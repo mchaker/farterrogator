@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Copy, Check, Hash, FileText, Tag as TagIcon, Sparkles, Loader2, User, Palette, Layers, Cpu, Shield, Globe, Download } from 'lucide-react';
 import { InterrogationResult, TaggingSettings, Tag, TagCategory, LoadingState } from '../types';
 import { embedPngMetadata } from '../services/pngMetadata';
@@ -23,6 +24,12 @@ export const Results: React.FC<ResultsProps> = ({
   const [copiedTags, setCopiedTags] = useState(false);
   const [copiedNatural, setCopiedNatural] = useState(false);
   const [isEmbedding, setIsEmbedding] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), 2000);
+  };
 
   const processedTags = useMemo(() => {
     // 1. Filter by Category Thresholds
@@ -59,6 +66,7 @@ export const Results: React.FC<ResultsProps> = ({
   const handleCopyTags = () => {
     navigator.clipboard.writeText(tagString);
     setCopiedTags(true);
+    showToast("All tags copied to clipboard!");
     setTimeout(() => setCopiedTags(false), 2000);
   };
 
@@ -66,6 +74,7 @@ export const Results: React.FC<ResultsProps> = ({
     if (result.naturalDescription) {
       navigator.clipboard.writeText(result.naturalDescription);
       setCopiedNatural(true);
+      showToast("Description copied to clipboard!");
       setTimeout(() => setCopiedNatural(false), 2000);
     }
   };
@@ -280,7 +289,10 @@ export const Results: React.FC<ResultsProps> = ({
               {processedTags.map((tag, idx) =>
                 <span
                   key={tag.name}
-                  onClick={() => navigator.clipboard.writeText(formatTag(tag.name))}
+                  onClick={() => {
+                    navigator.clipboard.writeText(formatTag(tag.name));
+                    showToast(`Copied: ${formatTag(tag.name)}`);
+                  }}
                   className={`
                       inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium cursor-pointer transition-all hover:scale-105 active:scale-95 border
                       ${getCategoryColor(tag.category)}
@@ -316,6 +328,16 @@ export const Results: React.FC<ResultsProps> = ({
           </div>
         )}
       </div>
+
+      {toastMessage && createPortal(
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-4 duration-200">
+          <div className="bg-slate-900/90 dark:bg-white/90 text-white dark:text-slate-900 px-4 py-2 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2 text-sm font-medium">
+            <Check className="w-4 h-4 text-green-500 dark:text-green-600" />
+            {toastMessage}
+          </div>
+        </div>,
+        document.body
+      )}
 
     </div >
   );

@@ -233,13 +233,25 @@ export const fetchOllamaModels = async (endpoint: string): Promise<string[]> => 
   try {
     const response = await fetch(`${proxiedEndpoint}/api/tags`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch models: ${response.statusText}`);
+      throw new Error(`Failed to fetch models: ${response.statusText} (${response.status})`);
     }
     const data = await response.json();
     // Ollama returns { models: [{ name: "qwen:vl", ... }] }
     return data.models?.map((m: any) => m.name) || [];
-  } catch (error) {
+  } catch (error: any) {
     console.error("Fetch Ollama Models Error:", error);
+    
+    // Detect CORS/Network errors
+    if (error.name === 'TypeError' && (error.message === 'Failed to fetch' || error.message.includes('NetworkError'))) {
+       console.warn(`
+       [CORS ERROR DETECTED]
+       The browser blocked the request to ${proxiedEndpoint}.
+       
+       SOLUTION:
+       If you are running Ollama, you must set the OLLAMA_ORIGINS environment variable to allow this domain.
+       Example: OLLAMA_ORIGINS="https://tagger.gpu.garden" ollama serve
+       `);
+    }
     return [];
   }
 };

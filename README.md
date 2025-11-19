@@ -73,6 +73,19 @@ Install [Ollama](https://ollama.com/) for the natural language descriptions.
 - **Endpoint**: `http://localhost:11434`
 - **Recommended Model**: `qwen2.5-vl` (Vision-Language model) or `llava`.
 
+#### ⚠️ Important: CORS Configuration
+If you are accessing Ollama from a different domain (e.g., your web app is on `tagger.gpu.garden` and Ollama is on `ollama.gpu.garden`), you **must** configure Ollama to allow Cross-Origin requests.
+
+Set the `OLLAMA_ORIGINS` environment variable when starting Ollama:
+
+```bash
+# Allow all origins (Development)
+OLLAMA_ORIGINS="*" ollama serve
+
+# Allow specific domain (Production)
+OLLAMA_ORIGINS="https://tagger.gpu.garden" ollama serve
+```
+
 **Configuration in App:**
 1. Click the **Configuration** panel in the UI.
 2. Select **Local Hybrid** under "AI Backend".

@@ -79,23 +79,27 @@ const getProxiedOllamaEndpoint = (originalEndpoint: string): string => {
   if (import.meta.env.DEV && cleanEndpoint.includes('ollama.gpu.garden')) {
     // Remove protocol and domain
     let path = cleanEndpoint.replace(/^https?:\/\//, '').replace(/^ollama\.gpu\.garden/, '');
-    
+
     // Ensure path starts with / if it's not empty
     if (!path) {
-      path = ''; 
+      path = '';
     } else if (!path.startsWith('/')) {
       path = '/' + path;
     }
-    
+
     const newEndpoint = `/ollama/gpu-garden${path}`;
     console.log(`[Proxy] Rewrote Ollama ${originalEndpoint} to ${newEndpoint}`);
     return newEndpoint;
   }
+
+  // In Production, use Cloudflare Pages Function proxy to bypass CORS/WAF
+  if (import.meta.env.PROD && cleanEndpoint.includes('ollama.gpu.garden')) {
+    console.log(`[Proxy] Rewriting Ollama ${originalEndpoint} to Cloudflare Function /ollama`);
+    return '/ollama';
+  }
   
   return cleanEndpoint;
-};
-
-const determineCategory = (name: string): TagCategory => {
+};const determineCategory = (name: string): TagCategory => {
   // Strict Rating Categorization
   if (name.startsWith('rating:') || ['general', 'safe', 'questionable', 'explicit', 'sensitive', 'nsfw'].includes(name)) {
     return 'rating';
@@ -106,9 +110,9 @@ const determineCategory = (name: string): TagCategory => {
   }
   // Character Counts (Danbooru puts these in General, but users often see them as character-related. Keeping as General per strict Danbooru)
   if (['1girl', '1boy', '2girls', '2boys', 'multiple girls', 'multiple boys'].includes(name)) {
-    return 'general'; 
+    return 'general';
   }
-  
+
   return 'general';
 };
 
@@ -134,14 +138,14 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
   if (import.meta.env.DEV && endpoint.includes('localtagger.gpu.garden')) {
     // Remove protocol and domain to get the relative path
     let path = endpoint.replace(/^https?:\/\//, '').replace(/^localtagger\.gpu\.garden/, '');
-    
+
     // If path is empty or just '/', default to '/interrogate/pixai'
     if (!path || path === '/') {
       path = '/interrogate/pixai';
     } else if (!path.startsWith('/')) {
       path = '/' + path;
     }
-    
+
     // Construct the proxy endpoint
     endpoint = `/interrogate/gpu-garden${path}`;
     console.log(`[Proxy] Rewrote ${config.taggerEndpoint} to ${endpoint}`);
@@ -164,14 +168,14 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
     // OR Array format: { tags: [["1girl", 0.99], ...] } or { tags: [{name: "1girl", score: 0.99}, ...] }
 
     const tags: Tag[] = [];
-    
+
     if (data.tags) {
       if (Array.isArray(data.tags)) {
         // Handle Array format
         data.tags.forEach((item: any) => {
           let name = '';
           let score = 0;
-          
+
           if (Array.isArray(item)) {
             name = item[0];
             score = Number(item[1]);
@@ -213,12 +217,12 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
     return filteredTags.sort((a, b) => b.score - a.score);
   } catch (error: any) {
     console.error("Fetch Local Tags Error:", error);
-    
+
     // Enhance error message for common CORS issues with remote URLs
     if (config.taggerEndpoint.startsWith('http') && !config.taggerEndpoint.includes('localhost') && error.message === 'Failed to fetch') {
       throw new Error(`Network Error (CORS): The browser blocked the request to ${config.taggerEndpoint}. This is a security feature. To fix this, update vite.config.ts to proxy this URL, or ensure the server allows CORS.`);
     }
-    
+
     throw error;
   }
 };
@@ -240,10 +244,10 @@ export const fetchOllamaModels = async (endpoint: string): Promise<string[]> => 
     return data.models?.map((m: any) => m.name) || [];
   } catch (error: any) {
     console.error("Fetch Ollama Models Error:", error);
-    
+
     // Detect CORS/Network errors
     if (error.name === 'TypeError' && (error.message === 'Failed to fetch' || error.message.includes('NetworkError'))) {
-       console.warn(`
+      console.warn(`
        [CORS ERROR DETECTED]
        The browser blocked the request to ${proxiedEndpoint}.
        
@@ -266,7 +270,10 @@ export const fetchOllamaDescription = async (base64Image: string, config: Backen
   try {
     const response = await fetch(`${proxiedEndpoint}/api/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({
         model: config.ollamaModel,
         prompt: "Describe this image in detail. Then, list 5 key themes.",
@@ -287,105 +294,110 @@ export const fetchOllamaDescription = async (base64Image: string, config: Backen
   }
 };
 
-const consolidateTagsWithOllama = async (
-  localTags: Tag[],
-  ollamaDescription: string,
-  config: BackendConfig
-): Promise<Tag[]> => {
-  if (!config.ollamaEndpoint) return localTags;
+// --- HYBRID MERGING LOGIC ---
 
-  const localTagsString = localTags.map(t => `${t.name} (${t.score.toFixed(2)})`).join(', ');
-  
-  const prompt = `
-    You are an expert Danbooru tagger. Your task is to consolidate tags from a local tagger and a natural language description into a final, strict JSON list of Danbooru tags.
-    
-    INPUTS:
-    1. Local Tagger Output (High Trust): ${localTagsString}
-    2. Visual Description (Context): ${ollamaDescription}
+interface TagState {
+  localTags: Tag[];
+  ollamaTags: Tag[];
+  combinedTags: Tag[];
+  summary: string | undefined;
+}
 
-    INSTRUCTIONS:
-    - TRUST the Local Tagger tags the most.
-    - Use the Description to add missing tags or clarify context, but ONLY if they are valid Danbooru tags.
-    - Ensure "technical" tags (e.g., 'highres', 'absurdres', '4k') are included if implied.
-    - Categorize every tag correctly: 'general', 'character', 'style', 'technical', 'rating'.
-    - Output STRICT JSON format ONLY. No markdown, no explanations.
-
-    JSON SCHEMA:
-    {
-      "tags": [
-        { "name": "tag_name", "score": 1.0, "category": "category_name" }
-      ]
-    }
-  `;
-
-  try {
-    const response = await fetch(`${config.ollamaEndpoint}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: config.ollamaModel,
-        prompt: prompt,
-        format: "json",
-        stream: false
-      })
-    });
-
-    const data = await response.json();
-    const parsed = JSON.parse(data.response);
-    return parsed.tags || localTags;
-  } catch (error) {
-    console.error("Consolidation Error:", error);
-    return localTags; // Fallback to local tags
-  }
+const normalizeTag = (tag: string): string => {
+  return tag.toLowerCase().trim().replace(/_/g, ' ');
 };
 
-const refineDescriptionWithOllama = async (
-  finalTags: Tag[],
-  config: BackendConfig
-): Promise<string> => {
-  if (!config.ollamaEndpoint) return "";
+const mergeTags = (localTags: Tag[], ollamaTags: Tag[]): Tag[] => {
+  const combined = new Map<string, Tag>();
 
-  const tagsString = finalTags.map(t => t.name).join(', ');
-  
-  const prompt = `
-    Generate a detailed natural language description of an image based STRICTLY on these Danbooru tags.
-    
-    TAGS: ${tagsString}
-    
-    INSTRUCTIONS:
-    - Describe the image naturally.
-    - Do not list the tags.
-    - Focus on the visual elements described by the tags.
-    - Ensure parity with the tags provided.
-  `;
+  // 1. Add Local Tags (Primary Source - High Confidence)
+  localTags.forEach(tag => {
+    const normalized = normalizeTag(tag.name);
+    combined.set(normalized, { ...tag, source: 'local' });
+  });
+
+  // 2. Add Ollama Tags (Secondary Source - Abstract/Missing)
+  ollamaTags.forEach(tag => {
+    const normalized = normalizeTag(tag.name);
+    if (combined.has(normalized)) {
+      // Parity Check: If both have it, boost confidence or keep local's high confidence
+      const existing = combined.get(normalized)!;
+      combined.set(normalized, {
+        ...existing,
+        score: Math.max(existing.score, tag.score),
+        source: 'both' // Mark as found in both
+      });
+    } else {
+      // New tag from Ollama
+      combined.set(normalized, { ...tag, source: 'ollama' });
+    }
+  });
+
+  return Array.from(combined.values()).sort((a, b) => b.score - a.score);
+};
+
+const fetchOllamaTagsAndSummary = async (
+  base64Image: string,
+  config: BackendConfig
+): Promise<{ tags: Tag[], summary: string }> => {
+  if (!config.ollamaEndpoint) return { tags: [], summary: "" };
+
+  const proxiedEndpoint = getProxiedOllamaEndpoint(config.ollamaEndpoint);
+
+  const prompt = "Describe this image using a comma-separated list of descriptive tags and a short summary. Format: Tags: tag1, tag2, ... Summary: ...";
 
   try {
-    const response = await fetch(`${config.ollamaEndpoint}/api/generate`, {
+    const response = await fetch(`${proxiedEndpoint}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: config.ollamaModel,
         prompt: prompt,
+        images: [base64Image],
         stream: false
       })
     });
 
     const data = await response.json();
-    return data.response;
+    const text = data.response;
+
+    // Parse Tags and Summary
+    const tagsMatch = text.match(/Tags:\s*(.*?)(?:\n|$|Summary:)/i);
+    const summaryMatch = text.match(/Summary:\s*(.*)/i);
+
+    const rawTags = tagsMatch ? tagsMatch[1].split(',').map((t: string) => t.trim()) : [];
+    const summary = summaryMatch ? summaryMatch[1].trim() : text; // Fallback to full text if no format
+
+    const tags: Tag[] = rawTags.map((name: string) => ({
+      name: name,
+      score: 0.7, // Default confidence for Ollama tags
+      category: determineCategory(name),
+      source: 'ollama'
+    }));
+
+    return { tags, summary };
   } catch (error) {
-    console.error("Refine Description Error:", error);
-    return "";
+    console.error("Ollama Tagging Error:", error);
+    return { tags: [], summary: "" };
   }
 };
 
 const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfig): Promise<InterrogationResult> => {
-  // 1. Run Local Tagger ONLY (as per user request for raw output first)
-  const localTags = await fetchLocalTags(base64Image, config);
+  // Parallel Fetching
+  const [localResult, ollamaResult] = await Promise.allSettled([
+    fetchLocalTags(base64Image, config),
+    fetchOllamaTagsAndSummary(base64Image, config)
+  ]);
 
-  // 2. Return tags immediately. Description is generated on demand.
+  const localTags = localResult.status === 'fulfilled' ? localResult.value : [];
+  const ollamaData = ollamaResult.status === 'fulfilled' ? ollamaResult.value : { tags: [], summary: undefined };
+
+  // Merging Strategy
+  const combinedTags = mergeTags(localTags, ollamaData.tags);
+
   return {
-    tags: localTags,
-    naturalDescription: undefined
+    tags: combinedTags,
+    naturalDescription: ollamaData.summary
   };
 };
 
@@ -452,13 +464,13 @@ export const generateCaption = async (
     if (!config.ollamaEndpoint || config.ollamaEndpoint.trim() === '') {
       throw new Error("Ollama endpoint is missing.");
     }
-    
+
     const proxiedEndpoint = getProxiedOllamaEndpoint(config.ollamaEndpoint);
 
     let prompt = "Describe this image in detail for an image generation prompt.";
     if (existingTags && existingTags.length > 0) {
-       const tagList = existingTags.map(t => t.name.replace(/_/g, ' ')).join(', ');
-       prompt = `You are a visual analysis AI. 
+      const tagList = existingTags.map(t => t.name.replace(/_/g, ' ')).join(', ');
+      prompt = `You are a visual analysis AI. 
        
        I have analyzed this image with a tagger and found these features: ${tagList}.
        
@@ -482,16 +494,16 @@ export const generateCaption = async (
       })
     });
     const data = await response.json();
-    
+
     // Clean up potential "thinking" artifacts if the model ignores the instruction
     let cleanResponse = data.response;
-    
+
     // Remove <think> blocks often produced by reasoning models
     cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/gi, '');
-    
+
     // Remove common meta-commentary prefixes
     cleanResponse = cleanResponse.replace(/^(Here is a description|Sure, here is|Based on the tags|The image shows|I can see that).{0,20}:\s*/i, '');
-    
+
     return cleanResponse.trim();
   }
 

@@ -7,6 +7,7 @@ export interface Tag {
   name: string;
   score: number;
   category: TagCategory;
+  source?: 'local' | 'ollama' | 'both';
 }
 
 export interface InterrogationResult {
@@ -16,7 +17,7 @@ export interface InterrogationResult {
 
 export interface BackendConfig {
   type: BackendType;
-  
+
   // Gemini Specifics
   geminiApiKey: string;
 

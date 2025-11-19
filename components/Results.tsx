@@ -223,25 +223,26 @@ export const Results: React.FC<ResultsProps> = ({
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {processedTags.map((tag, idx) => (
-                <div
-                  key={`${tag.name}-${idx}`}
+              {processedTags.map((tag, idx) =>
+                <span
+                  key={tag.name}
+                  onClick={() => navigator.clipboard.writeText(formatTag(tag.name))}
                   className={`
-                      group flex items-center gap-1.5 pl-2.5 pr-2 py-1.5 rounded-md border text-xs transition-all cursor-pointer hover:shadow-sm
+                      inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium cursor-pointer transition-all hover:scale-105 active:scale-95 border
                       ${getCategoryColor(tag.category)}
+                      ${tag.source === 'ollama' ? 'border-dashed' : ''}
+                      ${tag.source === 'both' ? 'ring-1 ring-offset-1 ring-offset-white dark:ring-offset-slate-900 ring-blue-400/50' : ''}
                     `}
-                  title={`Category: ${tag.category} | Confidence: ${tag.score}`}
-                  onClick={() => {
-                    navigator.clipboard.writeText(formatTag(tag.name));
-                  }}
+                  title={`Score: ${(tag.score * 100).toFixed(0)}% | Source: ${tag.source || 'local'}`}
                 >
                   <span className="opacity-50">{getCategoryIcon(tag.category)}</span>
                   <span className="font-mono font-medium">{formatTag(tag.name)}</span>
                   <span className="ml-1 text-[10px] font-bold opacity-60 group-hover:opacity-100 bg-black/10 dark:bg-black/20 px-1.5 py-0.5 rounded">
                     {tag.score.toFixed(2)}
                   </span>
-                </div>
-              ))}
+                  {tag.source === 'ollama' && <span className="text-[10px] opacity-60 ml-0.5">(AI)</span>}
+                </span>
+              )}
               {processedTags.length === 0 && (
                 <div className="w-full text-center py-12 text-slate-400 dark:text-slate-500">
                   <TagIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
@@ -262,6 +263,6 @@ export const Results: React.FC<ResultsProps> = ({
         )}
       </div>
 
-    </div>
+    </div >
   );
 };

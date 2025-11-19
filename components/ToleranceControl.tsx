@@ -183,7 +183,9 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Type className={`w-4 h-4 ${backendConfig.enableNaturalLanguage ? 'text-red-500' : 'text-slate-400'}`} />
-                      <span className="text-sm text-slate-700 dark:text-slate-300">Natural Language Output</span>
+                      <span className="text-sm text-slate-700 dark:text-slate-300">
+                        Natural Language Output <span className="text-xs text-slate-500 dark:text-slate-400">(this will take longer)</span>
+                      </span>
                     </div>
                     <button
                       onClick={() => onBackendChange({ ...backendConfig, enableNaturalLanguage: !backendConfig.enableNaturalLanguage })}

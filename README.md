@@ -16,7 +16,7 @@
 ## ✨ Features
 
 - **Dual Backend Support**:
-  - **Google Gemini**: Fast, cloud-based analysis using Gemini 1.5/2.0 models.
+  - **Google Gemini**: Fast, cloud-based analysis using Gemini models.
   - **Local Hybrid Mode**: Combines a local tagger (WD1.4/ViT/EVA) for precision tags with **Ollama** for visual reasoning and description.
 - **Strict Danbooru Tagging**:
   - Automatically categorizes tags into **Copyright**, **Character**, **Artist**, **General**, **Meta**, and **Rating**.

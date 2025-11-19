@@ -30,7 +30,7 @@ const App: React.FC = () => {
   const [backendConfig, setBackendConfig] = useState<BackendConfig>({
     type: 'local_hybrid',
     geminiApiKey: '',
-    ollamaEndpoint: 'https://ollama.gpu.garden/',
+    ollamaEndpoint: 'https://ollama.gpu.garden',
     ollamaModel: 'qwen2.5-vl',
     taggerEndpoint: 'http://localtagger.gpu.garden',
     taggerModel: 'eva',

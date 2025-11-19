@@ -69,28 +69,30 @@ const generateTagsGemini = async (base64Image: string, mimeType: string, config:
 // --- HELPER FUNCTIONS ---
 
 const getProxiedOllamaEndpoint = (originalEndpoint: string): string => {
+  // Always remove trailing slash to prevent double slashes (e.g. //api/tags)
+  let cleanEndpoint = originalEndpoint;
+  if (cleanEndpoint.endsWith('/')) {
+    cleanEndpoint = cleanEndpoint.slice(0, -1);
+  }
+
   // Only apply proxy rewriting in Development mode
-  if (import.meta.env.DEV && originalEndpoint.includes('ollama.gpu.garden')) {
+  if (import.meta.env.DEV && cleanEndpoint.includes('ollama.gpu.garden')) {
     // Remove protocol and domain
-    let path = originalEndpoint.replace(/^https?:\/\//, '').replace(/^ollama\.gpu\.garden/, '');
+    let path = cleanEndpoint.replace(/^https?:\/\//, '').replace(/^ollama\.gpu\.garden/, '');
     
     // Ensure path starts with / if it's not empty
     if (!path) {
-      path = ''; // Ollama endpoints usually don't have a trailing slash when used as base, but let's be careful
+      path = ''; 
     } else if (!path.startsWith('/')) {
       path = '/' + path;
     }
     
-    // Remove trailing slash if present to avoid double slashes when appending /api/tags
-    if (path.endsWith('/')) {
-      path = path.slice(0, -1);
-    }
-
     const newEndpoint = `/ollama/gpu-garden${path}`;
     console.log(`[Proxy] Rewrote Ollama ${originalEndpoint} to ${newEndpoint}`);
     return newEndpoint;
   }
-  return originalEndpoint;
+  
+  return cleanEndpoint;
 };
 
 const determineCategory = (name: string): TagCategory => {

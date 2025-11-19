@@ -1,13 +1,7 @@
 
 export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob> => {
-  let pngBlob: Blob;
-
-  if (file.type === 'image/png') {
-    pngBlob = file;
-  } else {
-    // Convert to PNG if not already
-    pngBlob = await convertToPng(file);
-  }
+  // Always process image to resize to ~1MP and strip original metadata
+  const pngBlob = await processImage(file);
 
   const arrayBuffer = await pngBlob.arrayBuffer();
   const data = new Uint8Array(arrayBuffer);
@@ -77,9 +71,8 @@ export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob
     return createChunk('tEXt', data);
   };
 
-  // NAI Metadata
+  // NAI Metadata - Minimal set
   const metadataChunks = [
-    createTextChunk('Title', 'AI generated image'),
     createTextChunk('Software', 'NovelAI'),
     createTextChunk('Source', 'NovelAI'),
     createTextChunk('Description', prompt),
@@ -125,19 +118,36 @@ export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob
   return new Blob([resultBuffer], { type: 'image/png' });
 };
 
-const convertToPng = (file: File): Promise<Blob> => {
+const processImage = (file: File): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+      
+      // Calculate 1MP dimensions (approx 1,048,576 pixels)
+      const targetPixels = 1024 * 1024;
+      const currentPixels = width * height;
+      
+      // Scale to match ~1MP density
+      const scale = Math.sqrt(targetPixels / currentPixels);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+
       const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = width;
+      canvas.height = height;
       const ctx = canvas.getContext('2d');
       if (!ctx) {
         reject(new Error('Could not get canvas context'));
         return;
       }
-      ctx.drawImage(img, 0, 0);
+      
+      // High quality scaling
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, width, height);
+      
       canvas.toBlob((blob) => {
         if (blob) {
           resolve(blob);

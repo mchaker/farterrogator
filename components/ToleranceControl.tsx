@@ -22,6 +22,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   const [activeTab, setActiveTab] = useState<'tags' | 'backend'>('tags');
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
+  const [isAdvanced, setIsAdvanced] = useState(false);
 
   const updateThreshold = (category: TagCategory, value: number) => {
     onSettingsChange({
@@ -29,6 +30,21 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
       thresholds: {
         ...settings.thresholds,
         [category]: value
+      }
+    });
+  };
+
+  const updateOverallThreshold = (value: number) => {
+    onSettingsChange({
+      ...settings,
+      thresholds: {
+        ...settings.thresholds,
+        general: value,
+        character: value,
+        copyright: value,
+        artist: value,
+        meta: value,
+        rating: 0.8 // Ensure rating stays fixed
       }
     });
   };
@@ -179,20 +195,28 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
 
               {/* Thresholds */}
               <div className="space-y-3">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex justify-between">
-                  <span>Confidence Thresholds</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Confidence Thresholds
+                  </label>
+                  <button
+                    onClick={() => setIsAdvanced(!isAdvanced)}
+                    className="text-[10px] text-blue-500 hover:text-blue-600 font-medium"
+                  >
+                    {isAdvanced ? 'Simple Mode' : 'Advanced Thresholds'}
+                  </button>
+                </div>
 
                 <div className="space-y-4">
-                  {categories.map(cat => (
-                    <div key={cat.id} className="space-y-1">
+                  {!isAdvanced ? (
+                    <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <div className={`flex items-center gap-1.5 font-medium ${cat.color}`}>
-                          {cat.icon}
-                          {cat.label}
+                        <div className="flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300">
+                          <Layers className="w-3 h-3" />
+                          Overall Confidence
                         </div>
                         <span className="font-mono text-slate-500 dark:text-slate-400">
-                          {settings.thresholds[cat.id].toFixed(2)}
+                          {settings.thresholds.general.toFixed(2)}
                         </span>
                       </div>
                       <input
@@ -200,13 +224,38 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                         min="0"
                         max="0.95"
                         step="0.05"
-                        value={settings.thresholds[cat.id]}
-                        onChange={(e) => updateThreshold(cat.id, parseFloat(e.target.value))}
+                        value={settings.thresholds.general}
+                        onChange={(e) => updateOverallThreshold(parseFloat(e.target.value))}
                         disabled={disabled}
                         className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-red-600 [&::-webkit-slider-thumb]:rounded-full"
                       />
                     </div>
-                  ))}
+                  ) : (
+                    categories
+                      .map(cat => (
+                        <div key={cat.id} className="space-y-1">
+                          <div className="flex justify-between text-xs">
+                            <div className={`flex items-center gap-1.5 font-medium ${cat.color}`}>
+                              {cat.icon}
+                              {cat.label}
+                            </div>
+                            <span className="font-mono text-slate-500 dark:text-slate-400">
+                              {settings.thresholds[cat.id].toFixed(2)}
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min="0"
+                            max="0.95"
+                            step="0.05"
+                            value={settings.thresholds[cat.id]}
+                            onChange={(e) => updateThreshold(cat.id, parseFloat(e.target.value))}
+                            disabled={disabled}
+                            className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-red-600 [&::-webkit-slider-thumb]:rounded-full"
+                          />
+                        </div>
+                      ))
+                  )}
                 </div>
               </div>
             </div>

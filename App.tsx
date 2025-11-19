@@ -15,11 +15,11 @@ const App: React.FC = () => {
 
   const [settings, setSettings] = useState<TaggingSettings>({
     thresholds: {
-      general: 0.5,
-      character: 0.6,
-      copyright: 0.5,
-      artist: 0.5,
-      meta: 0.5,
+      general: 0.7,
+      character: 0.7,
+      copyright: 0.7,
+      artist: 0.7,
+      meta: 0.7,
       rating: 0.8
     },
     topK: 50,

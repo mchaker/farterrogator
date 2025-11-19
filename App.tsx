@@ -144,7 +144,7 @@ const App: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 selection:bg-red-500/30 selection:text-red-800 dark:selection:text-red-200 transition-colors duration-300">
       <Header theme={theme} setTheme={setTheme} backendConfig={backendConfig} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 gap-8 flex flex-col lg:flex-row">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 gap-8 flex flex-col lg:flex-row lg:items-start">
 
         {/* Left Column: Input */}
         <div className="w-full lg:w-[400px] xl:w-[450px] flex flex-col gap-8 shrink-0">

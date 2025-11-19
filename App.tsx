@@ -78,7 +78,12 @@ const App: React.FC = () => {
     return true;
   };
 
-  const [loadingState, setLoadingState] = useState<{ tags: boolean; description: boolean }>({ tags: false, description: false });
+  const [loadingState, setLoadingState] = useState<{ tags: boolean; description: boolean, progress: number, status: string }>({ 
+    tags: false, 
+    description: false,
+    progress: 0,
+    status: ''
+  });
 
   const handleInterrogate = async () => {
     if (!selectedFile) return;
@@ -89,7 +94,9 @@ const App: React.FC = () => {
     setAppState(AppState.ANALYZING);
     setLoadingState({ 
       tags: true, 
-      description: backendConfig.type === 'local_hybrid' ? backendConfig.enableNaturalLanguage : false 
+      description: backendConfig.type === 'local_hybrid' ? backendConfig.enableNaturalLanguage : false,
+      progress: 0,
+      status: 'Starting...'
     });
     setError(null);
     setResult({ tags: [], naturalDescription: undefined }); // Reset result
@@ -98,19 +105,23 @@ const App: React.FC = () => {
       const base64 = await fileToBase64(selectedFile);
 
       // Unified flow for both Gemini and Local Hybrid
-      // The logic for consolidation and optional NL is handled inside generateTags
-      const interrogationResult = await generateTags(base64, selectedFile.type, backendConfig);
-
-      setResult(interrogationResult);
-      setLoadingState({ tags: false, description: false });
+      const result = await generateTags(
+        base64, 
+        selectedFile.type, 
+        backendConfig,
+        (status, progress) => {
+          setLoadingState(prev => ({ ...prev, status, progress }));
+        }
+      );
+      
+      setResult(result);
       setAppState(AppState.SUCCESS);
-
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      const msg = err?.message || "Failed to interrogate image.";
-      setError(msg);
       setAppState(AppState.ERROR);
-      setLoadingState({ tags: false, description: false });
+      setError(err instanceof Error ? err.message : "An unknown error occurred");
+    } finally {
+      setLoadingState({ tags: false, description: false, progress: 100, status: 'Done' });
     }
   };
 

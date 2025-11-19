@@ -207,7 +207,7 @@ export const Results: React.FC<ResultsProps> = ({
             <div className="flex flex-col items-center justify-center h-full space-y-4 py-4">
               <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400">
                 <Loader2 className="w-6 h-6 animate-spin" />
-                <span className="text-sm font-medium animate-pulse">Generating Technical tags...</span>
+                <span className="text-sm font-medium animate-pulse">{loadingState.status || 'Analyzing...'}</span>
               </div>
             </div>
           ) : result.naturalDescription ? (
@@ -276,13 +276,26 @@ export const Results: React.FC<ResultsProps> = ({
 
         <div className="flex-1 min-h-[200px] bg-white dark:bg-slate-800/30 rounded-xl border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300 relative">
           {loadingState.tags ? (
-            <div className="flex flex-wrap gap-2 animate-pulse">
-              {[...Array(12)].map((_, i) => (
-                <div key={i} className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-16"></div>
-              ))}
-              {[...Array(8)].map((_, i) => (
-                <div key={i + 12} className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-24"></div>
-              ))}
+            <div className="flex flex-col items-center justify-center h-full space-y-6 py-8">
+              <div className="w-full max-w-md space-y-2">
+                <div className="flex justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <span>{loadingState.status || 'Processing...'}</span>
+                  <span>{Math.round(loadingState.progress)}%</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-blue-500 transition-all duration-500 ease-out rounded-full relative"
+                    style={{ width: `${Math.max(5, loadingState.progress)}%` }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 animate-[shimmer_2s_infinite] skew-x-12"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 animate-pulse opacity-30 justify-center max-w-lg blur-[1px]">
+                {[...Array(12)].map((_, i) => (
+                  <div key={i} className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-16"></div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">

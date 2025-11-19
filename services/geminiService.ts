@@ -15,7 +15,13 @@ const getGeminiClient = (apiKey: string) => {
   return new GoogleGenAI({ apiKey });
 };
 
-const generateTagsGemini = async (base64Image: string, mimeType: string, config: BackendConfig): Promise<InterrogationResult> => {
+const generateTagsGemini = async (
+  base64Image: string, 
+  mimeType: string, 
+  config: BackendConfig,
+  onProgress?: (status: string, progress: number) => void
+): Promise<InterrogationResult> => {
+  onProgress?.("Initializing Gemini client...", 10);
   const ai = getGeminiClient(config.geminiApiKey);
 
   const responseSchema = {
@@ -41,6 +47,7 @@ const generateTagsGemini = async (base64Image: string, mimeType: string, config:
     required: ["tags"],
   };
 
+  onProgress?.("Sending image to Gemini...", 30);
   const response = await ai.models.generateContent({
     model: 'gemini-3-pro-preview',
     contents: {
@@ -56,9 +63,12 @@ const generateTagsGemini = async (base64Image: string, mimeType: string, config:
     },
   });
 
+  onProgress?.("Processing Gemini response...", 80);
+
   if (!response.text) return { tags: [] };
   try {
     const data = JSON.parse(response.text);
+    onProgress?.("Finalizing...", 100);
     // Gemini generates tags first, caption is separate
     return { tags: data.tags || [] };
   } catch (e) {
@@ -626,10 +636,15 @@ const enrichTagsWithCopyrights = async (
   return newTags.sort((a, b) => b.score - a.score);
 };
 
-const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfig): Promise<InterrogationResult> => {
+const generateTagsLocalHybrid = async (
+  base64Image: string, 
+  config: BackendConfig,
+  onProgress?: (status: string, progress: number) => void
+): Promise<InterrogationResult> => {
   // Sequential Fetching to feed Local Tags into Ollama
   let localTags: Tag[] = [];
   try {
+    onProgress?.("Analyzing image with local tagger...", 10);
     localTags = await fetchLocalTags(base64Image, config);
   } catch (e) {
     console.error("Local Tagger Failed:", e);
@@ -638,6 +653,7 @@ const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfi
   // Enrich Local Tags with Copyrights BEFORE sending to Ollama
   // This ensures Ollama knows the series context (e.g. Fate) when generating the description
   try {
+    onProgress?.("Enriching tags with copyright data...", 30);
     localTags = await enrichTagsWithCopyrights(localTags, config);
   } catch (e) {
     console.error("Copyright Enrichment Failed:", e);
@@ -648,19 +664,22 @@ const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfi
   // Only call Ollama if Natural Language is enabled
   if (config.enableNaturalLanguage) {
     try {
-      // Pass enriched local tags to Ollama for better context
+      onProgress?.("Consulting vision model (Ollama)...", 50);
+      // Pass local tags to Ollama for context
       ollamaData = await fetchOllamaTagsAndSummary(base64Image, config, localTags);
     } catch (e) {
       console.error("Ollama Failed:", e);
     }
+  } else {
+    onProgress?.("Skipping vision model (disabled)...", 50);
   }
 
-  // Merging Strategy
-  // If Ollama was skipped, ollamaData.tags will be empty, so mergeTags will just return localTags (with source='local')
-  let combinedTags = mergeTags(localTags, ollamaData.tags);
+  onProgress?.("Merging and refining results...", 80);
+  const mergedTags = mergeTags(localTags, ollamaData.tags);
   
+  onProgress?.("Finalizing...", 100);
   return {
-    tags: combinedTags,
+    tags: mergedTags,
     naturalDescription: ollamaData.summary
   };
 };
@@ -706,17 +725,18 @@ function getInterrogationPrompt() {
 export const generateTags = async (
   base64Image: string,
   mimeType: string,
-  config: BackendConfig
+  config: BackendConfig,
+  onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
   // Ensure tag database is loaded before processing
   await loadTagDatabase();
 
   switch (config.type) {
     case 'local_hybrid':
-      return generateTagsLocalHybrid(base64Image, config);
+      return generateTagsLocalHybrid(base64Image, config, onProgress);
     case 'gemini':
     default:
-      return generateTagsGemini(base64Image, mimeType, config);
+      return generateTagsGemini(base64Image, mimeType, config, onProgress);
   }
 };
 

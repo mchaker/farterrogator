@@ -46,4 +46,6 @@ export enum AppState {
 export interface LoadingState {
   tags: boolean;
   description: boolean;
+  progress: number;
+  status: string;
 }

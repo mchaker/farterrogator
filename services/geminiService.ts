@@ -99,22 +99,14 @@ const getProxiedOllamaEndpoint = (originalEndpoint: string): string => {
   }
 
   return cleanEndpoint;
-}; const determineCategory = (name: string): TagCategory => {
-  // Strict Rating Categorization
-  if (name.startsWith('rating:') || ['general', 'safe', 'questionable', 'explicit', 'sensitive', 'nsfw'].includes(name)) {
-    return 'rating';
-  }
-  // Meta / Technical Tags
-  if (['highres', 'absurdres', '4k', '8k', 'masterpiece', 'best quality', 'comic', 'monochrome', 'greyscale', 'lowres', 'bad quality', 'worst quality'].includes(name)) {
-    return 'meta';
-  }
-  // Character Counts (Danbooru puts these in General, but users often see them as character-related. Keeping as General per strict Danbooru)
-  if (['1girl', '1boy', '2girls', '2boys', 'multiple girls', 'multiple boys'].includes(name)) {
-    return 'general';
-  }
+}; import { getCategory, loadTagDatabase } from './tagService';
 
-  return 'general';
-};
+// Ensure database is loaded when service is imported/used
+// We can't await at top level easily in all envs, so we'll call it lazily or just kick it off.
+loadTagDatabase();
+
+// ... (rest of the file)
+
 
 export const fetchLocalTags = async (base64Image: string, config: BackendConfig): Promise<Tag[]> => {
   if (!config.taggerEndpoint || config.taggerEndpoint.trim() === '') {
@@ -204,7 +196,7 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
             tags.push({
               name,
               score,
-              category: determineCategory(name)
+              category: getCategory(name)
             });
           }
         });
@@ -214,7 +206,7 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
           tags.push({
             name,
             score: Number(score),
-            category: determineCategory(name)
+            category: getCategory(name)
           });
         });
       }
@@ -392,7 +384,7 @@ const fetchOllamaTagsAndSummary = async (
     const tags: Tag[] = rawTags.map((name: string) => ({
       name: name,
       score: 0.7, // Default confidence for Ollama tags
-      category: determineCategory(name),
+      category: getCategory(name),
       source: 'ollama'
     }));
 
@@ -465,6 +457,9 @@ export const generateTags = async (
   mimeType: string,
   config: BackendConfig
 ): Promise<InterrogationResult> => {
+  // Ensure tag database is loaded before processing
+  await loadTagDatabase();
+
   switch (config.type) {
     case 'local_hybrid':
       return generateTagsLocalHybrid(base64Image, config);

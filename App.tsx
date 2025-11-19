@@ -87,7 +87,10 @@ const App: React.FC = () => {
     if (!validateBackendConfig()) return;
 
     setAppState(AppState.ANALYZING);
-    setLoadingState({ tags: true, description: true });
+    setLoadingState({ 
+      tags: true, 
+      description: backendConfig.type === 'local_hybrid' ? backendConfig.enableNaturalLanguage : false 
+    });
     setError(null);
     setResult({ tags: [], naturalDescription: undefined }); // Reset result
 

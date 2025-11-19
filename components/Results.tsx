@@ -194,6 +194,13 @@ export const Results: React.FC<ResultsProps> = ({
                 <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full w-4/5 animate-pulse"></div>
               </div>
             </div>
+          ) : loadingState.tags ? (
+            <div className="flex flex-col items-center justify-center h-full space-y-4 py-4">
+              <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400">
+                <Loader2 className="w-6 h-6 animate-spin" />
+                <span className="text-sm font-medium animate-pulse">Generating Technical tags...</span>
+              </div>
+            </div>
           ) : result.naturalDescription ? (
             <HighlightedDescription />
           ) : (

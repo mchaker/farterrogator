@@ -332,7 +332,12 @@ const mergeTags = (localTags: Tag[], ollamaTags: Tag[]): Tag[] => {
     combined.set(normalized, { ...tag, source: 'local' });
   });
 
-  // 2. Add Ollama Tags (Secondary Source - Abstract/Missing)
+  // 2. Add Ollama Tags (Secondary Source)
+  // Logic Update: If we have Local Tags (Ground Truth), ONLY use Ollama tags for parity (marking as 'both').
+  // Do NOT add unique Ollama tags as they are often hallucinations or abstract concepts user wants to avoid in Technical Tags.
+  // If Local Tags are empty (failure/fallback), then use all Ollama tags.
+  const hasLocalTags = localTags.length > 0;
+
   ollamaTags.forEach(tag => {
     const normalized = normalizeTag(tag.name);
     if (combined.has(normalized)) {
@@ -343,8 +348,8 @@ const mergeTags = (localTags: Tag[], ollamaTags: Tag[]): Tag[] => {
         score: Math.max(existing.score, tag.score),
         source: 'both' // Mark as found in both
       });
-    } else {
-      // New tag from Ollama
+    } else if (!hasLocalTags) {
+      // Only add new tag from Ollama if we DON'T have local tags (Fallback mode)
       combined.set(normalized, { ...tag, source: 'ollama' });
     }
   });

@@ -230,6 +230,7 @@ const App: React.FC = () => {
                     onGenerateCaption={handleGenerateCaption}
                     isGeneratingCaption={isGeneratingCaption}
                     loadingState={loadingState}
+                    selectedFile={selectedFile}
                   />
                 </div>
               )}

@@ -135,6 +135,12 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)
   let endpoint = config.taggerEndpoint;
+
+  // Ensure path exists for gpu.garden endpoint
+  if (endpoint.includes('localtagger.gpu.garden') && !endpoint.includes('/interrogate/')) {
+    endpoint = endpoint.replace(/\/$/, '') + '/interrogate/pixai';
+  }
+
   if (import.meta.env.DEV && endpoint.includes('localtagger.gpu.garden')) {
     // Remove protocol and domain to get the relative path
     let path = endpoint.replace(/^https?:\/\//, '').replace(/^localtagger\.gpu\.garden/, '');

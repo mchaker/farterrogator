@@ -258,6 +258,10 @@ const App: React.FC = () => {
           </div>
         </div>
       </main>
+      
+      <footer className="py-6 text-center text-xs text-slate-400 dark:text-slate-600">
+        <p>&copy; {new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025'} Fartcore. All rights reserved.</p>
+      </footer>
     </div>
   );
 };

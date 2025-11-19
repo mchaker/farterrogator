@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme, backendConfig }
             href="https://gpu.garden"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative p-px rounded-full bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all active:scale-95"
+            className="group relative p-px rounded-full bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 bg-[length:200%_200%] animate-gradient-xy shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:shadow-[0_0_25px_rgba(168,85,247,0.7)] transition-all active:scale-95"
             title="GPU Garden"
           >
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 group-hover:bg-slate-50 dark:group-hover:bg-slate-800 transition-colors">

@@ -69,7 +69,8 @@ const generateTagsGemini = async (base64Image: string, mimeType: string, config:
 // --- HELPER FUNCTIONS ---
 
 const getProxiedOllamaEndpoint = (originalEndpoint: string): string => {
-  if (originalEndpoint.includes('ollama.gpu.garden')) {
+  // Only apply proxy rewriting in Development mode
+  if (import.meta.env.DEV && originalEndpoint.includes('ollama.gpu.garden')) {
     // Remove protocol and domain
     let path = originalEndpoint.replace(/^https?:\/\//, '').replace(/^ollama\.gpu\.garden/, '');
     
@@ -126,9 +127,9 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
   const formData = new FormData();
   formData.append('file', blob, 'image.png');
 
-  // Automatic Proxy Handling for known CORS-restricted endpoints
+  // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)
   let endpoint = config.taggerEndpoint;
-  if (endpoint.includes('localtagger.gpu.garden')) {
+  if (import.meta.env.DEV && endpoint.includes('localtagger.gpu.garden')) {
     // Remove protocol and domain to get the relative path
     let path = endpoint.replace(/^https?:\/\//, '').replace(/^localtagger\.gpu\.garden/, '');
     

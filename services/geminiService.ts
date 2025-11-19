@@ -410,6 +410,7 @@ const fetchOllamaTagsAndSummary = async (
       body: JSON.stringify({
         model: config.ollamaModel,
         prompt: prompt,
+        system: "You are an expert image analyzer. You strictly follow the output format: 'Tags: ...' followed by 'Summary: ...'. Do not include the tags list inside the summary.",
         images: [base64Image],
         stream: false
       })
@@ -419,11 +420,20 @@ const fetchOllamaTagsAndSummary = async (
     const text = data.response;
 
     // Parse Tags and Summary
-    const tagsMatch = text.match(/Tags:\s*(.*?)(?:\n|$|Summary:)/i);
-    const summaryMatch = text.match(/Summary:\s*(.*)/i);
+    // Improved regex to handle multi-line content and optional Summary label if Tags are present
+    const tagsMatch = text.match(/Tags:\s*([\s\S]*?)(?:\n\s*Summary:|$)/i);
+    const summaryMatch = text.match(/Summary:\s*([\s\S]*)/i);
 
     const rawTags = tagsMatch ? tagsMatch[1].split(',').map((t: string) => t.trim()) : [];
-    const summary = summaryMatch ? summaryMatch[1].trim() : text; // Fallback to full text if no format
+    
+    let summary = summaryMatch ? summaryMatch[1].trim() : text; 
+    
+    // Fallback: If Summary label is missing but Tags label was found, 
+    // assume everything after the tags (and a newline) is the summary.
+    if (!summaryMatch && tagsMatch) {
+       // Remove the full match of the tags section from the text to get the remainder
+       summary = text.replace(tagsMatch[0], '').trim();
+    }
 
     const tags: Tag[] = rawTags.map((name: string) => ({
       name: name,

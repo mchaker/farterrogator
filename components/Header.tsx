@@ -45,10 +45,15 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme, backendConfig }
             href="https://gpu.garden"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="group relative p-px rounded-full bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all active:scale-95"
             title="GPU Garden"
           >
-            <img src="https://gpu.garden/favicon.png" alt="GPU Garden" className="w-5 h-5" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 group-hover:bg-slate-50 dark:group-hover:bg-slate-800 transition-colors">
+              <img src="https://gpu.garden/favicon.png" alt="GPU Garden" className="w-6 h-6" />
+              <span className="text-sm font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                gpu.garden
+              </span>
+            </div>
           </a>
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
             <Sparkles className="w-3 h-3 text-red-500 dark:text-red-400" />

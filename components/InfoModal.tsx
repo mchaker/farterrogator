@@ -43,7 +43,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                 Dual Analysis Modes
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Choose between <strong>Google Gemini</strong> for cloud-based state-of-the-art analysis, or <strong>Local Hybrid Mode</strong> which combines a WD1.4 Tagger with Ollama (Vision Models) hosted on <strong>gpu.garden</strong>.
+                Choose between <strong>Google Gemini</strong> for cloud-based state-of-the-art analysis, or <strong>Pixai</strong> which combines a WD1.4 Tagger with Ollama (Vision Models) hosted on <strong>gpu.garden</strong>.
               </p>
             </div>
 
@@ -63,7 +63,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
                 Privacy & Security
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                In Local Hybrid mode, your images are processed securely on <strong>gpu.garden</strong> via the <strong>Fartcore data center</strong>. While not running on your device, your data is handled with strict privacy standards.
+                In Pixai mode, your images are processed securely on <strong>gpu.garden</strong> via the <strong>Fartcore data center</strong>. While not running on your device, your data is handled with strict privacy standards.
               </p>
             </div>
 
@@ -82,7 +82,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
             <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">How to use</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <li>Upload an image or drag & drop one onto the canvas.</li>
-              <li>Select your preferred backend (Gemini or Local Hybrid).</li>
+              <li>Select your preferred backend (Gemini or Pixai).</li>
               <li>Adjust confidence thresholds to filter tags.</li>
               <li>Click <strong>Start Interrogation</strong>.</li>
               <li>Copy tags, or download an <strong>NAI Ready</strong> PNG to use in your workflow.</li>

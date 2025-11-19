@@ -283,7 +283,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                     >
                       {type === 'gemini' && <Globe className="w-4 h-4" />}
                       {type === 'local_hybrid' && <Server className="w-4 h-4" />}
-                      {type === 'local_hybrid' ? 'Local Hybrid (Ollama + Tagger)' : 'Google Gemini'}
+                      {type === 'local_hybrid' ? 'Pixai (Ollama + Tagger)' : 'Google Gemini'}
                     </button>
                   ))}
                 </div>

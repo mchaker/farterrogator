@@ -65,12 +65,12 @@ const App: React.FC = () => {
       }
     } else if (backendConfig.type === 'local_hybrid') {
       if (!backendConfig.ollamaEndpoint || backendConfig.ollamaEndpoint.trim() === '') {
-        setError("Ollama Endpoint is required for Local Hybrid mode.");
+        setError("Ollama Endpoint is required for Pixai mode.");
         setAppState(AppState.ERROR);
         return false;
       }
       if (!backendConfig.taggerEndpoint || backendConfig.taggerEndpoint.trim() === '') {
-        setError("Local Tagger Endpoint is required for Local Hybrid mode.");
+        setError("Local Tagger Endpoint is required for Pixai mode.");
         setAppState(AppState.ERROR);
         return false;
       }
@@ -200,7 +200,7 @@ const App: React.FC = () => {
             <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Analysis Result</h2>
             {backendConfig.type !== 'gemini' && (
               <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 border border-amber-200 dark:border-amber-800/50">
-                Local Hybrid Mode
+                Pixai
               </span>
             )}
           </div>

@@ -25,7 +25,6 @@ export interface BackendConfig {
   ollamaEndpoint: string;
   ollamaModel: string; // e.g., 'qwen2.5-vl'
   taggerEndpoint: string; // e.g., 'http://localhost:8000/tag'
-  taggerModel: 'vit' | 'eva'; // Model selection for local tagger
   enableNaturalLanguage: boolean; // Toggle for natural language output
 }
 

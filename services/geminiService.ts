@@ -351,18 +351,37 @@ const mergeTags = (localTags: Tag[], ollamaTags: Tag[]): Tag[] => {
 
 const fetchOllamaTagsAndSummary = async (
   base64Image: string,
-  config: BackendConfig
+  config: BackendConfig,
+  existingTags: Tag[] = []
 ): Promise<{ tags: Tag[], summary: string }> => {
   if (!config.ollamaEndpoint) return { tags: [], summary: "" };
 
   const proxiedEndpoint = getProxiedOllamaEndpoint(config.ollamaEndpoint);
 
-  const prompt = "Describe this image using a comma-separated list of Danbooru-style tags (lowercase, underscores for spaces) and a short summary. Format: Tags: tag1, tag2, ... Summary: ...";
+  let prompt = "Describe this image using a comma-separated list of Danbooru-style tags (lowercase, underscores for spaces) and a short summary. Format: Tags: tag1, tag2, ... Summary: ...";
+
+  if (existingTags.length > 0) {
+    // Pass tags with confidence scores as requested
+    const tagList = existingTags.map(t => `${t.name} (${t.score.toFixed(2)})`).join(', ');
+    prompt = `Analyze this image. I have already detected these tags with confidence scores: ${tagList}.
+    
+    1. Verify these tags visually.
+    2. Add any missing tags that are visually apparent.
+    3. Write a detailed natural language description (summary) of the image, incorporating the visual elements described by the tags.
+    
+    Format your response exactly as:
+    Tags: tag1, tag2, ...
+    Summary: [Your detailed description here]
+    `;
+  }
 
   try {
     const response = await fetch(`${proxiedEndpoint}/api/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify({
         model: config.ollamaModel,
         prompt: prompt,
@@ -424,6 +443,11 @@ const fetchOllamaCopyrights = async (
 
     const data = await response.json();
     let copyrights: string[] = [];
+
+    if (!data.response || data.response.trim() === '') {
+      console.warn("Ollama returned empty response for copyrights.");
+      return [];
+    }
 
     try {
       // Try parsing JSON directly if model obeyed
@@ -508,14 +532,21 @@ const enrichTagsWithCopyrights = async (
 };
 
 const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfig): Promise<InterrogationResult> => {
-  // Parallel Fetching
-  const [localResult, ollamaResult] = await Promise.allSettled([
-    fetchLocalTags(base64Image, config),
-    fetchOllamaTagsAndSummary(base64Image, config)
-  ]);
+  // Sequential Fetching to feed Local Tags into Ollama
+  let localTags: Tag[] = [];
+  try {
+    localTags = await fetchLocalTags(base64Image, config);
+  } catch (e) {
+    console.error("Local Tagger Failed:", e);
+  }
 
-  const localTags = localResult.status === 'fulfilled' ? localResult.value : [];
-  const ollamaData = ollamaResult.status === 'fulfilled' ? ollamaResult.value : { tags: [], summary: undefined };
+  let ollamaData: { tags: Tag[], summary: string | undefined } = { tags: [], summary: undefined };
+  try {
+    // Pass local tags to Ollama for better context
+    ollamaData = await fetchOllamaTagsAndSummary(base64Image, config, localTags);
+  } catch (e) {
+    console.error("Ollama Failed:", e);
+  }
 
   // Merging Strategy
   let combinedTags = mergeTags(localTags, ollamaData.tags);

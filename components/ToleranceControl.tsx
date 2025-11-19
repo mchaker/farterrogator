@@ -309,20 +309,6 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                       placeholder="/interrogate/pixai"
                     />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-xs text-slate-500">Tagger Model</label>
-                    <div className="relative">
-                      <select
-                        value={backendConfig.taggerModel || 'vit'}
-                        onChange={(e) => onBackendChange({ ...backendConfig, taggerModel: e.target.value as 'vit' | 'eva' })}
-                        className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all appearance-none"
-                      >
-                        <option value="vit">ViT (Vision Transformer)</option>
-                        <option value="eva">EVA (Eva-CLIP)</option>
-                      </select>
-                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
-                    </div>
-                  </div>
                 </div>
               )}
             </div>

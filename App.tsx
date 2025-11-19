@@ -33,7 +33,6 @@ const App: React.FC = () => {
     ollamaEndpoint: 'https://ollama.gpu.garden',
     ollamaModel: 'qwen2.5-vl',
     taggerEndpoint: 'https://localtagger.gpu.garden/interrogate',
-    taggerModel: 'eva',
     enableNaturalLanguage: false
   });
 

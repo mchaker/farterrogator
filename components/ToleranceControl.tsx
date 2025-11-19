@@ -185,8 +185,13 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                       <Type className={`w-4 h-4 ${backendConfig.enableNaturalLanguage ? 'text-red-500' : 'text-slate-400'}`} />
                       <span className="text-sm text-slate-700 dark:text-slate-300">Natural Language Output</span>
                     </div>
-                    {/* Hidden toggle, always enabled now, but keeping structure if we want to re-enable control later */}
-                    <div className="text-xs text-slate-400 italic">Always On</div>
+                    <button
+                      onClick={() => onBackendChange({ ...backendConfig, enableNaturalLanguage: !backendConfig.enableNaturalLanguage })}
+                      disabled={disabled}
+                      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${backendConfig.enableNaturalLanguage ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700'}`}
+                    >
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${backendConfig.enableNaturalLanguage ? 'translate-x-5' : 'translate-x-1'}`} />
+                    </button>
                   </div>
                 )}
               </div>

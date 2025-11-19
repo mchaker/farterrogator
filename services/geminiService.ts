@@ -388,8 +388,11 @@ const fetchOllamaTagsAndSummary = async (
     
     1. Verify these tags visually.
     2. Add any missing tags that are visually apparent.
-    3. Write a detailed natural language description (summary) of the image, incorporating the visual elements described by the tags.
-    4. IMPORTANT: Your description MUST explicitly mention the key elements identified in the tags (e.g. character names, series, specific clothing).
+    3. Write a detailed natural language description (summary) of the image.
+       - Use the provided tags as a guide for what is present, but convert them into natural, flowing sentences.
+       - Do NOT simply list the tags or use technical terms like "1girl", "solo", or "looking_at_viewer" directly unless they fit naturally (e.g. "a solo girl looking at the viewer").
+       - Focus on the character's appearance, clothing, pose, and the background.
+       - Ensure character names and series titles are mentioned naturally.
     
     Format your response exactly as:
     Tags: tag1, tag2, ...

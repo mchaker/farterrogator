@@ -99,13 +99,13 @@ const getProxiedOllamaEndpoint = (originalEndpoint: string): string => {
   }
 
   return cleanEndpoint;
-}; import { getCategory, loadTagDatabase } from './tagService';
+};
+
+import { getCategory, loadTagDatabase, isTagInCategory } from './tagService';
 
 // Ensure database is loaded when service is imported/used
 // We can't await at top level easily in all envs, so we'll call it lazily or just kick it off.
 loadTagDatabase();
-
-// ... (rest of the file)
 
 
 export const fetchLocalTags = async (base64Image: string, config: BackendConfig): Promise<Tag[]> => {
@@ -395,6 +395,118 @@ const fetchOllamaTagsAndSummary = async (
   }
 };
 
+const fetchOllamaCopyrights = async (
+  characters: string[],
+  config: BackendConfig
+): Promise<Tag[]> => {
+  if (!config.ollamaEndpoint || characters.length === 0) return [];
+
+  const proxiedEndpoint = getProxiedOllamaEndpoint(config.ollamaEndpoint);
+  const charList = characters.join(', ');
+
+  // Prompt engineering: Ask for specific Danbooru copyright tags
+  const prompt = `Identify the series/copyright for these characters: ${charList}. 
+  Return ONLY a JSON array of strings containing the strict Danbooru copyright tags. 
+  Example: ["touhou", "fate/grand_order"]. 
+  If unknown, ignore.`;
+
+  try {
+    const response = await fetch(`${proxiedEndpoint}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: config.ollamaModel,
+        prompt: prompt,
+        format: "json", // Force JSON mode if supported by model, otherwise prompt handles it
+        stream: false
+      })
+    });
+
+    const data = await response.json();
+    let copyrights: string[] = [];
+
+    try {
+      // Try parsing JSON directly if model obeyed
+      // Some models might return text with JSON block, so we might need to extract
+      const jsonMatch = data.response.match(/\[.*\]/s);
+      if (jsonMatch) {
+        copyrights = JSON.parse(jsonMatch[0]);
+      } else {
+        // Fallback: try parsing the whole response
+        copyrights = JSON.parse(data.response);
+      }
+    } catch (e) {
+      console.warn("Failed to parse Ollama copyright response:", data.response);
+      return [];
+    }
+
+    // Validate and map to Tags
+    const validTags: Tag[] = [];
+    for (const name of copyrights) {
+      const normalized = normalizeTag(name);
+      // Verify it's actually a copyright tag in our DB
+      if (isTagInCategory(normalized, 'copyright')) {
+        validTags.push({
+          name: normalized,
+          score: 0.8, // High confidence since it's a specific lookup
+          category: 'copyright',
+          source: 'ollama'
+        });
+      }
+    }
+    return validTags;
+
+  } catch (error) {
+    console.error("Ollama Copyright Lookup Error:", error);
+    return [];
+  }
+};
+
+const enrichTagsWithCopyrights = async (
+  currentTags: Tag[],
+  config: BackendConfig
+): Promise<Tag[]> => {
+  const newTags = [...currentTags];
+  const existingNames = new Set(newTags.map(t => t.name));
+  const charactersNeedingLookup: string[] = [];
+
+  // 1. Regex Extraction
+  for (const tag of currentTags) {
+    if (tag.category === 'character') {
+      const match = tag.name.match(/.*\((.*?)\)/);
+      if (match) {
+        const seriesName = normalizeTag(match[1]);
+        // Check if this series name is a valid copyright tag
+        if (isTagInCategory(seriesName, 'copyright') && !existingNames.has(seriesName)) {
+          newTags.push({
+            name: seriesName,
+            score: tag.score, // Inherit score from character
+            category: 'copyright',
+            source: tag.source
+          });
+          existingNames.add(seriesName);
+        }
+      } else {
+        // No parenthesis, candidate for Ollama lookup
+        charactersNeedingLookup.push(tag.name);
+      }
+    }
+  }
+
+  // 2. Ollama Fallback
+  if (charactersNeedingLookup.length > 0 && config.ollamaEndpoint) {
+    const ollamaCopyrights = await fetchOllamaCopyrights(charactersNeedingLookup, config);
+    for (const tag of ollamaCopyrights) {
+      if (!existingNames.has(tag.name)) {
+        newTags.push(tag);
+        existingNames.add(tag.name);
+      }
+    }
+  }
+
+  return newTags.sort((a, b) => b.score - a.score);
+};
+
 const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfig): Promise<InterrogationResult> => {
   // Parallel Fetching
   const [localResult, ollamaResult] = await Promise.allSettled([
@@ -406,7 +518,10 @@ const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfi
   const ollamaData = ollamaResult.status === 'fulfilled' ? ollamaResult.value : { tags: [], summary: undefined };
 
   // Merging Strategy
-  const combinedTags = mergeTags(localTags, ollamaData.tags);
+  let combinedTags = mergeTags(localTags, ollamaData.tags);
+
+  // Enrich with Copyrights (Regex + Ollama Fallback)
+  combinedTags = await enrichTagsWithCopyrights(combinedTags, config);
 
   return {
     tags: combinedTags,

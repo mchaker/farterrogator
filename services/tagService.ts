@@ -76,3 +76,11 @@ export const getCategory = (tagName: string): TagCategory => {
 
     return 'general';
 };
+
+export const isTagInCategory = (tagName: string, category: TagCategory): boolean => {
+    return tagDatabase.get(tagName) === category;
+};
+
+export const isValidTag = (tagName: string): boolean => {
+    return tagDatabase.has(tagName);
+};

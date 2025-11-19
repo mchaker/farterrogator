@@ -59,10 +59,11 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   }, [activeTab, backendConfig.type, backendConfig.ollamaEndpoint]);
 
   const categories: { id: TagCategory; label: string; icon: React.ReactNode; color: string }[] = [
-    { id: 'character', label: 'Character', icon: <User className="w-3 h-3" />, color: 'text-pink-600 dark:text-pink-400' },
-    { id: 'style', label: 'Style', icon: <Palette className="w-3 h-3" />, color: 'text-amber-600 dark:text-amber-400' },
+    { id: 'copyright', label: 'Copyright', icon: <Globe className="w-3 h-3" />, color: 'text-purple-600 dark:text-purple-400' },
+    { id: 'character', label: 'Character', icon: <User className="w-3 h-3" />, color: 'text-green-600 dark:text-green-400' },
+    { id: 'artist', label: 'Artist', icon: <Palette className="w-3 h-3" />, color: 'text-amber-600 dark:text-amber-400' },
     { id: 'general', label: 'General', icon: <Layers className="w-3 h-3" />, color: 'text-blue-600 dark:text-blue-400' },
-    { id: 'technical', label: 'Technical', icon: <Cpu className="w-3 h-3" />, color: 'text-slate-600 dark:text-slate-400' },
+    { id: 'meta', label: 'Meta', icon: <Cpu className="w-3 h-3" />, color: 'text-slate-600 dark:text-slate-400' },
     { id: 'rating', label: 'Rating', icon: <Shield className="w-3 h-3" />, color: 'text-rose-600 dark:text-rose-400' },
   ];
 
@@ -152,6 +153,22 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                     <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${settings.removeUnderscores ? 'translate-x-5' : 'translate-x-1'}`} />
                   </button>
                 </div>
+
+                {backendConfig.type === 'local_hybrid' && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Type className={`w-4 h-4 ${backendConfig.enableNaturalLanguage ? 'text-red-500' : 'text-slate-400'}`} />
+                      <span className="text-sm text-slate-700 dark:text-slate-300">Natural Language Output</span>
+                    </div>
+                    <button
+                      onClick={() => onBackendChange({ ...backendConfig, enableNaturalLanguage: !backendConfig.enableNaturalLanguage })}
+                      disabled={disabled}
+                      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${backendConfig.enableNaturalLanguage ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700'}`}
+                    >
+                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${backendConfig.enableNaturalLanguage ? 'translate-x-5' : 'translate-x-1'}`} />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="h-px bg-slate-200 dark:bg-slate-700" />
@@ -289,8 +306,22 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                       value={backendConfig.taggerEndpoint}
                       onChange={(e) => onBackendChange({ ...backendConfig, taggerEndpoint: e.target.value })}
                       className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all"
-                      placeholder="http://localhost:8000/tag"
+                      placeholder="/interrogate/pixai"
                     />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-slate-500">Tagger Model</label>
+                    <div className="relative">
+                      <select
+                        value={backendConfig.taggerModel || 'vit'}
+                        onChange={(e) => onBackendChange({ ...backendConfig, taggerModel: e.target.value as 'vit' | 'eva' })}
+                        className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all appearance-none"
+                      >
+                        <option value="vit">ViT (Vision Transformer)</option>
+                        <option value="eva">EVA (Eva-CLIP)</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" />
+                    </div>
                   </div>
                 </div>
               )}

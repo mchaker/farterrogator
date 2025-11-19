@@ -28,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme, backendConfig }
         <div className="flex items-center gap-3">
           <div className="p-1.5 bg-red-500/10 rounded-lg border border-red-500/20">
             <img 
-              src="https://raw.githubusercontent.com/SAWARATSUKI/KawaiiLogos/main/Apple/Apple%20(Deep%20Red).png" 
+              src="/favicon.png" 
               alt="Logo" 
               className="w-7 h-7 object-contain"
             />

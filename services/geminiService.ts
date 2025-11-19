@@ -26,7 +26,7 @@ const generateTagsGemini = async (base64Image: string, mimeType: string, config:
             score: { type: Type.NUMBER },
             category: {
               type: Type.STRING,
-              enum: ['general', 'character', 'style', 'technical', 'rating']
+              enum: ['general', 'character', 'copyright', 'artist', 'meta', 'rating']
             }
           },
           required: ["name", "score", "category"],
@@ -84,7 +84,9 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
   formData.append('file', blob, 'image.png');
 
   try {
-    const response = await fetch(`${config.taggerEndpoint}?threshold=0.35`, {
+    // User verified curl command: curl -X POST -F "file=@..." http://localhost:8000/interrogate/pixai
+    // We stick to this exactly, removing hardcoded threshold and model params that might cause issues.
+    const response = await fetch(config.taggerEndpoint, {
       method: 'POST',
       body: formData,
     });
@@ -99,10 +101,28 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig)
     const tags: Tag[] = [];
     if (data.tags && typeof data.tags === 'object') {
       Object.entries(data.tags).forEach(([name, score]) => {
+        // Basic categorization for common technical/rating tags if not provided
+        let category: TagCategory = 'general';
+        
+        // Strict Rating Categorization
+        if (name.startsWith('rating:') || ['general', 'safe', 'questionable', 'explicit', 'sensitive', 'nsfw'].includes(name)) {
+          category = 'rating';
+        }
+        // Meta / Technical Tags
+        else if (['highres', 'absurdres', '4k', '8k', 'masterpiece', 'best quality', 'comic', 'monochrome', 'greyscale', 'lowres', 'bad quality', 'worst quality'].includes(name)) {
+          category = 'meta';
+        }
+        // Character Counts (Danbooru puts these in General, but users often see them as character-related. Keeping as General per strict Danbooru)
+        else if (['1girl', '1boy', '2girls', '2boys', 'multiple girls', 'multiple boys'].includes(name)) {
+          category = 'general'; 
+        }
+        // Note: Without a database, we cannot distinguish 'character' or 'copyright' from 'general' tags 
+        // (e.g. 'cirno' vs 'blue_dress'). They will default to 'general'.
+
         tags.push({
           name,
           score: Number(score),
-          category: 'general' // Default category, as raw tagger might not provide it
+          category
         });
       });
     }
@@ -163,25 +183,105 @@ export const fetchOllamaDescription = async (base64Image: string, config: Backen
   }
 };
 
-// Deprecated monolithic function, keeping for backward compatibility if needed, 
-// but the UI should now call fetchLocalTags and fetchOllamaDescription in parallel.
-const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfig): Promise<InterrogationResult> => {
-  // This is now a wrapper for parallel execution
-  const [tagsResult, descriptionResult] = await Promise.allSettled([
-    fetchLocalTags(base64Image, config),
-    fetchOllamaDescription(base64Image, config)
-  ]);
+const consolidateTagsWithOllama = async (
+  localTags: Tag[],
+  ollamaDescription: string,
+  config: BackendConfig
+): Promise<Tag[]> => {
+  if (!config.ollamaEndpoint) return localTags;
 
-  const tags = tagsResult.status === 'fulfilled' ? tagsResult.value : [];
-  const description = descriptionResult.status === 'fulfilled' ? descriptionResult.value : undefined;
+  const localTagsString = localTags.map(t => `${t.name} (${t.score.toFixed(2)})`).join(', ');
+  
+  const prompt = `
+    You are an expert Danbooru tagger. Your task is to consolidate tags from a local tagger and a natural language description into a final, strict JSON list of Danbooru tags.
+    
+    INPUTS:
+    1. Local Tagger Output (High Trust): ${localTagsString}
+    2. Visual Description (Context): ${ollamaDescription}
 
-  if (tagsResult.status === 'rejected' && descriptionResult.status === 'rejected') {
-    throw new Error("Both services failed.");
+    INSTRUCTIONS:
+    - TRUST the Local Tagger tags the most.
+    - Use the Description to add missing tags or clarify context, but ONLY if they are valid Danbooru tags.
+    - Ensure "technical" tags (e.g., 'highres', 'absurdres', '4k') are included if implied.
+    - Categorize every tag correctly: 'general', 'character', 'style', 'technical', 'rating'.
+    - Output STRICT JSON format ONLY. No markdown, no explanations.
+
+    JSON SCHEMA:
+    {
+      "tags": [
+        { "name": "tag_name", "score": 1.0, "category": "category_name" }
+      ]
+    }
+  `;
+
+  try {
+    const response = await fetch(`${config.ollamaEndpoint}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: config.ollamaModel,
+        prompt: prompt,
+        format: "json",
+        stream: false
+      })
+    });
+
+    const data = await response.json();
+    const parsed = JSON.parse(data.response);
+    return parsed.tags || localTags;
+  } catch (error) {
+    console.error("Consolidation Error:", error);
+    return localTags; // Fallback to local tags
   }
+};
 
+const refineDescriptionWithOllama = async (
+  finalTags: Tag[],
+  config: BackendConfig
+): Promise<string> => {
+  if (!config.ollamaEndpoint) return "";
+
+  const tagsString = finalTags.map(t => t.name).join(', ');
+  
+  const prompt = `
+    Generate a detailed natural language description of an image based STRICTLY on these Danbooru tags.
+    
+    TAGS: ${tagsString}
+    
+    INSTRUCTIONS:
+    - Describe the image naturally.
+    - Do not list the tags.
+    - Focus on the visual elements described by the tags.
+    - Ensure parity with the tags provided.
+  `;
+
+  try {
+    const response = await fetch(`${config.ollamaEndpoint}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: config.ollamaModel,
+        prompt: prompt,
+        stream: false
+      })
+    });
+
+    const data = await response.json();
+    return data.response;
+  } catch (error) {
+    console.error("Refine Description Error:", error);
+    return "";
+  }
+};
+
+const generateTagsLocalHybrid = async (base64Image: string, config: BackendConfig): Promise<InterrogationResult> => {
+  // 1. Run Local Tagger ONLY (as per user request for raw output first)
+  const localTags = await fetchLocalTags(base64Image, config);
+
+  // 2. Return tags immediately. Description is generated on demand.
   return {
-    tags,
-    naturalDescription: description
+    tags: localTags,
+    naturalDescription: undefined
   };
 };
 
@@ -207,7 +307,7 @@ function getInterrogationPrompt() {
     CRITICAL RULES:
     1. **REAL TAGS ONLY**: Use ONLY tags that exist in the Danbooru/Gelbooru wiki. 
     2. **Format**: Lowercase, underscores for spaces.
-    3. **Categorize**: 'character', 'style', 'technical', 'rating', 'general'.
+    3. **Categorize**: 'general', 'character', 'copyright', 'artist', 'meta', 'rating'.
     
     DEEP CHARACTER SCAN:
     - Hair: Color, Length, Style.
@@ -240,26 +340,53 @@ export const generateTags = async (
 export const generateCaption = async (
   base64Image: string,
   mimeType: string,
-  config: BackendConfig
+  config: BackendConfig,
+  existingTags?: Tag[]
 ): Promise<string> => {
 
   if (config.type === 'local_hybrid') {
     if (!config.ollamaEndpoint || config.ollamaEndpoint.trim() === '') {
       throw new Error("Ollama endpoint is missing.");
     }
-    // If calling separately for some reason, simple Ollama call
+    
+    let prompt = "Describe this image in detail for an image generation prompt.";
+    if (existingTags && existingTags.length > 0) {
+       const tagList = existingTags.map(t => t.name.replace(/_/g, ' ')).join(', ');
+       prompt = `You are a visual analysis AI. 
+       
+       I have analyzed this image with a tagger and found these features: ${tagList}.
+       
+       Using your vision capabilities, verify these features in the image and write a detailed, natural language description.
+       - Incorporate the provided tags into a cohesive narrative.
+       - If a tag seems visually wrong based on your view of the image, ignore it.
+       - Focus on composition, colors, lighting, and mood.
+       - Do not just list the tags; write in full sentences.
+       - IMPORTANT: Output ONLY the description. Do not include any thinking process, reasoning, or meta-commentary.
+       `;
+    }
+
     const response = await fetch(`${config.ollamaEndpoint}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: config.ollamaModel,
-        prompt: "Describe this image in detail for an image generation prompt.",
+        prompt: prompt,
         images: [base64Image],
         stream: false
       })
     });
     const data = await response.json();
-    return data.response;
+    
+    // Clean up potential "thinking" artifacts if the model ignores the instruction
+    let cleanResponse = data.response;
+    
+    // Remove <think> blocks often produced by reasoning models
+    cleanResponse = cleanResponse.replace(/<think>[\s\S]*?<\/think>/gi, '');
+    
+    // Remove common meta-commentary prefixes
+    cleanResponse = cleanResponse.replace(/^(Here is a description|Sure, here is|Based on the tags|The image shows|I can see that).{0,20}:\s*/i, '');
+    
+    return cleanResponse.trim();
   }
 
   // Gemini Implementation

@@ -15,10 +15,11 @@ const App: React.FC = () => {
 
   const [settings, setSettings] = useState<TaggingSettings>({
     thresholds: {
-      character: 0.6,
-      style: 0.4,
       general: 0.5,
-      technical: 0.5,
+      character: 0.6,
+      copyright: 0.5,
+      artist: 0.5,
+      meta: 0.5,
       rating: 0.8
     },
     topK: 50,
@@ -31,7 +32,9 @@ const App: React.FC = () => {
     geminiApiKey: '',
     ollamaEndpoint: 'http://localhost:11434',
     ollamaModel: 'qwen2.5-vl',
-    taggerEndpoint: 'http://localhost:8000/tag',
+    taggerEndpoint: '/interrogate/pixai',
+    taggerModel: '',
+    enableNaturalLanguage: false
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -92,46 +95,13 @@ const App: React.FC = () => {
     try {
       const base64 = await fileToBase64(selectedFile);
 
-      if (backendConfig.type === 'gemini') {
-        // Gemini is still monolithic for now, or could be split if Gemini supports it. 
-        // Keeping original flow for Gemini but mapping to new state structure.
-        const interrogationResult = await generateTags(base64, selectedFile.type, backendConfig);
-        setResult(interrogationResult);
-        setLoadingState({ tags: false, description: false });
-        setAppState(AppState.SUCCESS);
-      } else {
-        // Local Hybrid: Parallel Execution
-
-        // 1. Fetch Tags
-        const tagsPromise = fetchLocalTags(base64, backendConfig)
-          .then(tags => {
-            setResult(prev => ({ ...prev, tags: tags || [] }));
-            setLoadingState(prev => ({ ...prev, tags: false }));
-          })
-          .catch(err => {
-            console.error("Tags failed", err);
-            setLoadingState(prev => ({ ...prev, tags: false }));
-            // Don't fail the whole app, just this part
-          });
-
-        // 2. Fetch Description
-        const descPromise = fetchOllamaDescription(base64, backendConfig)
-          .then(desc => {
-            setResult(prev => ({ ...prev, naturalDescription: desc }));
-            setLoadingState(prev => ({ ...prev, description: false }));
-          })
-          .catch(err => {
-            console.error("Description failed", err);
-            setLoadingState(prev => ({ ...prev, description: false }));
-          });
-
-        // Wait for both to settle to determine final AppState (optional, or just let UI handle partials)
-        await Promise.allSettled([tagsPromise, descPromise]);
-
-        // If at least one succeeded, we are in a "Success" or "Partial Success" state
-        // For simplicity, if we are done loading, we set SUCCESS (even if one failed, the UI shows error for that part)
-        setAppState(AppState.SUCCESS);
-      }
+      // Unified flow for both Gemini and Local Hybrid
+      // The logic for consolidation and optional NL is handled inside generateTags
+      const interrogationResult = await generateTags(base64, selectedFile.type, backendConfig);
+      
+      setResult(interrogationResult);
+      setLoadingState({ tags: false, description: false });
+      setAppState(AppState.SUCCESS);
 
     } catch (err: any) {
       console.error(err);
@@ -151,7 +121,14 @@ const App: React.FC = () => {
     setIsGeneratingCaption(true);
     try {
       const base64 = await fileToBase64(selectedFile);
-      const caption = await generateCaption(base64, selectedFile.type, backendConfig);
+      // If we have tags, we can use them to refine the description (Parity)
+      // But generateCaption currently doesn't accept tags. 
+      // We can just call generateCaption which uses Ollama/Gemini directly on the image.
+      // OR we can implement a smarter flow here if needed.
+      // For now, let's stick to the standard generateCaption which does a fresh look.
+      // Ideally, we should pass the tags to ensure parity if that's what the user wants.
+      
+      const caption = await generateCaption(base64, selectedFile.type, backendConfig, result.tags);
       setResult(prev => prev ? { ...prev, naturalDescription: caption } : null);
     } catch (err) {
       console.error(err);

@@ -8,7 +8,7 @@ i18n
   .use({
     type: 'backend',
     read: (language: string, _namespace: string, callback: (error: any, resources: any) => void) => {
-      // Dynamic import for locales to enable code splitting
+      // Dynamic imports for locales to enable code splitting
       import(`./locales/${language}.json`)
         .then((resources) => {
           callback(null, resources.default || resources);

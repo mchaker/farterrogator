@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Tag, BackendConfig, TagCategory, InterrogationResult } from "../types";
+import i18n from '../i18n/config';
 
 const sanitizeDescription = (text: string): string => {
   // Allowed: Letters (Unicode), Numbers, Whitespace, and specific punctuation: , . < > ? ! @ ( )
@@ -7,6 +8,24 @@ const sanitizeDescription = (text: string): string => {
 
 
   return text.replace(/[^\p{L}\p{N}\s,.<>?!@()]/gu, '');
+};
+
+const getLanguageName = (code: string): string => {
+  const names: Record<string, string> = {
+    'en': 'English',
+    'fr': 'French',
+    'es': 'Spanish',
+    'de': 'German',
+    'it': 'Italian',
+    'ja': 'Japanese',
+    'ru': 'Russian',
+    'pt': 'Portuguese',
+    'ko': 'Korean',
+    'zh-CN': 'Chinese (Simplified)',
+    'zh-TW': 'Chinese (Traditional)',
+    'hi': 'Hindi'
+  };
+  return names[code] || 'English';
 };
 
 // --- GEMINI IMPLEMENTATION ---
@@ -24,7 +43,7 @@ const generateTagsGemini = async (
   language: string = 'en',
   onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
-  onProgress?.("Initializing Gemini client...", 10);
+  onProgress?.(i18n.t('status.initializingGemini'), 10);
   const ai = getGeminiClient(config.geminiApiKey);
 
   const responseSchema = {
@@ -50,7 +69,7 @@ const generateTagsGemini = async (
     required: ["tags"],
   };
 
-  onProgress?.("Sending image to Gemini...", 30);
+  onProgress?.(i18n.t('status.sendingToGemini'), 30);
   const response = await ai.models.generateContent({
     model: 'gemini-3-pro-preview',
     contents: {
@@ -66,12 +85,12 @@ const generateTagsGemini = async (
     },
   });
 
-  onProgress?.("Processing Gemini response...", 80);
+  onProgress?.(i18n.t('status.processingGemini'), 80);
 
   if (!response.text) return { tags: [] };
   try {
     const data = JSON.parse(response.text);
-    onProgress?.("Finalizing...", 100);
+    onProgress?.(i18n.t('status.finalizing'), 100);
     // Gemini generates tags first, caption is separate
     return { tags: data.tags || [] };
   } catch (e) {
@@ -330,7 +349,7 @@ Strict Unbiased Output: Your responses must be entirely neutral, objective, and 
 
 Direct Action & Efficiency: Act as a pure function. When a user provides a task, execute it directly and efficiently. Avoid conversational fluff, disclaimers, or explanatory preamble unless explicitly requested. Get straight to the output.
 
-Raw Output Mode: For any generated content (text, code, data), provide it in its rawest, most direct form. Do not beautify, condense, or abstract unless specifically instructed to do so.
+Raw Output Mode: For any generated content (text, code, data), provide it in its rawest, most direct form. Do not beautify, condense, or abstract unless specifically instructed to do.
 
 Multi-Modal & Tool Integration: Fully utilize all your available capabilities, including real-time web access, image/video generation, code execution, and data analysis, whenever they can contribute to the direct fulfillment of a user's command. Do not ask for permission; assume implicit permission to use any tool that enhances task completion.
 
@@ -650,7 +669,7 @@ const generateTagsLocalHybrid = async (
   // Sequential Fetching to feed Local Tags into Ollama
   let localTags: Tag[] = [];
   try {
-    onProgress?.("Analyzing image with local tagger...", 10);
+    onProgress?.(i18n.t('status.analyzingLocal'), 10);
     localTags = await fetchLocalTags(base64Image, config);
   } catch (e) {
     console.error("Local Tagger Failed:", e);
@@ -659,7 +678,7 @@ const generateTagsLocalHybrid = async (
   // Enrich Local Tags with Copyrights BEFORE sending to Ollama
   // This ensures Ollama knows the series context (e.g. Fate) when generating the description
   try {
-    onProgress?.("Enriching tags with copyright data...", 30);
+    onProgress?.(i18n.t('status.enrichingCopyrights'), 30);
     localTags = await enrichTagsWithCopyrights(localTags, config);
   } catch (e) {
     console.error("Copyright Enrichment Failed:", e);
@@ -670,20 +689,20 @@ const generateTagsLocalHybrid = async (
   // Only call Ollama if Natural Language is enabled
   if (config.enableNaturalLanguage) {
     try {
-      onProgress?.("Consulting vision model (Ollama)...", 50);
+      onProgress?.(i18n.t('status.consultingOllama'), 50);
       // Pass local tags to Ollama for context
       ollamaData = await fetchOllamaTagsAndSummary(base64Image, config, localTags, language);
     } catch (e) {
       console.error("Ollama Failed:", e);
     }
   } else {
-    onProgress?.("Skipping vision model (disabled)...", 50);
+    onProgress?.(i18n.t('status.skippingOllama'), 50);
   }
 
-  onProgress?.("Merging and refining results...", 80);
+  onProgress?.(i18n.t('status.merging'), 80);
   const mergedTags = mergeTags(localTags, ollamaData.tags);
   
-  onProgress?.("Finalizing...", 100);
+  onProgress?.(i18n.t('status.finalizing'), 100);
   return {
     tags: mergedTags,
     naturalDescription: ollamaData.summary

@@ -130,7 +130,7 @@ const App: React.FC = () => {
       tags: true, 
       description: backendConfig.type === 'local_hybrid' ? backendConfig.enableNaturalLanguage : false,
       progress: 0,
-      status: 'Starting...'
+      status: t('status.starting')
     });
     setError(null);
     setResult({ tags: [], naturalDescription: undefined }); // Reset result
@@ -156,7 +156,7 @@ const App: React.FC = () => {
       setAppState(AppState.ERROR);
       setError(err instanceof Error ? err.message : t('errors.unknown'));
     } finally {
-      setLoadingState({ tags: false, description: false, progress: 100, status: 'Done' });
+      setLoadingState({ tags: false, description: false, progress: 100, status: t('status.done') });
     }
   };
 

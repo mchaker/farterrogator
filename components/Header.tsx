@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme, backendConfig }
         <div className="flex items-center gap-3">
           <div className="p-1.5 bg-red-500/10 rounded-lg border border-red-500/20">
             <img 
-              src="/favicon.png" 
+              src="/favicon.webp" 
               alt="Logo" 
               className="w-7 h-7 object-contain"
             />
@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme, backendConfig }
             aria-label="GPU Garden"
           >
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 group-hover:bg-slate-50 dark:group-hover:bg-slate-800 transition-colors">
-              <img src="/gpu-garden-logo.png" alt="" className="w-6 h-6" aria-hidden="true" />
+              <img src="/gpu-garden-logo.webp" alt="" className="w-6 h-6" aria-hidden="true" />
               <span className="text-sm font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
                 gpu.garden
               </span>

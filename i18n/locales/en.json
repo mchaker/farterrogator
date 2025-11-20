@@ -41,6 +41,20 @@
     "descriptionCopied": "Description copied to clipboard!",
     "embedFailed": "Failed to create NAI ready image."
   },
+  "status": {
+    "starting": "Starting...",
+    "done": "Done",
+    "initializingGemini": "Initializing Gemini client...",
+    "sendingToGemini": "Sending image to Gemini...",
+    "processingGemini": "Processing Gemini response...",
+    "finalizing": "Finalizing...",
+    "analyzingLocal": "Analyzing image with local tagger...",
+    "enrichingCopyrights": "Enriching tags with copyright data...",
+    "consultingOllama": "Consulting vision model (Ollama)...",
+    "skippingOllama": "Skipping vision model (disabled)...",
+    "merging": "Merging and refining results...",
+    "generatingDescription": "Generating natural language description..."
+  },
   "settings": {
     "title": "Settings",
     "thresholds": "Thresholds",

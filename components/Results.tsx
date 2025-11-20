@@ -199,7 +199,7 @@ export const Results: React.FC<ResultsProps> = ({
             <div className="flex flex-col items-center justify-center h-full space-y-4 py-4" role="status" aria-live="polite">
               <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400">
                 <Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" />
-                <span className="text-sm font-medium animate-pulse">Generating natural language description...</span>
+                <span className="text-sm font-medium animate-pulse">{t('status.generatingDescription')}</span>
               </div>
               <div className="w-full max-w-xs space-y-2 opacity-50" aria-hidden="true">
                 <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full w-full animate-pulse"></div>
@@ -211,7 +211,7 @@ export const Results: React.FC<ResultsProps> = ({
             <div className="flex flex-col items-center justify-center h-full space-y-4 py-4" role="status" aria-live="polite">
               <div className="flex items-center gap-3 text-blue-600 dark:text-blue-400">
                 <Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" />
-                <span className="text-sm font-medium animate-pulse">{loadingState.status || 'Analyzing...'}</span>
+                <span className="text-sm font-medium animate-pulse">{loadingState.status || t('status.analyzing')}</span>
               </div>
             </div>
           ) : result.naturalDescription ? (

@@ -4,6 +4,8 @@ import { Tag, BackendConfig, TagCategory, InterrogationResult } from "../types";
 const sanitizeDescription = (text: string): string => {
   // Allowed: Letters (Unicode), Numbers, Whitespace, and specific punctuation: , . < > ? ! @ ( )
   // Removes everything else (including hyphens, quotes, etc.)
+
+
   return text.replace(/[^\p{L}\p{N}\s,.<>?!@()]/gu, '');
 };
 
@@ -19,6 +21,7 @@ const generateTagsGemini = async (
   base64Image: string, 
   mimeType: string, 
   config: BackendConfig,
+  language: string = 'en',
   onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
   onProgress?.("Initializing Gemini client...", 10);
@@ -401,13 +404,15 @@ const mergeTags = (localTags: Tag[], ollamaTags: Tag[]): Tag[] => {
 const fetchOllamaTagsAndSummary = async (
   base64Image: string,
   config: BackendConfig,
-  existingTags: Tag[] = []
+  existingTags: Tag[] = [],
+  language: string = 'en'
 ): Promise<{ tags: Tag[], summary: string }> => {
   if (!config.ollamaEndpoint) return { tags: [], summary: "" };
 
   const proxiedEndpoint = getProxiedOllamaEndpoint(config.ollamaEndpoint);
+  const langName = getLanguageName(language);
 
-  let prompt = "Describe this image using a comma-separated list of Danbooru-style tags (lowercase, underscores for spaces) and a short summary. Format: Tags: tag1, tag2, ... Summary: ...";
+  let prompt = `Describe this image using a comma-separated list of Danbooru-style tags (lowercase, underscores for spaces) and a short summary in ${langName}. Format: Tags: tag1, tag2, ... Summary: ...`;
 
   if (existingTags.length > 0) {
     // Pass tags with confidence scores as requested
@@ -416,15 +421,15 @@ const fetchOllamaTagsAndSummary = async (
     
     1. Verify these tags visually.
     2. Add any missing tags that are visually apparent.
-    3. Write a detailed natural language description (summary) of the image.
-       - Use the provided tags as a guide for what is present, but convert them into natural, flowing sentences.
-       - Do NOT simply list the tags or use technical terms like "1girl", "solo", or "looking_at_viewer" directly unless they fit naturally (e.g. "a solo girl looking at the viewer").
+    3. Write a detailed natural language description (summary) of the image in ${langName}.
+       - Use the provided tags as a guide for what is present, but convert them into natural, flowing sentences in ${langName}.
+       - Do NOT simply list the tags or use technical terms like "1girl", "solo", or "looking_at_viewer" directly unless they fit naturally.
        - Focus on the character's appearance, clothing, pose, and the background.
        - Ensure character names and series titles are mentioned naturally.
     
     Format your response exactly as:
     Tags: tag1, tag2, ...
-    Summary: [Your detailed description here]
+    Summary: [Your detailed description in ${langName} here]
     `;
   }
 
@@ -639,6 +644,7 @@ const enrichTagsWithCopyrights = async (
 const generateTagsLocalHybrid = async (
   base64Image: string, 
   config: BackendConfig,
+  language: string = 'en',
   onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
   // Sequential Fetching to feed Local Tags into Ollama
@@ -666,7 +672,7 @@ const generateTagsLocalHybrid = async (
     try {
       onProgress?.("Consulting vision model (Ollama)...", 50);
       // Pass local tags to Ollama for context
-      ollamaData = await fetchOllamaTagsAndSummary(base64Image, config, localTags);
+      ollamaData = await fetchOllamaTagsAndSummary(base64Image, config, localTags, language);
     } catch (e) {
       console.error("Ollama Failed:", e);
     }
@@ -726,6 +732,7 @@ export const generateTags = async (
   base64Image: string,
   mimeType: string,
   config: BackendConfig,
+  language: string = 'en',
   onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
   // Ensure tag database is loaded before processing
@@ -733,10 +740,10 @@ export const generateTags = async (
 
   switch (config.type) {
     case 'local_hybrid':
-      return generateTagsLocalHybrid(base64Image, config, onProgress);
+      return generateTagsLocalHybrid(base64Image, config, language, onProgress);
     case 'gemini':
     default:
-      return generateTagsGemini(base64Image, mimeType, config, onProgress);
+      return generateTagsGemini(base64Image, mimeType, config, language, onProgress);
   }
 };
 
@@ -744,8 +751,10 @@ export const generateCaption = async (
   base64Image: string,
   mimeType: string,
   config: BackendConfig,
-  existingTags?: Tag[]
+  existingTags?: Tag[],
+  language: string = 'en'
 ): Promise<string> => {
+  const langName = getLanguageName(language);
 
   if (config.type === 'local_hybrid') {
     if (!config.ollamaEndpoint || config.ollamaEndpoint.trim() === '') {
@@ -754,19 +763,19 @@ export const generateCaption = async (
 
     const proxiedEndpoint = getProxiedOllamaEndpoint(config.ollamaEndpoint);
 
-    let prompt = "Describe this image in detail for an image generation prompt.";
+    let prompt = `Describe this image in detail for an image generation prompt in ${langName}.`;
     if (existingTags && existingTags.length > 0) {
       const tagList = existingTags.map(t => t.name.replace(/_/g, ' ')).join(', ');
       prompt = `You are a visual analysis AI. 
        
        I have analyzed this image with a tagger and found these features: ${tagList}.
        
-       Using your vision capabilities, verify these features in the image and write a detailed, natural language description.
+       Using your vision capabilities, verify these features in the image and write a detailed, natural language description in ${langName}.
        - Incorporate the provided tags into a cohesive narrative.
        - If a tag seems visually wrong based on your view of the image, ignore it.
        - Focus on composition, colors, lighting, and mood.
        - Do not just list the tags; write in full sentences.
-       - IMPORTANT: Output ONLY the description. Do not include any thinking process, reasoning, or meta-commentary.
+       - IMPORTANT: Output ONLY the description in ${langName}. Do not include any thinking process, reasoning, or meta-commentary.
        `;
     }
 
@@ -801,7 +810,7 @@ export const generateCaption = async (
     contents: {
       parts: [
         { inlineData: { mimeType: mimeType, data: base64Image } },
-        { text: "Generate a detailed, natural language description of this image suitable for use as a prompt for an image generation model (like Stable Diffusion)." },
+        { text: `Generate a detailed, natural language description of this image suitable for use as a prompt for an image generation model (like Stable Diffusion). Write the description in ${langName}.` },
       ],
     },
   });

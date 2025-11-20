@@ -143,6 +143,7 @@ const App: React.FC = () => {
         base64, 
         selectedFile.type, 
         backendConfig,
+        i18n.language,
         (status, progress) => {
           setLoadingState(prev => ({ ...prev, status, progress }));
         }
@@ -175,7 +176,7 @@ const App: React.FC = () => {
       // For now, let's stick to the standard generateCaption which does a fresh look.
       // Ideally, we should pass the tags to ensure parity if that's what the user wants.
 
-      const caption = await generateCaption(base64, selectedFile.type, backendConfig, result.tags);
+      const caption = await generateCaption(base64, selectedFile.type, backendConfig, result.tags, i18n.language);
       setResult(prev => prev ? { ...prev, naturalDescription: caption } : null);
     } catch (err) {
       console.error(err);

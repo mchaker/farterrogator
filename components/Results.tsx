@@ -166,7 +166,7 @@ export const Results: React.FC<ResultsProps> = ({
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
             <FileText className="w-4 h-4" />
-            Natural Description
+            {t('results.naturalDescription')}
           </h3>
           <div className="flex gap-2">
             {result.naturalDescription && !loadingState.description && (

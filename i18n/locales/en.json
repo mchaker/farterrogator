@@ -30,6 +30,7 @@
     "generatingTags": "Generating Technical tags...",
     "descriptionNotGenerated": "Description not generated.",
     "generateDescription": "Generate Natural Language Description",
+    "naturalDescription": "Natural Description",
     "technicalTags": "Technical Tags",
     "randomized": "Randomized",
     "noUnderscores": "No Underscores",

@@ -30,6 +30,7 @@
     "generatingTags": "Generando etiquetas técnicas...",
     "descriptionNotGenerated": "Descripción no generada.",
     "generateDescription": "Generar Descripción en Lenguaje Natural",
+    "naturalDescription": "Descripción Natural",
     "technicalTags": "Etiquetas Técnicas",
     "randomized": "Aleatorizado",
     "noUnderscores": "Sin Guiones Bajos",

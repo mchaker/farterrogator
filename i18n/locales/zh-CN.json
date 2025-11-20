@@ -30,6 +30,7 @@
     "generatingTags": "正在生成技术标签...",
     "descriptionNotGenerated": "未生成描述。",
     "generateDescription": "生成自然语言描述",
+    "naturalDescription": "自然语言描述",
     "technicalTags": "技术标签",
     "randomized": "随机排序",
     "noUnderscores": "移除下划线",

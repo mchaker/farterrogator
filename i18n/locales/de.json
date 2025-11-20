@@ -39,7 +39,21 @@
     "naiReady": "NAI Bereit",
     "tagsCopied": "Alle Tags in die Zwischenablage kopiert!",
     "descriptionCopied": "Beschreibung in die Zwischenablage kopiert!",
-    "embedFailed": "Erstellung des NAI-bereiten Bildes fehlgeschlagen."
+    "embedFailed": "Fehler beim Erstellen des NAI-bereiten Bildes."
+  },
+  "status": {
+    "starting": "Starten...",
+    "done": "Fertig",
+    "initializingGemini": "Initialisiere Gemini-Client...",
+    "sendingToGemini": "Sende Bild an Gemini...",
+    "processingGemini": "Verarbeite Gemini-Antwort...",
+    "finalizing": "Abschließen...",
+    "analyzingLocal": "Analysiere Bild mit lokalem Tagger...",
+    "enrichingCopyrights": "Reichere Tags mit Urheberrechtsdaten an...",
+    "consultingOllama": "Konsultiere Vision-Modell (Ollama)...",
+    "skippingOllama": "Überspringe Vision-Modell (deaktiviert)...",
+    "merging": "Zusammenführen und Verfeinern der Ergebnisse...",
+    "generatingDescription": "Generiere natürlichsprachliche Beschreibung..."
   },
   "settings": {
     "title": "Einstellungen",

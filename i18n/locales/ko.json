@@ -40,6 +40,20 @@
     "descriptionCopied": "설명이 클립보드에 복사되었습니다!",
     "embedFailed": "NAI 준비 이미지를 생성하지 못했습니다."
   },
+  "status": {
+    "starting": "시작 중...",
+    "done": "완료",
+    "initializingGemini": "Gemini 클라이언트 초기화 중...",
+    "sendingToGemini": "Gemini로 이미지 전송 중...",
+    "processingGemini": "Gemini 응답 처리 중...",
+    "finalizing": "마무리 중...",
+    "analyzingLocal": "로컬 태거로 이미지 분석 중...",
+    "enrichingCopyrights": "저작권 데이터로 태그 보강 중...",
+    "consultingOllama": "비전 모델 (Ollama) 상담 중...",
+    "skippingOllama": "비전 모델 건너뛰는 중 (비활성화됨)...",
+    "merging": "결과 병합 및 구체화 중...",
+    "generatingDescription": "자연어 설명 생성 중..."
+  },
   "settings": {
     "title": "설정",
     "thresholds": "임계값",

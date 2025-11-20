@@ -40,6 +40,20 @@
     "descriptionCopied": "描述已複製到剪貼板！",
     "embedFailed": "無法創建 NAI 就緒圖片。"
   },
+  "status": {
+    "starting": "正在啟動...",
+    "done": "完成",
+    "initializingGemini": "正在初始化 Gemini 用戶端...",
+    "sendingToGemini": "正在傳送圖片至 Gemini...",
+    "processingGemini": "正在處理 Gemini 回應...",
+    "finalizing": "正在完成...",
+    "analyzingLocal": "正在使用本機標註器分析圖片...",
+    "enrichingCopyrights": "正在使用版權資料豐富標籤...",
+    "consultingOllama": "正在諮詢視覺模型 (Ollama)...",
+    "skippingOllama": "正在略過視覺模型 (已停用)...",
+    "merging": "正在合併並最佳化結果...",
+    "generatingDescription": "正在產生自然語言描述..."
+  },
   "settings": {
     "title": "設置",
     "thresholds": "閾值",

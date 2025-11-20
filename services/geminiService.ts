@@ -21,11 +21,19 @@ const getLanguageName = (code: string): string => {
     'ru': 'Russian',
     'pt': 'Portuguese',
     'ko': 'Korean',
+    'zh': 'Chinese',
     'zh-CN': 'Chinese (Simplified)',
     'zh-TW': 'Chinese (Traditional)',
     'hi': 'Hindi'
   };
-  return names[code] || 'English';
+  
+  if (names[code]) return names[code];
+  
+  // Try base language (e.g. 'de-DE' -> 'de')
+  const base = code.split('-')[0];
+  if (names[base]) return names[base];
+
+  return 'English';
 };
 
 // --- GEMINI IMPLEMENTATION ---

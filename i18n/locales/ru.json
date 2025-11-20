@@ -40,6 +40,20 @@
     "descriptionCopied": "Описание скопировано в буфер обмена!",
     "embedFailed": "Не удалось создать изображение НАИ Рэди."
   },
+  "status": {
+    "starting": "Запуск...",
+    "done": "Готово",
+    "initializingGemini": "Инициализация клиента Gemini...",
+    "sendingToGemini": "Отправка изображения в Gemini...",
+    "processingGemini": "Обработка ответа Gemini...",
+    "finalizing": "Завершение...",
+    "analyzingLocal": "Анализ изображения локальным теггером...",
+    "enrichingCopyrights": "Обогащение тегов данными об авторских правах...",
+    "consultingOllama": "Обращение к модели зрения (Ollama)...",
+    "skippingOllama": "Пропуск модели зрения (отключено)...",
+    "merging": "Объединение и уточнение результатов...",
+    "generatingDescription": "Генерация описания на естественном языке..."
+  },
   "settings": {
     "title": "Настройки",
     "thresholds": "Пороги",

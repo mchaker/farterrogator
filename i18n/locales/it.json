@@ -40,6 +40,20 @@
     "descriptionCopied": "Descrizione copiata negli appunti!",
     "embedFailed": "Impossibile creare immagine pronta per NAI."
   },
+  "status": {
+    "starting": "Avvio...",
+    "done": "Fatto",
+    "initializingGemini": "Inizializzazione client Gemini...",
+    "sendingToGemini": "Invio immagine a Gemini...",
+    "processingGemini": "Elaborazione risposta Gemini...",
+    "finalizing": "Finalizzazione...",
+    "analyzingLocal": "Analisi immagine con tagger locale...",
+    "enrichingCopyrights": "Arricchimento tag con dati copyright...",
+    "consultingOllama": "Consultazione modello visivo (Ollama)...",
+    "skippingOllama": "Salto modello visivo (disabilitato)...",
+    "merging": "Unione e affinamento risultati...",
+    "generatingDescription": "Generazione descrizione in linguaggio naturale..."
+  },
   "settings": {
     "title": "Impostazioni",
     "thresholds": "Soglie",

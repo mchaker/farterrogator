@@ -41,6 +41,20 @@
     "descriptionCopied": "Description copiée dans le presse-papiers !",
     "embedFailed": "Échec de la création de l'image NAI Ready."
   },
+  "status": {
+    "starting": "Démarrage...",
+    "done": "Terminé",
+    "initializingGemini": "Initialisation du client Gemini...",
+    "sendingToGemini": "Envoi de l'image à Gemini...",
+    "processingGemini": "Traitement de la réponse de Gemini...",
+    "finalizing": "Finalisation...",
+    "analyzingLocal": "Analyse de l'image avec le tagueur local...",
+    "enrichingCopyrights": "Enrichissement des tags avec les données de droits d'auteur...",
+    "consultingOllama": "Consultation du modèle de vision (Ollama)...",
+    "skippingOllama": "Omission du modèle de vision (désactivé)...",
+    "merging": "Fusion et affinement des résultats...",
+    "generatingDescription": "Génération de la description en langage naturel..."
+  },
   "settings": {
     "title": "Paramètres",
     "thresholds": "Seuils",

@@ -41,6 +41,20 @@
     "descriptionCopied": "説明をクリップボードにコピーしました！",
     "embedFailed": "NAI Ready画像の作成に失敗しました。"
   },
+  "status": {
+    "starting": "開始中...",
+    "done": "完了",
+    "initializingGemini": "Geminiクライアントを初期化中...",
+    "sendingToGemini": "画像をGeminiに送信中...",
+    "processingGemini": "Geminiの応答を処理中...",
+    "finalizing": "仕上げ中...",
+    "analyzingLocal": "ローカルタガーで画像を分析中...",
+    "enrichingCopyrights": "著作権データでタグを強化中...",
+    "consultingOllama": "ビジョンモデル (Ollama) に問い合わせ中...",
+    "skippingOllama": "ビジョンモデルをスキップ中 (無効)...",
+    "merging": "結果を統合して調整中...",
+    "generatingDescription": "自然言語の説明を生成中..."
+  },
   "settings": {
     "title": "設定",
     "thresholds": "閾値",

@@ -40,6 +40,20 @@
     "descriptionCopied": "विवरण क्लिपबोर्ड पर कॉपी हो गया!",
     "embedFailed": "NAI रेडी इमेज बनाने में विफल।"
   },
+  "status": {
+    "starting": "शुरू हो रहा है...",
+    "done": "हो गया",
+    "initializingGemini": "Gemini क्लाइंट को प्रारंभ किया जा रहा है...",
+    "sendingToGemini": "Gemini को छवि भेजी जा रही है...",
+    "processingGemini": "Gemini प्रतिक्रिया संसाधित की जा रही है...",
+    "finalizing": "अंतिम रूप दिया जा रहा है...",
+    "analyzingLocal": "स्थानीय टैगर के साथ छवि का विश्लेषण किया जा रहा है...",
+    "enrichingCopyrights": "कॉपीराइट डेटा के साथ टैग को समृद्ध किया जा रहा है...",
+    "consultingOllama": "विज़न मॉडल (Ollama) से परामर्श किया जा रहा है...",
+    "skippingOllama": "विज़न मॉडल को छोड़ा जा रहा है (अक्षम)...",
+    "merging": "परिणामों को मिलाया और परिष्कृत किया जा रहा है...",
+    "generatingDescription": "प्राकृतिक भाषा विवरण उत्पन्न किया जा रहा है..."
+  },
   "settings": {
     "title": "सेटिंग्स",
     "thresholds": "थ्रेशोल्ड",

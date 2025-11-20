@@ -41,6 +41,20 @@
     "descriptionCopied": "¡Descripción copiada al portapapeles!",
     "embedFailed": "Error al crear imagen lista para NAI."
   },
+  "status": {
+    "starting": "Iniciando...",
+    "done": "Hecho",
+    "initializingGemini": "Inicializando cliente Gemini...",
+    "sendingToGemini": "Enviando imagen a Gemini...",
+    "processingGemini": "Procesando respuesta de Gemini...",
+    "finalizing": "Finalizando...",
+    "analyzingLocal": "Analizando imagen con etiquetador local...",
+    "enrichingCopyrights": "Enriqueciendo etiquetas con datos de derechos de autor...",
+    "consultingOllama": "Consultando modelo de visión (Ollama)...",
+    "skippingOllama": "Omitiendo modelo de visión (desactivado)...",
+    "merging": "Fusionando y refinando resultados...",
+    "generatingDescription": "Generando descripción en lenguaje natural..."
+  },
   "settings": {
     "title": "Configuración",
     "thresholds": "Umbrales",

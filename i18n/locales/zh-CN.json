@@ -41,6 +41,20 @@
     "descriptionCopied": "描述已复制到剪贴板！",
     "embedFailed": "无法创建 NAI 就绪图片。"
   },
+  "status": {
+    "starting": "正在启动...",
+    "done": "完成",
+    "initializingGemini": "正在初始化 Gemini 客户端...",
+    "sendingToGemini": "正在发送图片至 Gemini...",
+    "processingGemini": "正在处理 Gemini 响应...",
+    "finalizing": "正在完成...",
+    "analyzingLocal": "正在使用本地标注器分析图片...",
+    "enrichingCopyrights": "正在使用版权数据丰富标签...",
+    "consultingOllama": "正在咨询视觉模型 (Ollama)...",
+    "skippingOllama": "正在跳过视觉模型 (已禁用)...",
+    "merging": "正在合并并优化结果...",
+    "generatingDescription": "正在生成自然语言描述..."
+  },
   "settings": {
     "title": "设置",
     "thresholds": "阈值",

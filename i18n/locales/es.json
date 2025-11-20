@@ -99,7 +99,7 @@
   },
   "info": {
     "title": "¿Qué es Farterrogator?",
-    "description": "<strong>Farterrogator</strong> es herramienta avanzada de interrogación de imágenes por IA diseñada para analizar imágenes y extraer metadata exitosa, etiquetas y descripciones en lenguaje natural. Ayuda a artistas, desarrolladores y entusiastas a comprender el contenido de sus imágenes y prepararlas para un procesamiento posterior por IA.",
+    "description": "<strong>Farterrogator</strong> es herramienta avanzada de interrogación de imágenes por IA diseñada para analizar imágenes y extraer metadata de forma exitosa, etiquetas y descripciones en lenguaje natural. Ayuda a artistas, desarrolladores y entusiastas a comprender el contenido de sus imágenes y prepararlas para un procesamiento posterior por IA.",
     "features": {
       "dualModes": {
         "title": "Modos de Análisis Dual",

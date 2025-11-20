@@ -178,7 +178,7 @@ export const Results: React.FC<ResultsProps> = ({
                 aria-label="Download with Natural Description embedded"
               >
                 {isEmbedding ? <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" /> : <Download className="w-3.5 h-3.5" aria-hidden="true" />}
-                NAI Ready
+                {t('results.naiReady')}
               </button>
             )}
             {result.naturalDescription && !loadingState.description && (

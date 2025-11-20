@@ -10,10 +10,14 @@ import { AppState, InterrogationResult, TaggingSettings, BackendConfig } from '.
 import { useTheme } from './hooks/useTheme';
 
 const App: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [result, setResult] = useState<InterrogationResult | null>(null);
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   const [settings, setSettings] = useState<TaggingSettings>(() => {
     const saved = localStorage.getItem('taggingSettings');

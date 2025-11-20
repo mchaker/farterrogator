@@ -32,10 +32,13 @@ export const LanguageSelector: React.FC = () => {
     { code: 'ja', label: '日本語' },
     { code: 'ru', label: 'Русский' },
     { code: 'pt', label: 'Português' },
-    { code: 'ko', label: '한국어' }
+    { code: 'ko', label: '한국어' },
+    { code: 'zh-CN', label: '简体中文' },
+    { code: 'zh-TW', label: '繁體中文' }
   ];
 
-  const currentLang = i18n.language?.split('-')[0] || 'en';
+  const currentLang = i18n.language || 'en';
+  const displayLang = currentLang.startsWith('zh') ? currentLang : currentLang.split('-')[0];
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -49,7 +52,7 @@ export const LanguageSelector: React.FC = () => {
         title="Change Language"
       >
         <Languages className="w-4 h-4" />
-        <span className="text-sm font-medium uppercase">{currentLang}</span>
+        <span className="text-sm font-medium uppercase">{displayLang}</span>
       </button>
       
       {isOpen && (

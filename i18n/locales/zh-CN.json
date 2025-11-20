@@ -1,0 +1,121 @@
+{
+  "app": {
+    "title": "Farterrogator",
+    "subtitle": "人工图像反推工具",
+    "copyright": "© {{year}} Fartcore. 保留所有权利。"
+  },
+  "header": {
+    "whatIsThis": "这是什么？",
+    "poweredBy": "由 {{model}} 驱动",
+    "nothingYet": "暂无内容"
+  },
+  "upload": {
+    "inputImage": "输入图片",
+    "dragDrop": "拖放图片到此处，或点击选择",
+    "supports": "支持 PNG, JPG, WEBP, GIF",
+    "clear": "清除图片",
+    "interrogate": "开始反推"
+  },
+  "results": {
+    "title": "分析结果",
+    "ready": "准备就绪",
+    "readySub": "上传图片以查看标签和描述",
+    "failed": "分析失败",
+    "troubleshoot": "本地模式故障排除：",
+    "troubleshootOllama": "确保 Ollama 正在运行于 {{endpoint}}",
+    "troubleshootTagger": "确保本地 Tagger 正在运行于 {{endpoint}}",
+    "troubleshootCors": "检查两个本地服务器的 CORS 标头",
+    "processing": "处理中...",
+    "analyzing": "分析中...",
+    "generatingTags": "正在生成技术标签...",
+    "descriptionNotGenerated": "未生成描述。",
+    "generateDescription": "生成自然语言描述",
+    "technicalTags": "技术标签",
+    "randomized": "随机排序",
+    "noUnderscores": "移除下划线",
+    "copyAll": "复制全部",
+    "copied": "已复制！",
+    "naiReady": "NAI 就绪",
+    "tagsCopied": "所有标签已复制到剪贴板！",
+    "descriptionCopied": "描述已复制到剪贴板！",
+    "embedFailed": "无法创建 NAI 就绪图片。"
+  },
+  "settings": {
+    "title": "设置",
+    "thresholds": "阈值",
+    "outputSettings": "输出设置",
+    "backendSettings": "后端设置",
+    "topK": "前 K 个标签",
+    "randomize": "随机顺序",
+    "removeUnderscores": "移除下划线",
+    "backendType": "后端类型",
+    "geminiKey": "Gemini API 密钥",
+    "ollamaEndpoint": "Ollama 端点",
+    "ollamaModel": "Ollama 模型",
+    "refresh": "刷新",
+    "taggerEndpoint": "本地 Tagger 端点",
+    "enableNaturalLanguage": "启用自然语言",
+    "naturalLanguageWarning": "（这将花费更长时间）",
+    "simpleMode": "简单模式",
+    "advancedThresholds": "高级阈值",
+    "backend": {
+      "provider": "提供商",
+      "pixai": "Pixai (Ollama + Tagger)",
+      "gemini": "Google Gemini",
+      "keyStorage": "密钥仅存储在内存中。",
+      "pixaiDescription": "无缝结合本地 Tagger 结果与 Ollama 的推理和字幕能力。",
+      "ollamaEndpointLabel": "Ollama 端点 (LLM/视觉)",
+      "ollamaModel": "Ollama 模型"
+    },
+    "categories": {
+      "general": "常规",
+      "character": "角色",
+      "copyright": "版权",
+      "artist": "艺术家",
+      "meta": "元数据",
+      "rating": "评级"
+    }
+  },
+  "errors": {
+    "geminiKeyRequired": "需要 Gemini API 密钥。请在设置面板中配置。",
+    "ollamaRequired": "Pixai 模式需要 Ollama 端点。",
+    "taggerRequired": "Pixai 模式需要本地 Tagger 端点。",
+    "unknown": "发生未知错误"
+  },
+  "info": {
+    "title": "什么是 Farterrogator？",
+    "description": "<strong>Farterrogator</strong> 是一款先进的人工图像反推工具，旨在分析图像并提取详细的元数据、标签和自然语言描述。它帮助艺术家、开发者和爱好者理解图像内容，并为进一步的人工处理做好准备。",
+    "features": {
+      "dualModes": {
+        "title": "双重分析模式",
+        "description": "选择 <strong>Google Gemini</strong> 进行基于云的最先进分析，或选择 <strong>Pixai</strong>，结合 WD1.4 Tagger 与托管在 <strong>gpu.garden</strong> 上的 Ollama（视觉模型）。"
+      },
+      "naiReady": {
+        "title": "NAI 就绪嵌入",
+        "description": "自动将生成的标签或描述嵌入 PNG 元数据。生成的图像是“NAI 就绪”的——只需将其拖入 NovelAI 即可自动使用分析数据填充提示词。"
+      },
+      "privacy": {
+        "title": "隐私与安全",
+        "description": "在 Pixai 模式下，您的图像通过 <strong>Fartcore 数据中心</strong> 在 <strong>gpu.garden</strong> 上安全处理。虽然不在您的设备上运行，但您的数据将按照严格的隐私标准进行处理。"
+      },
+      "gpuGarden": {
+        "title": "GPU Garden 集成",
+        "description": "针对 GPU Garden 基础设施进行了优化，允许无缝代理到远程 GPU 实例以进行繁重的工作。"
+      }
+    },
+    "howTo": {
+      "title": "如何使用",
+      "step1": "上传图片或将其拖放到画布上。",
+      "step2": "选择您偏好的后端（Gemini 或 Pixai）。",
+      "step3": "调整置信度阈值以过滤标签。",
+      "step4": "点击<strong>开始反推</strong>。",
+      "step5": "复制标签或下载 <strong>NAI 就绪</strong> PNG 以在您的工作流程中使用。"
+    },
+    "madeBy": "制作："
+  },
+  "theme": {
+    "light": "浅色模式",
+    "auto": "跟随系统",
+    "dark": "深色模式"
+  }
+}

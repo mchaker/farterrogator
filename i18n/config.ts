@@ -11,6 +11,8 @@ import ja from './locales/ja.json';
 import ru from './locales/ru.json';
 import pt from './locales/pt.json';
 import ko from './locales/ko.json';
+import zhCN from './locales/zh-CN.json';
+import zhTW from './locales/zh-TW.json';
 
 i18n
   .use(LanguageDetector)
@@ -25,7 +27,9 @@ i18n
       ja: { translation: ja },
       ru: { translation: ru },
       pt: { translation: pt },
-      ko: { translation: ko }
+      ko: { translation: ko },
+      'zh-CN': { translation: zhCN },
+      'zh-TW': { translation: zhTW }
     },
     fallbackLng: 'en',
     interpolation: {

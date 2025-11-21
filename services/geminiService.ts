@@ -185,11 +185,8 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig,
   }
 
   // Automatic Proxy Handling:
-  // 1. DEV mode
-  // 2. PROD mode BUT running locally (e.g., vite preview)
-  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
-  if ((import.meta.env.DEV || isLocalhost) && endpoint.includes('localtagger.gpu.garden')) {
+  // Always proxy gpu.garden requests through our backend (Vite or Cloudflare) to avoid CORS
+  if (endpoint.includes('localtagger.gpu.garden')) {
     // Remove protocol and domain to get the relative path
     let path = endpoint.replace(/^https?:\/\//, '').replace(/^localtagger\.gpu\.garden/, '');
 
@@ -206,6 +203,7 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig,
   }
 
   // Handle localhost:8000 proxy (Fix for CORS on local dev)
+  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
   if (isLocalhost && endpoint.includes('localhost:8000')) {
     endpoint = endpoint.replace('http://localhost:8000', '');
     if (!endpoint.startsWith('/')) {
@@ -374,10 +372,9 @@ export const fetchBatchTags = async (
     endpoint = endpoint.replace('http:', 'https:');
   }
 
-  // Automatic Proxy Handling (DEV ONLY)
-  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
-  if ((import.meta.env.DEV || isLocalhost) && endpoint.includes('localtagger.gpu.garden')) {
+  // Automatic Proxy Handling:
+  // Always proxy gpu.garden requests through our backend (Vite or Cloudflare) to avoid CORS
+  if (endpoint.includes('localtagger.gpu.garden')) {
     // Remove protocol and domain
     let path = endpoint.replace(/^https?:\/\//, '').replace(/^localtagger\.gpu\.garden/, '');
     
@@ -390,6 +387,7 @@ export const fetchBatchTags = async (
   }
 
   // Handle localhost:8000 proxy (Fix for CORS on local dev)
+  const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
   if (isLocalhost && endpoint.includes('localhost:8000')) {
     endpoint = endpoint.replace('http://localhost:8000', '');
     if (!endpoint.startsWith('/')) {

@@ -164,7 +164,7 @@ export const fetchLocalTags = async (
     throw new Error("Local Tagger endpoint is invalid or missing.");
   }
 
-  const normalizedMime = mimeType && mimeType.trim() !== '' ? mimeType : 'application/octet-stream';
+  const normalizedMime = mimeType && mimeType.trim() !== '' ? mimeType : 'image/png';
 
   // Convert base64 to blob for FormData using a single native pass
   let blob: Blob;
@@ -179,7 +179,8 @@ export const fetchLocalTags = async (
 
   const formData = new FormData();
   const mimeParts = normalizedMime.split('/');
-  const extension = mimeParts.length === 2 && mimeParts[1] ? mimeParts[1].split('+')[0] || mimeParts[1] : 'bin';
+  const subtype = mimeParts.length === 2 ? mimeParts[1] : '';
+  const extension = subtype ? (subtype.split('+')[0] || subtype) : 'bin';
   formData.append('file', blob, `image.${extension}`);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)

@@ -158,31 +158,28 @@ export const fetchLocalTags = async (
   base64Image: string,
   config: BackendConfig,
   settings?: TaggingSettings,
-  mimeType: string = 'image/png'
+  mimeType?: string
 ): Promise<Tag[]> => {
   if (!config.taggerEndpoint || config.taggerEndpoint.trim() === '') {
     throw new Error("Local Tagger endpoint is invalid or missing.");
   }
 
-  // Convert base64 to blob for FormData (use native decoding to avoid large JS loops on big images)
+  const normalizedMime = mimeType && mimeType.trim() !== '' ? mimeType : 'application/octet-stream';
+
+  // Convert base64 to blob for FormData using a single native pass
   let blob: Blob;
   try {
-    const dataUrl = `data:${mimeType};base64,${base64Image}`;
-    const response = await fetch(dataUrl);
-    blob = await response.blob();
-  } catch (_error) {
-    console.warn(`Native base64 decode failed (${_error instanceof Error ? _error.message : 'unknown error'}), falling back to manual conversion`, _error);
     const byteCharacters = atob(base64Image);
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-    blob = new Blob([byteArray], { type: mimeType }); // Type doesn't strictly matter for the backend usually, but good practice
+    const byteArray = Uint8Array.from(byteCharacters, char => char.charCodeAt(0));
+    blob = new Blob([byteArray], { type: normalizedMime });
+  } catch (error) {
+    console.error(`Failed to convert base64 to blob (${normalizedMime})`, error);
+    throw error;
   }
 
   const formData = new FormData();
-  const mimeParts = mimeType.split('/');
-  const extension = mimeParts.length === 2 && mimeParts[1] ? mimeParts[1] : 'bin';
+  const mimeParts = normalizedMime.split('/');
+  const extension = mimeParts.length === 2 && mimeParts[1] ? mimeParts[1].split('+')[0] || mimeParts[1] : 'bin';
   formData.append('file', blob, `image.${extension}`);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)

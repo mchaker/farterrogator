@@ -171,7 +171,7 @@ export const fetchLocalTags = async (
     const response = await fetch(dataUrl);
     blob = await response.blob();
   } catch (_error) {
-    console.warn("Native base64 decode failed, falling back to manual conversion", _error);
+    console.warn(`Native base64 decode failed (${_error instanceof Error ? _error.message : 'unknown error'}), falling back to manual conversion`, _error);
     const byteCharacters = atob(base64Image);
     const byteArray = new Uint8Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
@@ -181,7 +181,8 @@ export const fetchLocalTags = async (
   }
 
   const formData = new FormData();
-  const extension = mimeType.split('/')[1] || 'png';
+  const mimeParts = mimeType.split('/');
+  const extension = mimeParts.length === 2 && mimeParts[1] ? mimeParts[1] : 'bin';
   formData.append('file', blob, `image.${extension}`);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)

@@ -154,6 +154,16 @@ import { getCategory, loadTagDatabase, isTagInCategory } from './tagService';
 loadTagDatabase();
 
 
+const MIME_TYPE_PATTERN = /^[^/]+\/[^/]+$/;
+
+const getExtensionFromMimeType = (mime: string): string => {
+  // Handles structured MIME types like image/svg+xml by using the base subtype
+  if (!MIME_TYPE_PATTERN.test(mime)) return 'bin';
+  const [, subtype] = mime.split('/');
+  const baseSubtype = subtype.split('+')[0];
+  return baseSubtype || 'bin';
+};
+
 export const fetchLocalTags = async (
   base64Image: string,
   config: BackendConfig,
@@ -178,12 +188,7 @@ export const fetchLocalTags = async (
   }
 
   const formData = new FormData();
-  const extension = (() => {
-    if (!/^[^/]+\/[^/]+$/.test(normalizedMime)) return 'bin';
-    const [, subtype] = normalizedMime.split('/');
-    const cleaned = subtype.split('+')[0];
-    return cleaned || 'bin';
-  })();
+  const extension = getExtensionFromMimeType(normalizedMime);
   const filenamePrefix = normalizedMime.startsWith('image/') ? 'image' : 'file';
   formData.append('file', blob, `${filenamePrefix}.${extension}`);
 

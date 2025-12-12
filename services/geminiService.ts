@@ -154,7 +154,12 @@ import { getCategory, loadTagDatabase, isTagInCategory } from './tagService';
 loadTagDatabase();
 
 
-export const fetchLocalTags = async (base64Image: string, config: BackendConfig, settings?: TaggingSettings): Promise<Tag[]> => {
+export const fetchLocalTags = async (
+  base64Image: string,
+  config: BackendConfig,
+  settings?: TaggingSettings,
+  mimeType: string = 'image/png'
+): Promise<Tag[]> => {
   if (!config.taggerEndpoint || config.taggerEndpoint.trim() === '') {
     throw new Error("Local Tagger endpoint is invalid or missing.");
   }
@@ -162,20 +167,22 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig,
   // Convert base64 to blob for FormData (use native decoding to avoid large JS loops on big images)
   let blob: Blob;
   try {
-    const dataUrl = `data:image/png;base64,${base64Image}`;
+    const dataUrl = `data:${mimeType};base64,${base64Image}`;
     const response = await fetch(dataUrl);
     blob = await response.blob();
   } catch (_error) {
+    console.warn("Native base64 decode failed, falling back to manual conversion", _error);
     const byteCharacters = atob(base64Image);
     const byteArray = new Uint8Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteArray[i] = byteCharacters.charCodeAt(i);
     }
-    blob = new Blob([byteArray], { type: 'image/png' }); // Type doesn't strictly matter for the backend usually, but good practice
+    blob = new Blob([byteArray], { type: mimeType }); // Type doesn't strictly matter for the backend usually, but good practice
   }
 
   const formData = new FormData();
-  formData.append('file', blob, 'image.png');
+  const extension = mimeType.split('/')[1] || 'png';
+  formData.append('file', blob, `image.${extension}`);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)
   let endpoint = config.taggerEndpoint;
@@ -943,7 +950,8 @@ const enrichTagsWithCopyrights = async (
 };
 
 const generateTagsLocalHybrid = async (
-  base64Image: string, 
+  base64Image: string,
+  mimeType: string, 
   config: BackendConfig,
   settings?: TaggingSettings,
   language: string = 'en',
@@ -953,7 +961,7 @@ const generateTagsLocalHybrid = async (
   let localTags: Tag[] = [];
   try {
     onProgress?.(i18n.t('status.analyzingLocal'), 10);
-    localTags = await fetchLocalTags(base64Image, config, settings);
+    localTags = await fetchLocalTags(base64Image, config, settings, mimeType);
   } catch (e) {
     console.error("Local Tagger Failed:", e);
   }
@@ -1043,7 +1051,7 @@ export const generateTags = async (
 
   switch (config.type) {
     case 'local_hybrid':
-      return generateTagsLocalHybrid(base64Image, config, settings, language, onProgress);
+      return generateTagsLocalHybrid(base64Image, mimeType, config, settings, language, onProgress);
     case 'gemini':
     default:
       return generateTagsGemini(base64Image, mimeType, config, language, onProgress);

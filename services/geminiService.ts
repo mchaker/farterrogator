@@ -154,22 +154,48 @@ import { getCategory, loadTagDatabase, isTagInCategory } from './tagService';
 loadTagDatabase();
 
 
-export const fetchLocalTags = async (base64Image: string, config: BackendConfig, settings?: TaggingSettings): Promise<Tag[]> => {
+const MIME_TYPE_PATTERN = /^[^/]+\/[^/]+$/;
+
+const getExtensionFromMimeType = (mime: string): string => {
+  // Handles structured MIME types like image/svg+xml by using the base subtype
+  if (!mime || mime.trim() === '' || !MIME_TYPE_PATTERN.test(mime)) return 'bin';
+  const [, subtype] = mime.split('/');
+  const baseSubtype = subtype.split('+')[0];
+  return baseSubtype || 'bin';
+};
+
+const getUploadFilename = (mime: string, extension: string): string => {
+  const prefix = mime.startsWith('image/') ? 'image' : 'file';
+  return `${prefix}.${extension}`;
+};
+
+export const fetchLocalTags = async (
+  base64Image: string,
+  config: BackendConfig,
+  settings?: TaggingSettings,
+  mimeType?: string
+): Promise<Tag[]> => {
   if (!config.taggerEndpoint || config.taggerEndpoint.trim() === '') {
     throw new Error("Local Tagger endpoint is invalid or missing.");
   }
 
-  // Convert base64 to blob for FormData
-  const byteCharacters = atob(base64Image);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  const normalizedMime = mimeType && mimeType.trim() !== '' ? mimeType : 'image/png';
+
+  // Convert base64 to blob for FormData using a single native pass
+  let blob: Blob;
+  try {
+    const byteCharacters = atob(base64Image);
+    const byteArray = Uint8Array.from(byteCharacters, char => char.charCodeAt(0));
+    blob = new Blob([byteArray], { type: normalizedMime });
+  } catch (error) {
+    console.error(`Failed to convert base64 to blob (length: ${base64Image.length}, mime: ${normalizedMime})`, error);
+    throw error;
   }
-  const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type: 'image/png' }); // Type doesn't strictly matter for the backend usually, but good practice
 
   const formData = new FormData();
-  formData.append('file', blob, 'image.png');
+  const extension = getExtensionFromMimeType(normalizedMime);
+  const filename = getUploadFilename(normalizedMime, extension);
+  formData.append('file', blob, filename);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)
   let endpoint = config.taggerEndpoint;
@@ -937,7 +963,8 @@ const enrichTagsWithCopyrights = async (
 };
 
 const generateTagsLocalHybrid = async (
-  base64Image: string, 
+  base64Image: string,
+  mimeType: string, 
   config: BackendConfig,
   settings?: TaggingSettings,
   language: string = 'en',
@@ -947,7 +974,7 @@ const generateTagsLocalHybrid = async (
   let localTags: Tag[] = [];
   try {
     onProgress?.(i18n.t('status.analyzingLocal'), 10);
-    localTags = await fetchLocalTags(base64Image, config, settings);
+    localTags = await fetchLocalTags(base64Image, config, settings, mimeType);
   } catch (e) {
     console.error("Local Tagger Failed:", e);
   }
@@ -1037,7 +1064,7 @@ export const generateTags = async (
 
   switch (config.type) {
     case 'local_hybrid':
-      return generateTagsLocalHybrid(base64Image, config, settings, language, onProgress);
+      return generateTagsLocalHybrid(base64Image, mimeType, config, settings, language, onProgress);
     case 'gemini':
     default:
       return generateTagsGemini(base64Image, mimeType, config, language, onProgress);

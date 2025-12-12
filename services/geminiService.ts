@@ -158,10 +158,15 @@ const MIME_TYPE_PATTERN = /^[^/]+\/[^/]+$/;
 
 const getExtensionFromMimeType = (mime: string): string => {
   // Handles structured MIME types like image/svg+xml by using the base subtype
-  if (!MIME_TYPE_PATTERN.test(mime)) return 'bin';
+  if (!mime || mime.trim() === '' || !MIME_TYPE_PATTERN.test(mime)) return 'bin';
   const [, subtype] = mime.split('/');
   const baseSubtype = subtype.split('+')[0];
   return baseSubtype || 'bin';
+};
+
+const getUploadFilename = (mime: string, extension: string): string => {
+  const prefix = mime.startsWith('image/') ? 'image' : 'file';
+  return `${prefix}.${extension}`;
 };
 
 export const fetchLocalTags = async (
@@ -183,14 +188,14 @@ export const fetchLocalTags = async (
     const byteArray = Uint8Array.from(byteCharacters, char => char.charCodeAt(0));
     blob = new Blob([byteArray], { type: normalizedMime });
   } catch (error) {
-    console.error(`Failed to convert base64 to blob (${normalizedMime})`, error);
+    console.error(`Failed to convert base64 to blob (length: ${base64Image.length}, mime: ${normalizedMime})`, error);
     throw error;
   }
 
   const formData = new FormData();
   const extension = getExtensionFromMimeType(normalizedMime);
-  const filenamePrefix = normalizedMime.startsWith('image/') ? 'image' : 'file';
-  formData.append('file', blob, `${filenamePrefix}.${extension}`);
+  const filename = getUploadFilename(normalizedMime, extension);
+  formData.append('file', blob, filename);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)
   let endpoint = config.taggerEndpoint;

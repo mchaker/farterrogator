@@ -178,10 +178,14 @@ export const fetchLocalTags = async (
   }
 
   const formData = new FormData();
-  const mimeParts = normalizedMime.split('/');
-  const subtype = mimeParts.length === 2 ? mimeParts[1] : '';
-  const extension = subtype ? (subtype.split('+')[0] || subtype) : 'bin';
-  formData.append('file', blob, `image.${extension}`);
+  const extension = (() => {
+    if (!/^[^/]+\/[^/]+$/.test(normalizedMime)) return 'bin';
+    const [, subtype] = normalizedMime.split('/');
+    const cleaned = subtype.split('+')[0];
+    return cleaned || 'bin';
+  })();
+  const filenamePrefix = normalizedMime.startsWith('image/') ? 'image' : 'file';
+  formData.append('file', blob, `${filenamePrefix}.${extension}`);
 
   // Automatic Proxy Handling for known CORS-restricted endpoints (DEV ONLY)
   let endpoint = config.taggerEndpoint;

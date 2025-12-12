@@ -159,14 +159,20 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig,
     throw new Error("Local Tagger endpoint is invalid or missing.");
   }
 
-  // Convert base64 to blob for FormData
-  const byteCharacters = atob(base64Image);
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  // Convert base64 to blob for FormData (use native decoding to avoid large JS loops on big images)
+  let blob: Blob;
+  try {
+    const dataUrl = `data:image/png;base64,${base64Image}`;
+    const response = await fetch(dataUrl);
+    blob = await response.blob();
+  } catch {
+    const byteCharacters = atob(base64Image);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    blob = new Blob([byteArray], { type: 'image/png' }); // Type doesn't strictly matter for the backend usually, but good practice
   }
-  const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type: 'image/png' }); // Type doesn't strictly matter for the backend usually, but good practice
 
   const formData = new FormData();
   formData.append('file', blob, 'image.png');

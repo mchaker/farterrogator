@@ -165,7 +165,7 @@ export const fetchLocalTags = async (base64Image: string, config: BackendConfig,
     const dataUrl = `data:image/png;base64,${base64Image}`;
     const response = await fetch(dataUrl);
     blob = await response.blob();
-  } catch {
+  } catch (_error) {
     const byteCharacters = atob(base64Image);
     const byteArray = new Uint8Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {

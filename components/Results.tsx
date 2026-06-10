@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Button, Progressbar, Preloader } from 'konsta/react';
@@ -26,6 +26,23 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
   } | null>(null);
   const previewCache = useRef<Map<string, string | null>>(new Map());
   const previewHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [artistPostCounts, setArtistPostCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    if (!artistMatches || artistMatches.length === 0) return;
+    setArtistPostCounts({});
+    Promise.all(
+      artistMatches.map(async artist => {
+        try {
+          const res = await fetch(`https://danbooru.donmai.us/tags.json?search[name]=${encodeURIComponent(artist.name)}&limit=1`);
+          const data = await res.json();
+          return [artist.name, data.length > 0 ? (data[0].post_count ?? 0) : 0] as const;
+        } catch {
+          return [artist.name, 0] as const;
+        }
+      })
+    ).then(entries => setArtistPostCounts(Object.fromEntries(entries)));
+  }, [artistMatches]);
 
   const handleArtistEnter = async (artistName: string, e: React.MouseEvent<HTMLLIElement>) => {
     if (previewHideTimer.current) clearTimeout(previewHideTimer.current);
@@ -45,7 +62,9 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
         `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(artistName + ' -rating:e -rating:q')}&limit=1&random=true`
       );
       const data = await res.json();
-      const url: string | null = data.length > 0 ? (data[0].preview_file_url ?? null) : null;
+      const url: string | null = data.length > 0
+        ? (data[0].large_file_url ?? data[0].sample_file_url ?? data[0].preview_file_url ?? null)
+        : null;
       if (url === null) previewCache.current.set(artistName, null);
       setArtistPreview(prev => prev?.name === artistName ? { ...prev, url, loading: false } : prev);
     } catch {
@@ -168,12 +187,12 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
           <div className="flex gap-2 items-center">
             <div className="flex gap-1">
               {settings.randomize && (
-                <span className="px-2 py-0.5 rounded-full bg-md-light-secondary-container dark:bg-md-dark-secondary-container text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container text-[10px] font-medium">
+                <span className="px-2 py-0.5 rounded-full bg-md-light-secondary-container dark:bg-md-dark-secondary-container text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container text-2xs font-medium">
                   {t('results.randomized')}
                 </span>
               )}
               {settings.removeUnderscores && (
-                <span className="px-2 py-0.5 rounded-full bg-md-light-secondary-container dark:bg-md-dark-secondary-container text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container text-[10px] font-medium">
+                <span className="px-2 py-0.5 rounded-full bg-md-light-secondary-container dark:bg-md-dark-secondary-container text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container text-2xs font-medium">
                   {t('results.noUnderscores')}
                 </span>
               )}
@@ -239,7 +258,7 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                 >
                   <span className="opacity-50" aria-hidden="true">{getCategoryIcon(tag.category)}</span>
                   <span className="font-mono font-medium">{formatTag(tag.name)}</span>
-                  <span className="ml-1 text-[10px] font-bold opacity-60 bg-black/10 dark:bg-black/20 px-1.5 py-0.5 rounded" aria-hidden="true">
+                  <span className="ml-1 text-2xs font-bold opacity-60 bg-black/10 dark:bg-black/20 px-1.5 py-0.5 rounded" aria-hidden="true">
                     {tag.score.toFixed(2)}
                   </span>
                 </button>
@@ -270,7 +289,7 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
           <h3 className="text-sm font-semibold text-md-light-on-surface dark:text-md-dark-on-surface uppercase tracking-wider flex items-center gap-2">
             <Palette className="w-4 h-4" aria-hidden="true" />
             {t('results.artistSimilarity')}
-            <span className="bg-md-light-surface-3 dark:bg-md-dark-surface-3 px-2 py-0.5 rounded-full text-[10px] font-normal normal-case tracking-normal text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+            <span className="bg-md-light-surface-3 dark:bg-md-dark-surface-3 px-2 py-0.5 rounded-full text-2xs font-normal normal-case tracking-normal text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
               Kaloscope 2.0
             </span>
           </h3>
@@ -301,6 +320,11 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                         <span className="flex-1 min-w-0 text-sm font-medium font-mono truncate text-md-light-on-surface dark:text-md-dark-on-surface">
                           {formatTag(artist.name)}
                         </span>
+                        {artistPostCounts[artist.name] !== undefined && (
+                          <span className="shrink-0 text-2xs tabular-nums text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-50">
+                            {artistPostCounts[artist.name].toLocaleString()}
+                          </span>
+                        )}
                       </button>
                       <a
                         href={`https://danbooru.donmai.us/artists/show_or_new?name=${encodeURIComponent(artist.name)}`}

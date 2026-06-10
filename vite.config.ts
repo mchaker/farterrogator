@@ -105,6 +105,18 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       cssMinify: 'lightningcss',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('jszip') || id.includes('js-untar')) {
+                return 'vendor-files';
+              }
+              return 'vendor';
+            }
+          }
+        }
+      }
     }
   };
 });

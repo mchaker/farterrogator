@@ -33,22 +33,22 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
     const x = rect.left - 168;
     const y = Math.max(8, Math.min(rect.top + rect.height / 2 - 80, window.innerHeight - 168));
 
-    if (previewCache.current.has(artistName)) {
-      setArtistPreview({ name: artistName, url: previewCache.current.get(artistName)!, loading: false, x, y });
+    // Only skip fetch for artists confirmed to have no matching posts
+    if (previewCache.current.get(artistName) === null) {
+      setArtistPreview({ name: artistName, url: null, loading: false, x, y });
       return;
     }
 
     setArtistPreview({ name: artistName, url: null, loading: true, x, y });
     try {
       const res = await fetch(
-        `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(artistName + ' -rating:e -rating:q')}&limit=1`
+        `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(artistName + ' -rating:e -rating:q')}&limit=1&random=true`
       );
       const data = await res.json();
       const url: string | null = data.length > 0 ? (data[0].preview_file_url ?? null) : null;
-      previewCache.current.set(artistName, url);
+      if (url === null) previewCache.current.set(artistName, null);
       setArtistPreview(prev => prev?.name === artistName ? { ...prev, url, loading: false } : prev);
     } catch {
-      previewCache.current.set(artistName, null);
       setArtistPreview(prev => prev?.name === artistName ? { ...prev, url: null, loading: false } : prev);
     }
   };

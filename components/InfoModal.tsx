@@ -21,7 +21,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
       aria-labelledby="info-modal-title"
     >
       <div 
-        className="bg-white dark:bg-stone-950 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-stone-200 dark:border-stone-800 animate-in zoom-in-50 duration-300"
+        className="bg-white dark:bg-stone-950 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto border border-stone-200 dark:border-stone-800 animate-in zoom-in-50 duration-300"
         onClick={e => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-white/80 dark:bg-stone-950/80 backdrop-blur-md p-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between z-10">
@@ -38,7 +38,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        <div className="p-6 space-y-8">
+        <div className="p-8 space-y-10">
           <section>
             <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-lg">
               <Trans 
@@ -50,7 +50,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
             </p>
           </section>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-3">
               <h3 className="font-semibold text-stone-900 dark:text-stone-100 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-amber-500" />
@@ -92,7 +92,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <section className="bg-stone-50 dark:bg-stone-800/50 rounded-xl p-4 border border-stone-200 dark:border-stone-700">
+          <section className="bg-stone-50 dark:bg-stone-800/50 rounded-xl p-6 border border-stone-200 dark:border-stone-700">
             <h3 className="font-semibold text-stone-900 dark:text-stone-100 mb-2">{t('info.howTo.title')}</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm text-stone-600 dark:text-stone-400">
               <li>{t('info.howTo.step1')}</li>

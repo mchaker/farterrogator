@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { App as KonstaApp, Page, Button, Preloader } from "konsta/react";
-import { AlertCircle, Wand2, Sparkles, HelpCircle } from "lucide-react";
+import { AlertCircle, Wand2, Sparkles } from "lucide-react";
 import { Header } from "./components/Header";
 import { ImageUpload } from "./components/ImageUpload";
 import { ToleranceControl } from "./components/ToleranceControl";
 import { Results } from "./components/Results";
-import { InfoModal } from "./components/InfoModal";
 import {
   generateTags,
   fileToBase64,
@@ -42,7 +41,6 @@ const App: React.FC = () => {
     null,
   );
   const [isMatchingArtists, setIsMatchingArtists] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -210,7 +208,7 @@ const App: React.FC = () => {
 
   return (
     <KonstaApp theme="material" className="h-full selection:bg-red-500/30">
-      <Page className="flex flex-col">
+      <Page className="flex flex-col min-h-screen">
         <Header theme={theme} setTheme={setTheme} />
 
         <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 lg:p-8 gap-4 sm:gap-6 lg:gap-8 flex flex-col lg:flex-row lg:items-start pb-4">
@@ -343,7 +341,7 @@ const App: React.FC = () => {
           </div>
         </main>
 
-        <footer className="sticky bottom-0 z-20 px-3 pb-2.5 pt-1 flex items-center justify-between text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+        <footer className="px-3 pb-2.5 pt-1 flex items-center justify-between text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant relative">
           <a
             href="https://gpu.garden"
             target="_blank"
@@ -373,7 +371,7 @@ const App: React.FC = () => {
               </span>
             </span>
           </a>
-          <p className="opacity-50 hidden sm:block px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md">
+          <p className="opacity-50 absolute left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md whitespace-nowrap">
             {t("app.copyright", {
               year:
                 new Date().getFullYear() > 2025
@@ -381,17 +379,27 @@ const App: React.FC = () => {
                   : "2025",
             })}
           </p>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            aria-label={t("header.whatIsThis")}
-            title={t("header.whatIsThis")}
-            className="p-1.5 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:bg-md-light-surface-3/80 dark:hover:bg-md-dark-surface-3/80 transition-colors"
-          >
-            <HelpCircle className="w-4 h-4" aria-hidden="true" />
-          </button>
+          <span className="px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md opacity-60">
+            made by{" "}
+            <a
+              href="https://mooshieblob.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-md-light-primary dark:hover:text-md-dark-primary hover:opacity-100 transition-colors"
+            >
+              mooshieblob
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://github.com/AshtakaOOf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-md-light-primary dark:hover:text-md-dark-primary hover:opacity-100 transition-colors"
+            >
+              ashtaka
+            </a>
+          </span>
         </footer>
-
-        <InfoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </Page>
     </KonstaApp>
   );

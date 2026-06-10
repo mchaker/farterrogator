@@ -265,17 +265,17 @@ const App: React.FC = () => {
           </div>
         </main>
 
-        <footer className="sticky bottom-0 z-20 px-4 py-2 flex items-center justify-between text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant bg-md-light-surface-2/80 dark:bg-md-dark-surface-2/80 backdrop-blur-md">
+        <footer className="sticky bottom-0 z-20 px-3 pb-2.5 pt-1 flex items-center justify-between text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
           <a
             href="https://gpu.garden"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-1.5 active:scale-95 transition-transform"
+            className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md active:scale-95 transition-transform"
             title="GPU Garden"
             aria-label="GPU Garden"
           >
-            <img src="/gpu-garden-logo.webp" alt="" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
-            <span className="relative font-bold text-xs sm:text-sm overflow-hidden">
+            <img src="/gpu-garden-logo.webp" alt="" className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
+            <span className="relative font-bold text-xs overflow-hidden">
               <span className="block text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant transition-opacity duration-250 group-hover:opacity-0" aria-hidden="true">
                 gpu.garden
               </span>
@@ -287,14 +287,14 @@ const App: React.FC = () => {
               </span>
             </span>
           </a>
-          <p className="opacity-60 text-center hidden sm:block">{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>
+          <p className="opacity-50 hidden sm:block px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md">{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>
           <button
             onClick={() => setIsModalOpen(true)}
             aria-label={t('header.whatIsThis')}
             title={t('header.whatIsThis')}
-            className="p-1.5 rounded-full text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:bg-md-light-surface-3 dark:hover:bg-md-dark-surface-3 transition-colors"
+            className="p-1.5 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:bg-md-light-surface-3/80 dark:hover:bg-md-dark-surface-3/80 transition-colors"
           >
-            <HelpCircle className="w-5 h-5" aria-hidden="true" />
+            <HelpCircle className="w-4 h-4" aria-hidden="true" />
           </button>
         </footer>
 

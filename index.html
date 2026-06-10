@@ -1,74 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Farterrogator</title>
-    <meta name="description" content="Advanced AI Image Interrogator & Prompt Generator. Analyze images to generate strict Danbooru-style tags and detailed natural language descriptions." />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tagger.gpu.garden/" />
-    <meta property="og:title" content="Farterrogator" />
-    <meta property="og:description" content="Advanced AI Image Interrogator & Prompt Generator. Analyze images to generate strict Danbooru-style tags and detailed natural language descriptions." />
-    <meta property="og:image" content="https://tagger.gpu.garden/favicon.png" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Farterrogator</title>
+        <meta
+            name="description"
+            content="Use the best new and proved Danbooru AI image taggers for free in less than 10 seconds."
+        />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:url" content="https://tagger.gpu.garden/" />
-    <meta property="twitter:title" content="Farterrogator" />
-    <meta property="twitter:description" content="Advanced AI Image Interrogator & Prompt Generator. Analyze images to generate strict Danbooru-style tags and detailed natural language descriptions." />
-    <meta property="twitter:image" content="https://tagger.gpu.garden/favicon.png" />
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://tagger.gpu.garden/" />
+        <meta property="og:title" content="Farterrogator" />
+        <meta
+            property="og:description"
+            content="Use the best new and proved Danbooru AI image taggers for free in less than 10 seconds."
+        />
+        <meta
+            property="og:image"
+            content="https://tagger.gpu.garden/favicon.png"
+        />
 
-    <link rel="icon" type="image/webp" href="/favicon.webp">
-    
-    <!-- Preconnects -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://gpu.garden">
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:url" content="https://tagger.gpu.garden/" />
+        <meta property="twitter:title" content="Farterrogator" />
+        <meta
+            property="twitter:description"
+            content="Use the best new and proved Danbooru AI image taggers for free in less than 10 seconds."
+        />
+        <meta
+            property="twitter:image"
+            content="https://tagger.gpu.garden/favicon.png"
+        />
 
-    <!-- Fonts: Non-blocking load -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    </noscript>
+        <link rel="icon" type="image/webp" href="/favicon.webp" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    </noscript>
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      .font-mono {
-        font-family: 'JetBrains Mono', monospace;
-      }
-      /* Custom scrollbar for tag lists */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: transparent; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #475569; 
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #f87171; /* red-400 */
-      }
-      .dark ::-webkit-scrollbar-thumb:hover {
-        background: #991b1b; /* red-800 */
-      }
-    </style>
-</head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+        <!-- Preconnects -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://gpu.garden" />
+
+        <!-- Fonts: Non-blocking load -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+            media="print"
+            onload="this.media = 'all'"
+        />
+        <noscript>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+                rel="stylesheet"
+            />
+        </noscript>
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+            rel="stylesheet"
+            media="print"
+            onload="this.media = 'all'"
+        />
+        <noscript>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+                rel="stylesheet"
+            />
+        </noscript>
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+            .font-mono {
+                font-family: "JetBrains Mono", monospace;
+            }
+            /* Custom scrollbar for tag lists */
+            ::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 4px;
+            }
+            .dark ::-webkit-scrollbar-thumb {
+                background: #475569;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #f87171; /* red-400 */
+            }
+            .dark ::-webkit-scrollbar-thumb:hover {
+                background: #991b1b; /* red-800 */
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/index.tsx"></script>
+    </body>
 </html>

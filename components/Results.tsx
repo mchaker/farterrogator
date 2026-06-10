@@ -19,7 +19,7 @@ interface ResultsProps {
 export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState, selectedFile, artistMatches, isMatchingArtists }) => {
   const { t } = useTranslation();
   const [copiedTags, setCopiedTags] = useState(false);
-  const [copiedA1111, setCopiedA1111] = useState(false);
+
   const [isEmbedding, setIsEmbedding] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -66,24 +66,11 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
     [processedTags, settings.removeUnderscores]
   );
 
-  // A1111 / ComfyUI format: escape literal ( ) \ so they aren't parsed as weight syntax
-  const a1111TagString = useMemo(
-    () => processedTags.map(t => formatTag(t.name).replace(/[\\()]/g, '\\$&')).join(', '),
-    [processedTags, settings.removeUnderscores]
-  );
-
   const handleCopyTags = () => {
     navigator.clipboard.writeText(tagString);
     setCopiedTags(true);
     showToast(t('results.tagsCopied'));
     setTimeout(() => setCopiedTags(false), 2000);
-  };
-
-  const handleCopyA1111 = () => {
-    navigator.clipboard.writeText(a1111TagString);
-    setCopiedA1111(true);
-    showToast(t('results.tagsCopied'));
-    setTimeout(() => setCopiedA1111(false), 2000);
   };
 
   const handleDownloadNai = async (content: string, suffix: string) => {
@@ -235,39 +222,8 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
 
         {/* Raw tag string */}
         {!loadingState.tags && processedTags.length > 0 && (
-          <div className="bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl transition-colors duration-300 overflow-hidden">
-            <div className="flex items-center justify-between gap-2 px-3 pt-2.5 pb-1">
-              <span className="text-2xs font-semibold uppercase tracking-wider text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-50">
-                {t('results.technicalTags')}
-              </span>
-              <div className="flex items-center gap-1.5">
-                <Button
-                  small
-                  rounded
-                  tonal
-                  inline
-                  onClick={handleCopyTags}
-                  className="gap-1 text-2xs disabled:opacity-50"
-                  aria-label={copiedTags ? t('results.copied') : t('results.copyAll')}
-                >
-                  {copiedTags ? <Check className="w-3 h-3" aria-hidden="true" /> : <Copy className="w-3 h-3" aria-hidden="true" />}
-                  {copiedTags ? t('results.copied') : t('results.copyAll')}
-                </Button>
-                <Button
-                  small
-                  rounded
-                  tonal
-                  inline
-                  onClick={handleCopyA1111}
-                  className="gap-1 text-2xs disabled:opacity-50"
-                  aria-label={copiedA1111 ? t('results.copied') : 'A1111 (ComfyUI)'}
-                >
-                  {copiedA1111 ? <Check className="w-3 h-3" aria-hidden="true" /> : <Copy className="w-3 h-3" aria-hidden="true" />}
-                  {copiedA1111 ? t('results.copied') : 'A1111 (ComfyUI)'}
-                </Button>
-              </div>
-            </div>
-            <p className="px-3 pb-3 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant font-mono wrap-break-word opacity-80 select-all leading-relaxed">
+          <div className="px-3 py-2.5 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl transition-colors duration-300">
+            <p className="text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant font-mono wrap-break-word opacity-80 select-all leading-relaxed">
               {tagString}
             </p>
           </div>

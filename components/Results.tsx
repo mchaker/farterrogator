@@ -313,7 +313,7 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                         </span>
                       </button>
                       <a
-                        href={`https://danbooru.donmai.us/artists?name=${encodeURIComponent(artist.name)}`}
+                        href={`https://danbooru.donmai.us/artists/show_or_new?name=${encodeURIComponent(artist.name)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 p-1.5 rounded-lg text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:text-primary dark:hover:text-md-dark-primary hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 transition-colors"

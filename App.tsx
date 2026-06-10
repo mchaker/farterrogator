@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { App as KonstaApp, Page, Button, Chip, Preloader } from "konsta/react";
+import { App as KonstaApp, Page, Button, Preloader } from "konsta/react";
 import { AlertCircle, Wand2, Sparkles, HelpCircle } from "lucide-react";
 import { Header } from "./components/Header";
 import { ImageUpload } from "./components/ImageUpload";
@@ -20,6 +20,7 @@ import {
   BackendConfig,
   BatchResult,
   ArtistMatch,
+  TaggerModel,
 } from "./types";
 import { useTheme } from "./hooks/useTheme";
 
@@ -103,6 +104,9 @@ const App: React.FC = () => {
   }, [backendConfig]);
 
   const [error, setError] = useState<string | null>(null);
+  const [lastTaggerModel, setLastTaggerModel] = useState<TaggerModel>(
+    backendConfig.taggerModel,
+  );
   const [loadingState, setLoadingState] = useState<{
     tags: boolean;
     progress: number;
@@ -177,6 +181,7 @@ const App: React.FC = () => {
           },
         );
         setResult(res);
+        setLastTaggerModel(backendConfig.taggerModel);
         setAppState(AppState.SUCCESS);
         await artistPromise;
       } else {
@@ -191,6 +196,7 @@ const App: React.FC = () => {
           settings,
         );
         setBatchResults(results);
+        setLastTaggerModel(backendConfig.taggerModel);
         setAppState(AppState.SUCCESS);
       }
     } catch (err) {
@@ -258,9 +264,6 @@ const App: React.FC = () => {
               <h2 className="text-base sm:text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface">
                 {t("results.title")}
               </h2>
-              <Chip className="uppercase text-[10px] font-semibold tracking-wide">
-                {backendConfig.taggerModel}
-              </Chip>
             </div>
 
             <div className="flex-1 bg-md-light-surface-1 dark:bg-md-dark-surface-1 rounded-3xl sm:rounded-[28px] p-2 transition-colors duration-300 relative min-h-[360px] sm:min-h-[480px]">
@@ -303,6 +306,7 @@ const App: React.FC = () => {
                   <Results
                     result={result}
                     settings={settings}
+                    taggerModel={lastTaggerModel}
                     loadingState={loadingState}
                     selectedFile={selectedFiles[0]}
                     artistMatches={artistMatches}

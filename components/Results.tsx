@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Button, Progressbar, Preloader } from 'konsta/react';
-import { Copy, Check, Hash, Tag as TagIcon, User, Palette, Layers, Cpu, Shield, Globe, Download } from 'lucide-react';
+import { Copy, Check, Hash, Tag as TagIcon, User, Palette, Layers, Cpu, Shield, Globe, Download, ExternalLink } from 'lucide-react';
 import { InterrogationResult, TaggingSettings, Tag, TagCategory, LoadingState, ArtistMatch } from '../types';
 import { embedPngMetadata } from '../services/pngMetadata';
 import { normalizeTagName, parseTagList } from '../services/taggerService';
@@ -251,13 +251,13 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                 {artistMatches!.map((artist, i) => {
                   const isTop = i < 5;
                   return (
-                    <li key={artist.name}>
+                    <li key={artist.name} className={`flex items-center gap-1 rounded-xl transition-opacity ${!isTop ? 'opacity-40 hover:opacity-70' : ''}`}>
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(formatTag(artist.name));
                           showToast(t('results.copiedItem', { item: formatTag(artist.name) }));
                         }}
-                        className={`w-full flex items-center gap-3 px-2 py-1.5 rounded-xl transition-colors text-left cursor-pointer hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 ${!isTop ? 'opacity-40 hover:opacity-70' : ''}`}
+                        className="flex-1 flex items-center gap-3 px-2 py-1.5 rounded-xl hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 transition-colors text-left cursor-pointer min-w-0"
                         title={t('results.copyArtist')}
                       >
                         <span className={`w-5 shrink-0 text-center text-xs font-bold tabular-nums ${isTop ? 'text-primary dark:text-md-dark-primary' : 'text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant'}`}>
@@ -267,6 +267,17 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                           {formatTag(artist.name)}
                         </span>
                       </button>
+                      <a
+                        href={`https://danbooru.donmai.us/artists?name=${encodeURIComponent(artist.name)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 p-1.5 rounded-lg text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:text-primary dark:hover:text-md-dark-primary hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 transition-colors"
+                        title="Open on Danbooru"
+                        aria-label={`Open ${formatTag(artist.name)} on Danbooru`}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                      </a>
                     </li>
                   );
                 })}

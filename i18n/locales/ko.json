@@ -66,15 +66,16 @@
     "advancedThresholds": "고급",
     "backend": {
       "model": "태거 모델",
-      "baseUrl": "기본 URL",
-      "baseUrlHint": "엔드포인트 기본 주소, 예: https://localtagger.gpu.garden 또는 http://localhost:8000",
+      "baseUrl": "API URL",
+      "baseUrlHint": "API 엔드포인트 URL, 예: https://localtagger.gpu.garden 또는 http://localhost:8000",
       "familyWd": "WD 계열",
       "models": {
         "wd": "Danbooru 중심",
         "pixai": "일러스트 최적화",
         "camie": "특화된 출력",
         "taggerine": "확장된 커버리지"
-      }
+      },
+      "resetToDefault": "기본값으로 초기화"
     },
     "categories": {
       "general": "일반",

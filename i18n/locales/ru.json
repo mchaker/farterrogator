@@ -66,15 +66,16 @@
     "advancedThresholds": "Расширенный",
     "backend": {
       "model": "Модель теггера",
-      "baseUrl": "Базовый URL",
-      "baseUrlHint": "База эндпоинта, напр. https://localtagger.gpu.garden или http://localhost:8000",
+      "baseUrl": "API URL",
+      "baseUrlHint": "URL API-эндпоинта, напр. https://localtagger.gpu.garden или http://localhost:8000",
       "familyWd": "Семейство WD",
       "models": {
         "wd": "Ориентирован на Danbooru",
         "pixai": "Оптимизирован для иллюстраций",
         "camie": "Специализированный вывод",
         "taggerine": "Расширенный охват"
-      }
+      },
+      "resetToDefault": "Сбросить на умолчание"
     },
     "categories": {
       "general": "Общие",

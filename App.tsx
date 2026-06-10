@@ -270,13 +270,21 @@ const App: React.FC = () => {
             href="https://gpu.garden"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95"
+            className="group flex items-center gap-1.5 active:scale-95 transition-transform"
             title="GPU Garden"
             aria-label="GPU Garden"
           >
-            <img src="/gpu-garden-logo.webp" alt="" className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
-            <span className="font-bold bg-clip-text text-transparent bg-linear-to-r from-red-600 to-green-600 dark:from-red-400 dark:to-green-400 text-xs sm:text-sm">
-              gpu.garden
+            <img src="/gpu-garden-logo.webp" alt="" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
+            <span className="relative font-bold text-xs sm:text-sm overflow-hidden">
+              <span className="block text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant transition-opacity duration-250 group-hover:opacity-0" aria-hidden="true">
+                gpu.garden
+              </span>
+              <span
+                className="absolute inset-0 bg-clip-text text-transparent bg-linear-to-r from-red-600 to-red-400 dark:from-red-400 dark:to-red-300 -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out"
+                aria-hidden="true"
+              >
+                gpu.garden
+              </span>
             </span>
           </a>
           <p className="opacity-60 text-center hidden sm:block">{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>

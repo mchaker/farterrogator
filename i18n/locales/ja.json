@@ -66,15 +66,16 @@
     "advancedThresholds": "詳細",
     "backend": {
       "model": "タガーモデル",
-      "baseUrl": "ベースURL",
-      "baseUrlHint": "エンドポイントのベース。例: https://localtagger.gpu.garden または http://localhost:8000",
+      "baseUrl": "API URL",
+      "baseUrlHint": "APIエンドポイントURL。例: https://localtagger.gpu.garden または http://localhost:8000",
       "familyWd": "WD ファミリー",
       "models": {
         "wd": "Danbooru 中心",
         "pixai": "イラスト最適化",
         "camie": "特化型出力",
         "taggerine": "広範なカバレッジ"
-      }
+      },
+      "resetToDefault": "デフォルトにリセット"
     },
     "categories": {
       "general": "一般",

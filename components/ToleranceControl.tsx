@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BlockTitle, List, ListItem, ListInput, Toggle, Range, Segmented, SegmentedButton } from 'konsta/react';
-import { Shuffle, Layers, User, Palette, Cpu, Type, Shield, Globe, Server, Link2 } from 'lucide-react';
+import { Shuffle, Layers, User, Palette, Cpu, Type, Shield, Globe, Server, Link2, RotateCcw } from 'lucide-react';
 import { TaggingSettings, TagCategory, BackendConfig, TaggerModel } from '../types';
 
 interface ToleranceControlProps {
@@ -132,6 +132,17 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           }
         />
       </List>
+      <div className="flex justify-end px-4 pt-1">
+        <button
+          type="button"
+          onClick={() => onBackendChange({ ...backendConfig, taggerBaseUrl: 'https://localtagger.gpu.garden' })}
+          disabled={disabled || backendConfig.taggerBaseUrl === 'https://localtagger.gpu.garden'}
+          className="flex items-center gap-1 text-xs text-primary dark:text-md-dark-primary hover:underline disabled:opacity-30 disabled:no-underline disabled:cursor-default transition-opacity"
+        >
+          <RotateCcw className="w-3 h-3" aria-hidden="true" />
+          {t('settings.backend.resetToDefault')}
+        </button>
+      </div>
 
       {/* Output */}
       <BlockTitle className="mt-6! mb-2!">{t('settings.outputSettings')}</BlockTitle>

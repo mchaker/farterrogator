@@ -66,15 +66,16 @@
     "advancedThresholds": "Avanzado",
     "backend": {
       "model": "Modelo de etiquetado",
-      "baseUrl": "URL base",
-      "baseUrlHint": "Base del endpoint, p. ej. https://localtagger.gpu.garden o http://localhost:8000",
+      "baseUrl": "URL de la API",
+      "baseUrlHint": "URL del endpoint API, p. ej. https://localtagger.gpu.garden o http://localhost:8000",
       "familyWd": "Familia WD",
       "models": {
         "wd": "Centrado en Danbooru",
         "pixai": "Optimizado para ilustración",
         "camie": "Salida especializada",
         "taggerine": "Cobertura ampliada"
-      }
+      },
+      "resetToDefault": "Restablecer predeterminado"
     },
     "categories": {
       "general": "General",

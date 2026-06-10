@@ -66,15 +66,16 @@
     "advancedThresholds": "उन्नत",
     "backend": {
       "model": "टैगर मॉडल",
-      "baseUrl": "बेस URL",
-      "baseUrlHint": "एंडपॉइंट बेस, जैसे https://localtagger.gpu.garden या http://localhost:8000",
+      "baseUrl": "API URL",
+      "baseUrlHint": "API एंडपॉइंट URL, जैसे https://localtagger.gpu.garden या http://localhost:8000",
       "familyWd": "WD परिवार",
       "models": {
         "wd": "Danbooru-केंद्रित",
         "pixai": "इलस्ट्रेशन-अनुकूलित",
         "camie": "विशेषीकृत आउटपुट",
         "taggerine": "विस्तृत कवरेज"
-      }
+      },
+      "resetToDefault": "डिफ़ॉल्ट पर रीसेट करें"
     },
     "categories": {
       "general": "सामान्य",

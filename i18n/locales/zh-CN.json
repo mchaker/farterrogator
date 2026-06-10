@@ -66,15 +66,16 @@
     "advancedThresholds": "高级",
     "backend": {
       "model": "标注模型",
-      "baseUrl": "基础 URL",
-      "baseUrlHint": "端点基础地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
+      "baseUrl": "API 地址",
+      "baseUrlHint": "API 端点地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
       "familyWd": "WD 系列",
       "models": {
         "wd": "以 Danbooru 为中心",
         "pixai": "插画优化",
         "camie": "特化输出",
         "taggerine": "更广覆盖"
-      }
+      },
+      "resetToDefault": "重置为默认"
     },
     "categories": {
       "general": "一般",

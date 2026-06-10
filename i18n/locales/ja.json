@@ -85,8 +85,10 @@
       "rating": "レーティング"
     },
     "maxTags": "最大タグ数 (0 = 無制限)",
-    "triggerPhrase": "トリガーフレーズ",
-    "triggerPlaceholder": "例: masterpiece, best quality"
+    "whitelist": "タグホワイトリスト",
+    "whitelistPlaceholder": "例: masterpiece, best quality",
+    "blacklist": "タグブラックリスト",
+    "blacklistPlaceholder": "例: watermark, signature"
   },
   "errors": {
     "taggerRequired": "タガーのベースURLが必要です。バックエンド設定で構成してください。",

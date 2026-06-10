@@ -85,8 +85,10 @@
       "rating": "Clasificación"
     },
     "maxTags": "Máx. etiquetas (0 = ilimitado)",
-    "triggerPhrase": "Frase desencadenante",
-    "triggerPlaceholder": "p. ej. masterpiece, best quality"
+    "whitelist": "Lista blanca de etiquetas",
+    "whitelistPlaceholder": "p. ej. masterpiece, best quality",
+    "blacklist": "Lista negra de etiquetas",
+    "blacklistPlaceholder": "p. ej. watermark, signature"
   },
   "errors": {
     "taggerRequired": "Se requiere la URL base del etiquetador. Configúrala en los ajustes del backend.",

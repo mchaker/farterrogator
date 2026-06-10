@@ -85,8 +85,10 @@
       "rating": "Rating"
     },
     "maxTags": "Max Tags (0 = Unlimited)",
-    "triggerPhrase": "Trigger Phrase",
-    "triggerPlaceholder": "e.g. masterpiece, best quality"
+    "whitelist": "Tag Whitelist",
+    "whitelistPlaceholder": "e.g. masterpiece, best quality",
+    "blacklist": "Tag Blacklist",
+    "blacklistPlaceholder": "e.g. watermark, signature"
   },
   "errors": {
     "taggerRequired": "Tagger base URL is required. Please configure it in the backend settings.",

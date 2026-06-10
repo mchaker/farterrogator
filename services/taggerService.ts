@@ -23,6 +23,20 @@ function buildEndpoint(baseUrl: string, model: TaggerModel): string {
   return `${base}${path}`;
 }
 
+// Tags are compared case-insensitively with underscores and spaces equivalent
+export function normalizeTagName(name: string): string {
+  return name.trim().toLowerCase().replace(/ /g, '_');
+}
+
+export function parseTagList(value?: string): Set<string> {
+  return new Set(
+    (value ?? '')
+      .split(',')
+      .map(normalizeTagName)
+      .filter(Boolean)
+  );
+}
+
 const MIME_TYPE_PATTERN = /^[^/]+\/[^/]+$/;
 
 function getExtensionFromMimeType(mime: string): string {
@@ -94,7 +108,6 @@ export const fetchTags = async (
   const queryParams = new URLSearchParams();
   if (settings) {
     if (settings.maxTags > 0) queryParams.append('max_tags', Math.floor(settings.maxTags).toString());
-    if (settings.triggerPhrase?.trim()) queryParams.append('trigger_word', settings.triggerPhrase.trim());
     queryParams.append('threshold', settings.thresholds.general.toString());
   } else {
     queryParams.append('threshold', '0.35');
@@ -127,7 +140,8 @@ export const fetchBatchTags = async (
   const queryParams = new URLSearchParams();
   queryParams.append('output_format', 'zip');
   if (settings) {
-    if (settings.triggerPhrase?.trim()) queryParams.append('trigger_word', settings.triggerPhrase.trim());
+    // Whitelist tags are prepended server-side into the per-image .txt files
+    if (settings.whitelist?.trim()) queryParams.append('trigger_word', settings.whitelist.trim());
     if (settings.randomize) queryParams.append('random_order', 'true');
     queryParams.append('threshold', settings.thresholds.general.toString());
   } else {
@@ -156,12 +170,15 @@ export const fetchBatchTags = async (
 
   const data = await response.json();
 
+  const blacklist = parseTagList(settings?.blacklist);
   const normalize = (entries: [string, unknown][]): { tag: string; score: number }[] => {
-    return entries.map(([tag, score]) => {
-      let s = Number(score);
-      if (s > 1.0) s /= 100;
-      return { tag, score: s };
-    });
+    return entries
+      .map(([tag, score]) => {
+        let s = Number(score);
+        if (s > 1.0) s /= 100;
+        return { tag, score: s };
+      })
+      .filter(e => !blacklist.has(normalizeTagName(e.tag)));
   };
 
   if (Array.isArray(data)) {

@@ -85,8 +85,10 @@
       "rating": "Classification"
     },
     "maxTags": "Max. tags (0 = illimité)",
-    "triggerPhrase": "Phrase déclencheuse",
-    "triggerPlaceholder": "p. ex. masterpiece, best quality"
+    "whitelist": "Liste blanche de tags",
+    "whitelistPlaceholder": "p. ex. masterpiece, best quality",
+    "blacklist": "Liste noire de tags",
+    "blacklistPlaceholder": "p. ex. watermark, signature"
   },
   "errors": {
     "taggerRequired": "L'URL de base du tagger est requise. Veuillez la configurer dans les paramètres du backend.",

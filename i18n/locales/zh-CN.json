@@ -28,10 +28,10 @@
   "results": {
     "title": "分析结果",
     "ready": "准备就绪",
-    "readySub": "上传图像以开始打标",
+    "readySub": "上传图像以开始标注",
     "failed": "分析失败",
     "troubleshoot": "故障排查:",
-    "troubleshootTagger": "请确认打标器可在 {{endpoint}} 访问",
+    "troubleshootTagger": "请确认标注器可在 {{endpoint}} 访问",
     "processing": "处理中...",
     "analyzing": "分析中...",
     "technicalTags": "标签",
@@ -65,7 +65,7 @@
     "simpleMode": "简单",
     "advancedThresholds": "高级",
     "backend": {
-      "model": "打标模型",
+      "model": "标注模型",
       "baseUrl": "基础 URL",
       "baseUrlHint": "端点基础地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
       "familyWd": "WD 系列",
@@ -85,19 +85,21 @@
       "rating": "分级"
     },
     "maxTags": "最大标签数 (0 = 不限)",
-    "triggerPhrase": "触发词",
-    "triggerPlaceholder": "例如 masterpiece, best quality"
+    "whitelist": "标签白名单",
+    "whitelistPlaceholder": "例如 masterpiece, best quality",
+    "blacklist": "标签黑名单",
+    "blacklistPlaceholder": "例如 watermark, signature"
   },
   "errors": {
-    "taggerRequired": "需要打标器的基础 URL。请在后端设置中配置。",
+    "taggerRequired": "需要标注器的基础 URL。请在后端设置中配置。",
     "unknown": "发生未知错误"
   },
   "info": {
     "title": "Farterrogator 是什么?",
-    "description": "<strong>Farterrogator</strong> 是一款快速的本地 Booru 风格图像打标工具。它使用 WD 系列和插画特化模型分析图像，提取兼容 Danbooru 的标签，用于数据集制作和提示词工程。",
+    "description": "<strong>Farterrogator</strong> 是一款快速的本地 Booru 风格图像标注工具。它使用 WD 系列和插画特化模型分析图像，提取兼容 Danbooru 的标签，用于数据集制作和提示词工程。",
     "features": {
       "models": {
-        "title": "多种打标模型",
+        "title": "多种标注模型",
         "description": "可在 <strong>WD14 EVA</strong>、<strong>PixAI</strong>、<strong>Camie</strong> 和 <strong>Taggerine</strong> 之间选择，另有 Kaloscope 画师风格相似度。"
       },
       "naiReady": {
@@ -116,7 +118,7 @@
     "howTo": {
       "title": "使用方法",
       "step1": "上传图像，或将其拖放到画布上。",
-      "step2": "选择打标模型 (WD、PixAI、Camie 或 Taggerine)。",
+      "step2": "选择标注模型 (WD、PixAI、Camie 或 Taggerine)。",
       "step3": "调整置信度阈值以过滤标签。",
       "step4": "点击<strong>开始反推</strong>。",
       "step5": "复制标签，或下载 <strong>NAI Ready</strong> PNG。"

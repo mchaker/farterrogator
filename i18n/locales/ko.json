@@ -85,8 +85,10 @@
       "rating": "등급"
     },
     "maxTags": "최대 태그 수 (0 = 무제한)",
-    "triggerPhrase": "트리거 문구",
-    "triggerPlaceholder": "예: masterpiece, best quality"
+    "whitelist": "태그 화이트리스트",
+    "whitelistPlaceholder": "예: masterpiece, best quality",
+    "blacklist": "태그 블랙리스트",
+    "blacklistPlaceholder": "예: watermark, signature"
   },
   "errors": {
     "taggerRequired": "태거 기본 URL이 필요합니다. 백엔드 설정에서 구성해 주세요.",

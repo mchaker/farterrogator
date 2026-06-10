@@ -31,7 +31,8 @@ export interface TaggingSettings {
   thresholds: Record<TagCategory, number>;
   topK: number;
   maxTags: number;
-  triggerPhrase: string;
+  whitelist: string;
+  blacklist: string;
   randomize: boolean;
   removeUnderscores: boolean;
 }

@@ -155,13 +155,23 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           )}
         />
         <ListInput
-          label={t('settings.triggerPhrase')}
+          label={t('settings.whitelist')}
           type="text"
-          value={settings.triggerPhrase || ''}
-          placeholder={t('settings.triggerPlaceholder')}
+          value={settings.whitelist || ''}
+          placeholder={t('settings.whitelistPlaceholder')}
           disabled={disabled}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onSettingsChange({ ...settings, triggerPhrase: e.target.value })
+            onSettingsChange({ ...settings, whitelist: e.target.value })
+          }
+        />
+        <ListInput
+          label={t('settings.blacklist')}
+          type="text"
+          value={settings.blacklist || ''}
+          placeholder={t('settings.blacklistPlaceholder')}
+          disabled={disabled}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onSettingsChange({ ...settings, blacklist: e.target.value })
           }
         />
         <ListItem

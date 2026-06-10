@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Button, Progressbar, Preloader } from 'konsta/react';
 import { Copy, Check, Hash, Tag as TagIcon, User, Palette, Layers, Cpu, Shield, Globe, Download } from 'lucide-react';
-import { InterrogationResult, TaggingSettings, TagCategory, LoadingState, ArtistMatch } from '../types';
+import { InterrogationResult, TaggingSettings, Tag, TagCategory, LoadingState, ArtistMatch } from '../types';
 import { embedPngMetadata } from '../services/pngMetadata';
+import { normalizeTagName, parseTagList } from '../services/taggerService';
 
 interface ResultsProps {
   result: InterrogationResult;
@@ -27,7 +28,17 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
   };
 
   const processedTags = useMemo(() => {
+    const blacklist = parseTagList(settings.blacklist);
+    const whitelistNames = (settings.whitelist ?? '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+    const whitelistSet = new Set(whitelistNames.map(normalizeTagName));
+
     let tags = result.tags.filter(tag => {
+      const norm = normalizeTagName(tag.name);
+      if (blacklist.has(norm)) return false;
+      if (whitelistSet.has(norm)) return false; // re-added below at full score
       const threshold = settings.thresholds[tag.category] ?? 0.5;
       return tag.score >= threshold;
     });
@@ -42,7 +53,9 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
       }
     }
 
-    return tags;
+    // Whitelist tags are always included, ahead of everything else
+    const whitelistTags: Tag[] = whitelistNames.map(name => ({ name, score: 1, category: 'general' }));
+    return [...whitelistTags, ...tags];
   }, [result.tags, settings]);
 
   const formatTag = (name: string) => settings.removeUnderscores ? name.replace(/_/g, ' ') : name;

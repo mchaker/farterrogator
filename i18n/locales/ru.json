@@ -85,8 +85,10 @@
       "rating": "Рейтинг"
     },
     "maxTags": "Макс. тегов (0 = без ограничений)",
-    "triggerPhrase": "Триггер-фраза",
-    "triggerPlaceholder": "напр. masterpiece, best quality"
+    "whitelist": "Белый список тегов",
+    "whitelistPlaceholder": "напр. masterpiece, best quality",
+    "blacklist": "Чёрный список тегов",
+    "blacklistPlaceholder": "напр. watermark, signature"
   },
   "errors": {
     "taggerRequired": "Требуется базовый URL теггера. Настройте его в параметрах бэкенда.",

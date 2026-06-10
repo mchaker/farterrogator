@@ -32,13 +32,21 @@ const App: React.FC = () => {
   const [settings, setSettings] = useState<TaggingSettings>(() => {
     try {
       const saved = localStorage.getItem('taggingSettings');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Migrate old triggerPhrase field to whitelist
+        if (parsed.whitelist === undefined) parsed.whitelist = parsed.triggerPhrase ?? '';
+        if (parsed.blacklist === undefined) parsed.blacklist = '';
+        delete parsed.triggerPhrase;
+        return parsed;
+      }
     } catch { /* ignore */ }
     return {
       thresholds: { general: 0.7, character: 0.7, copyright: 0.7, artist: 0.7, meta: 0.7, rating: 0.8 },
       topK: 50,
       maxTags: 0,
-      triggerPhrase: '',
+      whitelist: '',
+      blacklist: '',
       randomize: false,
       removeUnderscores: false,
     };

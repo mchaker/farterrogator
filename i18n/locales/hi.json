@@ -85,8 +85,10 @@
       "rating": "रेटिंग"
     },
     "maxTags": "अधिकतम टैग (0 = असीमित)",
-    "triggerPhrase": "ट्रिगर वाक्यांश",
-    "triggerPlaceholder": "जैसे masterpiece, best quality"
+    "whitelist": "टैग व्हाइटलिस्ट",
+    "whitelistPlaceholder": "जैसे masterpiece, best quality",
+    "blacklist": "टैग ब्लैकलिस्ट",
+    "blacklistPlaceholder": "जैसे watermark, signature"
   },
   "errors": {
     "taggerRequired": "टैगर का बेस URL आवश्यक है। कृपया इसे बैकएंड सेटिंग्स में कॉन्फ़िगर करें।",

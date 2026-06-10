@@ -27,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme, backendConfig }
       <Navbar
         transparent
         className="top-0 sticky backdrop-blur-md"
+        innerClassName="overflow-visible!"
         bgClassName="bg-md-light-surface-2/80 dark:bg-md-dark-surface-2/80"
         left={
           <div className="flex items-center gap-3 pl-2">

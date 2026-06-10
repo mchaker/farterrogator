@@ -85,8 +85,10 @@
       "rating": "分級"
     },
     "maxTags": "最大標籤數 (0 = 不限)",
-    "triggerPhrase": "觸發詞",
-    "triggerPlaceholder": "例如 masterpiece, best quality"
+    "whitelist": "標籤白名單",
+    "whitelistPlaceholder": "例如 masterpiece, best quality",
+    "blacklist": "標籤黑名單",
+    "blacklistPlaceholder": "例如 watermark, signature"
   },
   "errors": {
     "taggerRequired": "需要標註器的基礎 URL。請在後端設定中設定。",

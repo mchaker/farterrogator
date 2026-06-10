@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Loader2, AlertCircle, Wand2, Sparkles } from 'lucide-react';
+import { App as KonstaApp, Page, Button, Chip, Preloader } from 'konsta/react';
+import { AlertCircle, Wand2, Sparkles } from 'lucide-react';
 import { Header } from './components/Header';
 import { ImageUpload } from './components/ImageUpload';
 import { ToleranceControl } from './components/ToleranceControl';
 import { Results } from './components/Results';
-import { generateTags, generateCaption, fileToBase64, fetchLocalTags, fetchOllamaDescription, fetchOllamaModels, fetchBatchTags } from './services/geminiService';
-import { AppState, InterrogationResult, TaggingSettings, BackendConfig, BatchResult } from './types';
+import { generateTags, fileToBase64, fetchBatchTags } from './services/taggerService';
+import { fetchArtistMatches } from './services/kaloscopeService';
+import { AppState, InterrogationResult, TaggingSettings, BackendConfig, BatchResult, ArtistMatch } from './types';
 import { useTheme } from './hooks/useTheme';
+
+const DEFAULT_BACKEND_CONFIG: BackendConfig = {
+  taggerModel: 'wd',
+  taggerBaseUrl: 'https://localtagger.gpu.garden',
+};
 
 const App: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -15,34 +22,25 @@ const App: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [result, setResult] = useState<InterrogationResult | null>(null);
   const [batchResults, setBatchResults] = useState<Record<string, BatchResult> | null>(null);
+  const [artistMatches, setArtistMatches] = useState<ArtistMatch[] | null>(null);
+  const [isMatchingArtists, setIsMatchingArtists] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
   const [settings, setSettings] = useState<TaggingSettings>(() => {
-    const saved = localStorage.getItem('taggingSettings');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved settings", e);
-      }
-    }
+    try {
+      const saved = localStorage.getItem('taggingSettings');
+      if (saved) return JSON.parse(saved);
+    } catch { /* ignore */ }
     return {
-      thresholds: {
-        general: 0.7,
-        character: 0.7,
-        copyright: 0.7,
-        artist: 0.7,
-        meta: 0.7,
-        rating: 0.8
-      },
+      thresholds: { general: 0.7, character: 0.7, copyright: 0.7, artist: 0.7, meta: 0.7, rating: 0.8 },
       topK: 50,
       maxTags: 0,
       triggerPhrase: '',
       randomize: false,
-      removeUnderscores: false
+      removeUnderscores: false,
     };
   });
 
@@ -51,22 +49,15 @@ const App: React.FC = () => {
   }, [settings]);
 
   const [backendConfig, setBackendConfig] = useState<BackendConfig>(() => {
-    const saved = localStorage.getItem('backendConfig');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved backend config", e);
+    try {
+      const saved = localStorage.getItem('backendConfig');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Migrate old config shapes that had 'type' field
+        if (parsed.taggerModel && parsed.taggerBaseUrl) return parsed;
       }
-    }
-    return {
-      type: 'local_hybrid',
-      geminiApiKey: '',
-      ollamaEndpoint: 'https://ollama.gpu.garden',
-      ollamaModel: 'qwen3-vl:30b',
-      taggerEndpoint: 'https://localtagger.gpu.garden/interrogate',
-      enableNaturalLanguage: true
-    };
+    } catch { /* ignore */ }
+    return DEFAULT_BACKEND_CONFIG;
   });
 
   useEffect(() => {
@@ -74,7 +65,11 @@ const App: React.FC = () => {
   }, [backendConfig]);
 
   const [error, setError] = useState<string | null>(null);
-  const [isGeneratingCaption, setIsGeneratingCaption] = useState(false);
+  const [loadingState, setLoadingState] = useState<{ tags: boolean; progress: number; status: string }>({
+    tags: false,
+    progress: 0,
+    status: '',
+  });
   const { theme, setTheme } = useTheme();
 
   const handleFilesSelect = (files: File[]) => {
@@ -82,86 +77,57 @@ const App: React.FC = () => {
     setAppState(AppState.IDLE);
     setResult(null);
     setBatchResults(null);
+    setArtistMatches(null);
     setError(null);
-    setIsGeneratingCaption(false);
   };
 
   const handleClear = () => {
     setSelectedFiles([]);
     setResult(null);
     setBatchResults(null);
+    setArtistMatches(null);
     setAppState(AppState.IDLE);
     setError(null);
-    setIsGeneratingCaption(false);
   };
 
-  const validateBackendConfig = (): boolean => {
-    if (backendConfig.type === 'gemini') {
-      if (!backendConfig.geminiApiKey || backendConfig.geminiApiKey.trim() === '') {
-        setError(t('errors.geminiKeyRequired'));
-        setAppState(AppState.ERROR);
-        return false;
-      }
-    } else if (backendConfig.type === 'local_hybrid') {
-      if (!backendConfig.ollamaEndpoint || backendConfig.ollamaEndpoint.trim() === '') {
-        setError(t('errors.ollamaRequired'));
-        setAppState(AppState.ERROR);
-        return false;
-      }
-      if (!backendConfig.taggerEndpoint || backendConfig.taggerEndpoint.trim() === '') {
-        setError(t('errors.taggerRequired'));
-        setAppState(AppState.ERROR);
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const [loadingState, setLoadingState] = useState<{ tags: boolean; description: boolean, progress: number, status: string }>({ 
-    tags: false, 
-    description: false,
-    progress: 0,
-    status: ''
-  });
-
-    const handleInterrogate = async () => {
+  const handleInterrogate = async () => {
     if (selectedFiles.length === 0) return;
 
-    // Strict validation before starting
-    if (!validateBackendConfig()) return;
+    if (!backendConfig.taggerBaseUrl?.trim()) {
+      setError(t('errors.taggerRequired'));
+      setAppState(AppState.ERROR);
+      return;
+    }
 
     setAppState(AppState.ANALYZING);
-    setLoadingState({ 
-      tags: true, 
-      description: backendConfig.type === 'local_hybrid' ? backendConfig.enableNaturalLanguage : false,
-      progress: 0,
-      status: t('status.starting')
-    });
+    setLoadingState({ tags: true, progress: 0, status: t('status.starting') });
     setError(null);
-    setResult({ tags: [], naturalDescription: undefined }); // Reset result
+    setResult(null);
     setBatchResults(null);
+    setArtistMatches(null);
 
     try {
       if (selectedFiles.length === 1) {
         const file = selectedFiles[0];
-        const base64 = await fileToBase64(file);
 
-        // Unified flow for both Gemini and Local Hybrid
-        const result = await generateTags(
-          base64, 
-          file.type, 
-          backendConfig,
-          settings,
-          i18n.language,
-          (status, progress) => {
-            setLoadingState(prev => ({ ...prev, status, progress }));
-          }
-        );
-        
-        setResult(result);
+        // Artist similarity runs in parallel with tagging; failures are non-fatal
+        setIsMatchingArtists(true);
+        const artistPromise = fetchArtistMatches(file, backendConfig.taggerBaseUrl)
+          .then(matches => setArtistMatches(matches))
+          .catch(err => {
+            console.warn('Kaloscope artist matching unavailable:', err);
+            setArtistMatches(null);
+          })
+          .finally(() => setIsMatchingArtists(false));
+
+        const base64 = await fileToBase64(file);
+        const res = await generateTags(base64, file.type, backendConfig, settings, i18n.language, (status, progress) => {
+          setLoadingState(prev => ({ ...prev, status, progress }));
+        });
+        setResult(res);
         setAppState(AppState.SUCCESS);
+        await artistPromise;
       } else {
-        // Batch Logic
         setLoadingState(prev => ({ ...prev, status: t('results.analyzing'), progress: 50 }));
         const results = await fetchBatchTags(selectedFiles, backendConfig, settings);
         setBatchResults(results);
@@ -172,80 +138,49 @@ const App: React.FC = () => {
       setAppState(AppState.ERROR);
       setError(err instanceof Error ? err.message : t('errors.unknown'));
     } finally {
-      setLoadingState({ tags: false, description: false, progress: 100, status: t('status.done') });
-    }
-  };
-
-  // Deprecated/Modified: handleGenerateCaption is now part of the main flow for Local Hybrid, 
-  // but kept for Gemini or manual re-trigger if needed.
-  const handleGenerateCaption = async () => {
-    if (selectedFiles.length !== 1 || !result) return;
-    if (!validateBackendConfig()) return;
-
-    setIsGeneratingCaption(true);
-    try {
-      const file = selectedFiles[0];
-      const base64 = await fileToBase64(file);
-      // If we have tags, we can use them to refine the description (Parity)
-      // But generateCaption currently doesn't accept tags. 
-      // We can just call generateCaption which uses Ollama/Gemini directly on the image.
-      // OR we can implement a smarter flow here if needed.
-      // For now, let's stick to the standard generateCaption which does a fresh look.
-      // Ideally, we should pass the tags to ensure parity if that's what the user wants.
-
-      const caption = await generateCaption(base64, file.type, backendConfig, result.tags, i18n.language);
-      setResult(prev => prev ? { ...prev, naturalDescription: caption } : null);
-    } catch (err) {
-      console.error(err);
-      setError(err instanceof Error ? err.message : t('errors.unknown'));
-    } finally {
-      setIsGeneratingCaption(false);
+      setLoadingState({ tags: false, progress: 100, status: t('status.done') });
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 selection:bg-red-500/30 selection:text-red-800 dark:selection:text-red-200 transition-colors duration-300">
-      <Header theme={theme} setTheme={setTheme} backendConfig={backendConfig} />
+    <KonstaApp theme="material" className="h-full selection:bg-red-500/30">
+      <Page className="flex flex-col">
+        <Header theme={theme} setTheme={setTheme} backendConfig={backendConfig} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 gap-8 flex flex-col lg:flex-row lg:items-start">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 gap-6 lg:gap-8 flex flex-col lg:flex-row lg:items-start">
 
-        {/* Left Column: Input */}
-        <div className="w-full lg:w-[400px] xl:w-[450px] flex flex-col gap-8 shrink-0">
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{t('upload.inputImage')}</h2>
-            <ImageUpload
-              onFilesSelect={handleFilesSelect}
-              selectedFiles={selectedFiles}
-              onClear={handleClear}
-            />
-          </div>
+          {/* Left Column: Input */}
+          <div className="w-full lg:w-[400px] xl:w-[450px] flex flex-col gap-6 shrink-0">
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface px-1">
+                {t('upload.inputImage')}
+              </h2>
+              <ImageUpload
+                onFilesSelect={handleFilesSelect}
+                selectedFiles={selectedFiles}
+                onClear={handleClear}
+              />
+            </div>
 
-          <div className="space-y-4">
-            <button
+            <Button
+              large
+              rounded
               onClick={handleInterrogate}
               disabled={selectedFiles.length === 0 || appState === AppState.ANALYZING}
-              className={`
-                 w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-lg
-                 ${selectedFiles.length === 0
-                  ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed'
-                  : appState === AppState.ANALYZING
-                    ? 'bg-red-50 dark:bg-red-900/50 text-red-600 dark:text-red-300 cursor-wait border border-red-200 dark:border-red-500/30'
-                    : 'bg-red-600 hover:bg-red-500 text-white hover:shadow-red-500/25 border border-red-400/20'
-                }
-               `}
+              className="h-14! text-base font-semibold gap-2 shadow-md disabled:opacity-40"
             >
               {appState === AppState.ANALYZING ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Preloader className="w-5 h-5 text-current" />
                   {t('results.analyzing')}
                 </>
               ) : (
                 <>
-                  <Wand2 className="w-5 h-5" />
+                  <Wand2 className="w-5 h-5" aria-hidden="true" />
                   {t('upload.interrogate')}
                 </>
               )}
-            </button>
+            </Button>
 
             <ToleranceControl
               settings={settings}
@@ -255,82 +190,89 @@ const App: React.FC = () => {
               disabled={appState === AppState.ANALYZING}
             />
           </div>
-        </div>
 
-        {/* Right Column: Output */}
-        <div className="flex-1 flex flex-col min-h-[500px] lg:h-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex items-center gap-3 mb-2">
-            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{t('results.title')}</h2>
-            {backendConfig.type !== 'gemini' && (
-              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 border border-amber-200 dark:border-amber-800/50">
-                EVA
-              </span>
-            )}
-          </div>
+          {/* Right Column: Output */}
+          <div className="flex-1 flex flex-col min-h-[500px] lg:h-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-center gap-3 mb-2 px-1">
+              <h2 className="text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface">{t('results.title')}</h2>
+              <Chip className="uppercase text-[10px] font-semibold tracking-wide">
+                {backendConfig.taggerModel}
+              </Chip>
+            </div>
 
-          <div className="flex-1 bg-white dark:bg-slate-900/30 rounded-2xl border border-slate-200 dark:border-slate-800 p-1 transition-colors duration-300 relative min-h-[500px]">
-            {!result && !batchResults && appState !== AppState.ERROR && (
-              <div className="absolute inset-0 m-2 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 dark:text-slate-600">
-                <Sparkles className="w-12 h-12 mb-3 opacity-20" />
-                <p className="font-medium opacity-50">{t('results.ready')}</p>
-                <p className="text-sm opacity-30 mt-1">{t('results.readySub')}</p>
-              </div>
-            )}
+            <div className="flex-1 bg-md-light-surface-1 dark:bg-md-dark-surface-1 rounded-[28px] p-2 transition-colors duration-300 relative min-h-[500px]">
+              {!result && !batchResults && appState !== AppState.ERROR && (
+                <div className="absolute inset-0 m-3 rounded-3xl border-2 border-dashed border-md-light-outline-variant dark:border-md-dark-outline-variant flex flex-col items-center justify-center text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+                  <Sparkles className="w-12 h-12 mb-3 opacity-20" />
+                  <p className="font-medium opacity-60">{t('results.ready')}</p>
+                  <p className="text-sm opacity-40 mt-1">{t('results.readySub')}</p>
+                </div>
+              )}
 
-            {appState === AppState.ERROR && (
-              <div className="h-full flex flex-col items-center justify-center text-red-500 dark:text-red-400 p-8 text-center">
-                <AlertCircle className="w-12 h-12 mb-4 opacity-50" />
-                <h3 className="text-lg font-bold mb-2">{t('results.failed')}</h3>
-                <p className="text-slate-600 dark:text-slate-500 max-w-md">{error}</p>
-                {backendConfig.type === 'local_hybrid' && (
-                  <div className="mt-4 p-3 bg-slate-100 dark:bg-slate-800/50 rounded text-xs text-left">
+              {appState === AppState.ERROR && (
+                <div className="h-full flex flex-col items-center justify-center text-red-500 dark:text-red-400 p-8 text-center">
+                  <AlertCircle className="w-12 h-12 mb-4 opacity-50" />
+                  <h3 className="text-lg font-bold mb-2">{t('results.failed')}</h3>
+                  <p className="text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant max-w-md">{error}</p>
+                  <div className="mt-4 p-3 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-xl text-xs text-left">
                     <p className="font-semibold mb-1">{t('results.troubleshoot')}</p>
                     <ul className="list-disc list-inside opacity-70 space-y-1">
-                      <li>{t('results.troubleshootOllama', { endpoint: backendConfig.ollamaEndpoint })}</li>
-                      <li>{t('results.troubleshootTagger', { endpoint: backendConfig.taggerEndpoint })}</li>
-                      <li>{t('results.troubleshootCors')}</li>
+                      <li>{t('results.troubleshootTagger', { endpoint: backendConfig.taggerBaseUrl })}</li>
                     </ul>
                   </div>
-                )}
-              </div>
-            )}
-
-            {result && selectedFiles.length === 1 && (
-              <div className="h-full p-4">
-                <Results
-                  result={result}
-                  settings={settings}
-                  onGenerateCaption={handleGenerateCaption}
-                  isGeneratingCaption={isGeneratingCaption}
-                  loadingState={loadingState}
-                  selectedFile={selectedFiles[0]}
-                />
-              </div>
-            )}
-
-            {batchResults && (
-              <div className="h-full p-4 overflow-auto">
-                <h3 className="text-lg font-bold mb-4">Batch Results</h3>
-                <div className="space-y-4">
-                  {Object.entries(batchResults).map(([filename, data]: [string, BatchResult]) => (
-                    <div key={filename} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-                      <h4 className="font-semibold mb-2 text-sm text-slate-700 dark:text-slate-300">{filename}</h4>
-                      <div className="bg-white dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-700 font-mono text-xs break-all">
-                        {data.tag_string}
-                      </div>
-                    </div>
-                  ))}
                 </div>
-              </div>
-            )}
+              )}
+
+              {result && selectedFiles.length === 1 && (
+                <div className="h-full p-4">
+                  <Results
+                    result={result}
+                    settings={settings}
+                    loadingState={loadingState}
+                    selectedFile={selectedFiles[0]}
+                    artistMatches={artistMatches}
+                    isMatchingArtists={isMatchingArtists}
+                  />
+                </div>
+              )}
+
+              {batchResults && (
+                <div className="h-full p-4 overflow-auto">
+                  <h3 className="text-lg font-bold mb-4">{t('results.batchResults')}</h3>
+                  <div className="space-y-4">
+                    {Object.entries(batchResults).map(([filename, data]: [string, BatchResult]) => (
+                      <div key={filename} className="p-4 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl">
+                        <h4 className="font-semibold mb-2 text-sm">{filename}</h4>
+                        <div className="bg-md-light-surface dark:bg-md-dark-surface p-3 rounded-xl font-mono text-xs break-all">
+                          {data.tag_string}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </main>
-      
-      <footer className="py-6 text-center text-xs text-slate-400 dark:text-slate-600">
-        <p>{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>
-      </footer>
-    </div>
+        </main>
+
+        <footer className="sticky bottom-0 z-20 py-3 flex flex-col items-center gap-1.5 text-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant bg-md-light-surface-2/80 dark:bg-md-dark-surface-2/80 backdrop-blur-md">
+          <a
+            href="https://gpu.garden"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95"
+            title="GPU Garden"
+            aria-label="GPU Garden"
+          >
+            <img src="/gpu-garden-logo.webp" alt="" className="w-6 h-6" aria-hidden="true" />
+            <span className="text-sm font-bold bg-clip-text text-transparent bg-linear-to-r from-red-600 to-green-600 dark:from-red-400 dark:to-green-400">
+              gpu.garden
+            </span>
+          </a>
+          <p className="opacity-60">{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>
+        </footer>
+      </Page>
+    </KonstaApp>
   );
 };
 

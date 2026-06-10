@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Settings2, Shuffle, SortAsc, ChevronDown, ChevronUp, Layers, User, Palette, Cpu, Type, Shield, Server, Globe, Key, RefreshCw, Download } from 'lucide-react';
-import { TaggingSettings, TagCategory, BackendConfig, BackendType } from '../types';
-import { fetchOllamaModels } from '../services/geminiService';
+import { BlockTitle, List, ListItem, ListInput, Toggle, Range, Segmented, SegmentedButton } from 'konsta/react';
+import { Shuffle, Layers, User, Palette, Cpu, Type, Shield, Globe, Server, Link2 } from 'lucide-react';
+import { TaggingSettings, TagCategory, BackendConfig, TaggerModel } from '../types';
 
 interface ToleranceControlProps {
   settings: TaggingSettings;
@@ -12,429 +12,222 @@ interface ToleranceControlProps {
   disabled?: boolean;
 }
 
+// Family/model names are product names and stay untranslated; descriptions
+// come from i18n via settings.backend.models.<id>
+const TAGGER_MODEL_GROUPS: { family: string; familyKey?: string; models: { id: TaggerModel; label: string }[] }[] = [
+  {
+    family: 'WD Family',
+    familyKey: 'settings.backend.familyWd',
+    models: [
+      { id: 'wd', label: 'WD' },
+      { id: 'pixai', label: 'PixAI' },
+    ],
+  },
+  {
+    family: 'Camie',
+    models: [{ id: 'camie', label: 'Camie' }],
+  },
+  {
+    family: 'Taggerine',
+    models: [{ id: 'taggerine', label: 'Taggerine' }],
+  },
+];
+
 export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   settings,
   backendConfig,
   onSettingsChange,
   onBackendChange,
-  disabled
+  disabled,
 }) => {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [activeTab, setActiveTab] = useState<'tags' | 'backend'>('tags');
-  const [availableModels, setAvailableModels] = useState<string[]>([]);
-  const [isLoadingModels, setIsLoadingModels] = useState(false);
   const [isAdvanced, setIsAdvanced] = useState(false);
 
   const updateThreshold = (category: TagCategory, value: number) => {
-    onSettingsChange({
-      ...settings,
-      thresholds: {
-        ...settings.thresholds,
-        [category]: value
-      }
-    });
+    onSettingsChange({ ...settings, thresholds: { ...settings.thresholds, [category]: value } });
   };
 
   const updateOverallThreshold = (value: number) => {
     onSettingsChange({
       ...settings,
       thresholds: {
-        ...settings.thresholds,
         general: value,
         character: value,
         copyright: value,
         artist: value,
         meta: value,
-        rating: 0.8 // Ensure rating stays fixed
-      }
+        rating: 0.8,
+      },
     });
   };
 
-  const handleFetchModels = async () => {
-    if (!backendConfig.ollamaEndpoint) return;
-
-    setIsLoadingModels(true);
-    try {
-      const models = await fetchOllamaModels(backendConfig.ollamaEndpoint);
-      setAvailableModels(models);
-      
-      // Smart selection logic
-      if (models.length > 0 && !models.includes(backendConfig.ollamaModel)) {
-        // 1. Try to find a model that contains the current config name (e.g. 'qwen3-vl' -> 'qwen3-vl:30b')
-        const partialMatch = models.find(m => m.includes(backendConfig.ollamaModel) || backendConfig.ollamaModel.includes(m));
-        
-        if (partialMatch) {
-           onBackendChange({ ...backendConfig, ollamaModel: partialMatch });
-        } else {
-           // 2. Fallback to first available
-           onBackendChange({ ...backendConfig, ollamaModel: models[0] });
-        }
-      }
-    } catch (e) {
-      console.error("Failed to load models", e);
-    } finally {
-      setIsLoadingModels(false);
-    }
-  };
-
-  // Fetch models when switching to backend tab or when endpoint changes (debounced ideally, but here on blur/effect)
-  useEffect(() => {
-    if (activeTab === 'backend' && backendConfig.type === 'local_hybrid') {
-      handleFetchModels();
-    }
-  }, [activeTab, backendConfig.type, backendConfig.ollamaEndpoint]);
-
   const categories: { id: TagCategory; label: string; icon: React.ReactNode; color: string }[] = [
-    { id: 'copyright', label: t('settings.categories.copyright'), icon: <Globe className="w-3 h-3" />, color: 'text-purple-600 dark:text-purple-400' },
-    { id: 'character', label: t('settings.categories.character'), icon: <User className="w-3 h-3" />, color: 'text-green-600 dark:text-green-400' },
-    { id: 'artist', label: t('settings.categories.artist'), icon: <Palette className="w-3 h-3" />, color: 'text-amber-600 dark:text-amber-400' },
-    { id: 'general', label: t('settings.categories.general'), icon: <Layers className="w-3 h-3" />, color: 'text-blue-600 dark:text-blue-400' },
-    { id: 'meta', label: t('settings.categories.meta'), icon: <Cpu className="w-3 h-3" />, color: 'text-slate-600 dark:text-slate-400' },
-    { id: 'rating', label: t('settings.categories.rating'), icon: <Shield className="w-3 h-3" />, color: 'text-rose-600 dark:text-rose-400' },
+    { id: 'copyright', label: t('settings.categories.copyright'), icon: <Globe className="w-4 h-4" aria-hidden="true" />,   color: 'text-purple-600 dark:text-purple-400' },
+    { id: 'character', label: t('settings.categories.character'), icon: <User className="w-4 h-4" aria-hidden="true" />,    color: 'text-green-600 dark:text-green-400' },
+    { id: 'artist',    label: t('settings.categories.artist'),    icon: <Palette className="w-4 h-4" aria-hidden="true" />, color: 'text-amber-600 dark:text-amber-400' },
+    { id: 'general',   label: t('settings.categories.general'),   icon: <Layers className="w-4 h-4" aria-hidden="true" />,  color: 'text-blue-600 dark:text-blue-400' },
+    { id: 'meta',      label: t('settings.categories.meta'),      icon: <Cpu className="w-4 h-4" aria-hidden="true" />,     color: 'text-slate-600 dark:text-slate-400' },
+    { id: 'rating',    label: t('settings.categories.rating'),    icon: <Shield className="w-4 h-4" aria-hidden="true" />,  color: 'text-rose-600 dark:text-rose-400' },
   ];
 
+  const sliderRow = (
+    label: React.ReactNode,
+    value: number,
+    display: string,
+    onInput: (v: number) => void,
+    min: number,
+    max: number,
+    step: number,
+  ) => (
+    <div className="flex w-full flex-col gap-1">
+      <div className="flex items-center justify-between text-sm">
+        {label}
+        <span className="font-mono text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">{display}</span>
+      </div>
+      <Range
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onInput={(e: React.ChangeEvent<HTMLInputElement>) => onInput(parseFloat(e.target.value))}
+      />
+    </div>
+  );
+
   return (
-    <div className="bg-white dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300 overflow-hidden">
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-        aria-expanded={isExpanded}
-        aria-controls="settings-content"
-      >
-        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
-          <Settings2 className="w-4 h-4 text-red-600 dark:text-red-400" aria-hidden="true" />
-          <span>{t('settings.title')}</span>
-        </div>
-        {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" aria-hidden="true" /> : <ChevronDown className="w-4 h-4 text-slate-400" aria-hidden="true" />}
-      </button>
+    <div>
+      {/* Model & endpoint */}
+      <BlockTitle className="mt-0! mb-2!">{t('settings.backend.model')}</BlockTitle>
+      <List strong inset className="my-0!">
+        <ListInput
+          label={t('settings.backend.model')}
+          type="select"
+          dropdown
+          media={<Server className="w-5 h-5" aria-hidden="true" />}
+          value={backendConfig.taggerModel}
+          disabled={disabled}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            onBackendChange({ ...backendConfig, taggerModel: e.target.value as TaggerModel })
+          }
+        >
+          {TAGGER_MODEL_GROUPS.map(group => (
+            <optgroup key={group.family} label={group.familyKey ? t(group.familyKey) : group.family}>
+              {group.models.map(m => (
+                <option key={m.id} value={m.id}>{m.label} — {t(`settings.backend.models.${m.id}`)}</option>
+              ))}
+            </optgroup>
+          ))}
+        </ListInput>
+        <ListInput
+          label={t('settings.backend.baseUrl')}
+          type="url"
+          media={<Link2 className="w-5 h-5" aria-hidden="true" />}
+          value={backendConfig.taggerBaseUrl}
+          placeholder="https://localtagger.gpu.garden"
+          disabled={disabled}
+          inputClassName="font-mono text-xs"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onBackendChange({ ...backendConfig, taggerBaseUrl: e.target.value })
+          }
+        />
+      </List>
 
-      {isExpanded && (
-        <div id="settings-content" className="p-4 animate-in slide-in-from-top-2 duration-200">
-
-          {/* Tabs */}
-          <div className="flex p-1 mb-4 bg-slate-100 dark:bg-slate-800 rounded-lg" role="tablist">
-            <button
-              onClick={() => setActiveTab('tags')}
-              className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${activeTab === 'tags'
-                  ? 'bg-white dark:bg-slate-600 text-red-600 dark:text-red-300 shadow-sm'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
-                }`}
-              role="tab"
-              aria-selected={activeTab === 'tags'}
-              aria-controls="tab-tags"
-            >
-              {t('settings.outputSettings')}
-            </button>
-            <button
-              onClick={() => setActiveTab('backend')}
-              className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${activeTab === 'backend'
-                  ? 'bg-white dark:bg-slate-600 text-red-600 dark:text-red-300 shadow-sm'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
-                }`}
-              role="tab"
-              aria-selected={activeTab === 'backend'}
-              aria-controls="tab-backend"
-            >
-              {t('settings.backendSettings')}
-            </button>
-          </div>
-
-          {activeTab === 'tags' ? (
-            <div id="tab-tags" role="tabpanel" className="space-y-6">
-              {/* Output Options */}
-              <div className="space-y-3">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('settings.outputSettings')}</label>
-
-                <div className="flex items-center justify-between gap-4">
-                  <span id="top-k-label" className="text-sm text-slate-700 dark:text-slate-300">{t('settings.topK')}</span>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="range"
-                      min="10" max="100" step="5"
-                      value={settings.topK}
-                      onChange={(e) => onSettingsChange({ ...settings, topK: parseInt(e.target.value) })}
-                      disabled={disabled}
-                      className="w-24 h-1 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-red-600 [&::-webkit-slider-thumb]:rounded-full"
-                      aria-labelledby="top-k-label"
-                    />
-                    <span className="w-8 text-right text-xs font-mono text-slate-600 dark:text-slate-400">{settings.topK}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span id="max-tags-label" className="text-sm text-slate-700 dark:text-slate-300">{t('settings.maxTags')}</span>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="range"
-                      min="0" max="100" step="5"
-                      value={settings.maxTags || 0}
-                      onChange={(e) => onSettingsChange({ ...settings, maxTags: parseInt(e.target.value) })}
-                      disabled={disabled}
-                      className="w-24 h-1 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-red-600 [&::-webkit-slider-thumb]:rounded-full"
-                      aria-labelledby="max-tags-label"
-                    />
-                    <span className="w-8 text-right text-xs font-mono text-slate-600 dark:text-slate-400">{settings.maxTags || 0}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label htmlFor="trigger-phrase" className="text-sm text-slate-700 dark:text-slate-300 block">{t('settings.triggerPhrase')}</label>
-                  <input
-                    id="trigger-phrase"
-                    type="text"
-                    value={settings.triggerPhrase || ''}
-                    onChange={(e) => onSettingsChange({ ...settings, triggerPhrase: e.target.value })}
-                    disabled={disabled}
-                    placeholder="e.g. masterpiece, best quality"
-                    className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {settings.randomize ? <Shuffle className="w-4 h-4 text-red-500" aria-hidden="true" /> : <SortAsc className="w-4 h-4 text-slate-400" aria-hidden="true" />}
-                    <span id="randomize-label" className="text-sm text-slate-700 dark:text-slate-300">{t('settings.randomize')}</span>
-                  </div>
-                  <button
-                    onClick={() => onSettingsChange({ ...settings, randomize: !settings.randomize })}
-                    disabled={disabled}
-                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${settings.randomize ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700'}`}
-                    role="switch"
-                    aria-checked={settings.randomize}
-                    aria-labelledby="randomize-label"
-                  >
-                    <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${settings.randomize ? 'translate-x-5' : 'translate-x-1'}`} />
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Type className={`w-4 h-4 ${settings.removeUnderscores ? 'text-red-500' : 'text-slate-400'}`} aria-hidden="true" />
-                    <span id="underscores-label" className="text-sm text-slate-700 dark:text-slate-300">{t('settings.removeUnderscores')}</span>
-                  </div>
-                  <button
-                    onClick={() => onSettingsChange({ ...settings, removeUnderscores: !settings.removeUnderscores })}
-                    disabled={disabled}
-                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${settings.removeUnderscores ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700'}`}
-                    role="switch"
-                    aria-checked={settings.removeUnderscores}
-                    aria-labelledby="underscores-label"
-                  >
-                    <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${settings.removeUnderscores ? 'translate-x-5' : 'translate-x-1'}`} />
-                  </button>
-                </div>
-
-                {backendConfig.type === 'local_hybrid' && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Type className={`w-4 h-4 ${backendConfig.enableNaturalLanguage ? 'text-red-500' : 'text-slate-400'}`} aria-hidden="true" />
-                      <span id="natural-lang-label" className="text-sm text-slate-700 dark:text-slate-300">
-                        {t('settings.enableNaturalLanguage')} <span className="text-xs text-slate-500 dark:text-slate-400">{t('settings.naturalLanguageWarning')}</span>
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => onBackendChange({ ...backendConfig, enableNaturalLanguage: !backendConfig.enableNaturalLanguage })}
-                      disabled={disabled}
-                      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${backendConfig.enableNaturalLanguage ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-700'}`}
-                      role="switch"
-                      aria-checked={backendConfig.enableNaturalLanguage}
-                      aria-labelledby="natural-lang-label"
-                    >
-                      <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${backendConfig.enableNaturalLanguage ? 'translate-x-5' : 'translate-x-1'}`} />
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div className="h-px bg-slate-200 dark:bg-slate-700" role="separator" />
-
-              {/* Thresholds */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    {t('settings.thresholds')}
-                  </label>
-                  <button
-                    onClick={() => setIsAdvanced(!isAdvanced)}
-                    className="text-[10px] text-blue-500 hover:text-blue-600 font-medium"
-                    aria-pressed={isAdvanced}
-                  >
-                    {isAdvanced ? t('settings.simpleMode') : t('settings.advancedThresholds')}
-                  </button>
-                </div>
-
-                <div className="space-y-4">
-                  {!isAdvanced ? (
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs">
-                        <div className="flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300" id="general-threshold-label">
-                          <Layers className="w-3 h-3" aria-hidden="true" />
-                          {t('settings.categories.general')}
-                        </div>
-                        <span className="font-mono text-slate-500 dark:text-slate-400">
-                          {settings.thresholds.general.toFixed(2)}
-                        </span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="0.95"
-                        step="0.05"
-                        value={settings.thresholds.general}
-                        onChange={(e) => updateOverallThreshold(parseFloat(e.target.value))}
-                        disabled={disabled}
-                        className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-red-600 [&::-webkit-slider-thumb]:rounded-full"
-                        aria-labelledby="general-threshold-label"
-                      />
-                    </div>
-                  ) : (
-                    categories
-                      .map(cat => (
-                        <div key={cat.id} className="space-y-1">
-                          <div className="flex justify-between text-xs">
-                            <div className={`flex items-center gap-1.5 font-medium ${cat.color}`} id={`threshold-label-${cat.id}`}>
-                              {cat.icon}
-                              {cat.label}
-                            </div>
-                            <span className="font-mono text-slate-500 dark:text-slate-400">
-                              {settings.thresholds[cat.id].toFixed(2)}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min="0"
-                            max="0.95"
-                            step="0.05"
-                            value={settings.thresholds[cat.id]}
-                            onChange={(e) => updateThreshold(cat.id, parseFloat(e.target.value))}
-                            disabled={disabled}
-                            className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-red-600 [&::-webkit-slider-thumb]:rounded-full"
-                            aria-labelledby={`threshold-label-${cat.id}`}
-                          />
-                        </div>
-                      ))
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div id="tab-backend" role="tabpanel" className="space-y-4">
-              {/* Backend Selection */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('settings.backend.provider')}</label>
-                <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('settings.backend.provider')}>
-                  {(['gemini', 'local_hybrid'] as BackendType[]).map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => onBackendChange({ ...backendConfig, type })}
-                      className={`p-2 rounded-lg border text-xs font-medium flex flex-col items-center gap-1 transition-all ${backendConfig.type === type
-                          ? 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-500 text-red-700 dark:text-red-300'
-                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-red-200 dark:hover:border-red-500/50'
-                        }`}
-                      role="radio"
-                      aria-checked={backendConfig.type === type}
-                    >
-                      {type === 'gemini' && <Globe className="w-4 h-4" aria-hidden="true" />}
-                      {type === 'local_hybrid' && <Server className="w-4 h-4" aria-hidden="true" />}
-                      {type === 'local_hybrid' ? t('settings.backend.eva') : t('settings.backend.gemini')}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {backendConfig.type === 'gemini' && (
-                <div className="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700 animate-in slide-in-from-top-1">
-                  <div className="space-y-1">
-                    <label htmlFor="gemini-api-key" className="text-xs text-slate-500">{t('settings.geminiKey')}</label>
-                    <div className="relative">
-                      <input
-                        id="gemini-api-key"
-                        type="password"
-                        value={backendConfig.geminiApiKey}
-                        onChange={(e) => onBackendChange({ ...backendConfig, geminiApiKey: e.target.value })}
-                        className="w-full text-sm pl-8 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all font-mono"
-                        placeholder="AIza..."
-                      />
-                      <Key className="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" aria-hidden="true" />
-                    </div>
-                    <p className="text-[10px] text-slate-400">{t('settings.backend.keyStorage')}</p>
-                  </div>
-                </div>
-              )}
-
-              {backendConfig.type === 'local_hybrid' && (
-                <div className="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-700 animate-in slide-in-from-top-1">
-                  <div className="p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded text-[10px] text-blue-600 dark:text-blue-300 leading-tight">
-                    {t('settings.backend.evaDescription')}
-                  </div>
-                  <div className="space-y-1">
-                    <label htmlFor="ollama-endpoint" className="text-xs text-slate-500">{t('settings.backend.ollamaEndpointLabel')}</label>
-                    <input
-                      id="ollama-endpoint"
-                      type="text"
-                      value={backendConfig.ollamaEndpoint}
-                      onChange={(e) => onBackendChange({ ...backendConfig, ollamaEndpoint: e.target.value })}
-                      className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all"
-                      placeholder="http://localhost:11434"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="ollama-model" className="text-xs text-slate-500">{t('settings.backend.ollamaModel')}</label>
-                      <button
-                        onClick={handleFetchModels}
-                        disabled={isLoadingModels}
-                        className="text-[10px] text-blue-500 hover:text-blue-600 flex items-center gap-1"
-                        aria-label={t('settings.refresh')}
-                      >
-                        <RefreshCw className={`w-3 h-3 ${isLoadingModels ? 'animate-spin' : ''}`} aria-hidden="true" />
-                        {t('settings.refresh')}
-                      </button>
-                    </div>
-
-                    {availableModels.length > 0 ? (
-                      <div className="relative">
-                        <select
-                          id="ollama-model"
-                          value={backendConfig.ollamaModel}
-                          onChange={(e) => onBackendChange({ ...backendConfig, ollamaModel: e.target.value })}
-                          className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all appearance-none"
-                        >
-                          {availableModels.map(model => (
-                            <option key={model} value={model}>{model}</option>
-                          ))}
-                        </select>
-                        <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" aria-hidden="true" />
-                      </div>
-                    ) : (
-                      <input
-                        id="ollama-model"
-                        type="text"
-                        value={backendConfig.ollamaModel}
-                        onChange={(e) => onBackendChange({ ...backendConfig, ollamaModel: e.target.value })}
-                        className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all"
-                        placeholder="qwen:vl (Enter manually if fetch fails)"
-                      />
-                    )}
-                  </div>
-                  <div className="space-y-1">
-                    <label htmlFor="tagger-endpoint" className="text-xs text-slate-500">Local Tagger Endpoint (WD1.4)</label>
-                    <input
-                      id="tagger-endpoint"
-                      type="text"
-                      value={backendConfig.taggerEndpoint}
-                      onChange={(e) => onBackendChange({ ...backendConfig, taggerEndpoint: e.target.value })}
-                      className="w-full text-sm px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md focus:ring-2 focus:ring-red-500 outline-none transition-all"
-                      placeholder="/interrogate/eva"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+      {/* Output */}
+      <BlockTitle className="mt-6! mb-2!">{t('settings.outputSettings')}</BlockTitle>
+      <List strong inset className="my-0!">
+        <ListItem
+          innerChildren={sliderRow(
+            <span>{t('settings.topK')}</span>,
+            settings.topK,
+            String(settings.topK),
+            v => onSettingsChange({ ...settings, topK: v }),
+            10, 100, 5,
           )}
-        </div>
-      )}
+        />
+        <ListItem
+          innerChildren={sliderRow(
+            <span>{t('settings.maxTags')}</span>,
+            settings.maxTags || 0,
+            String(settings.maxTags || 0),
+            v => onSettingsChange({ ...settings, maxTags: v }),
+            0, 100, 5,
+          )}
+        />
+        <ListInput
+          label={t('settings.triggerPhrase')}
+          type="text"
+          value={settings.triggerPhrase || ''}
+          placeholder={t('settings.triggerPlaceholder')}
+          disabled={disabled}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onSettingsChange({ ...settings, triggerPhrase: e.target.value })
+          }
+        />
+        <ListItem
+          label
+          title={t('settings.randomize')}
+          media={<Shuffle className={`w-5 h-5 ${settings.randomize ? 'text-primary dark:text-md-dark-primary' : 'opacity-50'}`} aria-hidden="true" />}
+          after={
+            <Toggle
+              checked={settings.randomize}
+              disabled={disabled}
+              onChange={() => onSettingsChange({ ...settings, randomize: !settings.randomize })}
+            />
+          }
+        />
+        <ListItem
+          label
+          title={t('settings.removeUnderscores')}
+          media={<Type className={`w-5 h-5 ${settings.removeUnderscores ? 'text-primary dark:text-md-dark-primary' : 'opacity-50'}`} aria-hidden="true" />}
+          after={
+            <Toggle
+              checked={settings.removeUnderscores}
+              disabled={disabled}
+              onChange={() => onSettingsChange({ ...settings, removeUnderscores: !settings.removeUnderscores })}
+            />
+          }
+        />
+      </List>
+
+      {/* Thresholds */}
+      <BlockTitle className="mt-6! mb-2!">{t('settings.thresholds')}</BlockTitle>
+      <div className="px-4 pb-2">
+        <Segmented strong rounded>
+          <SegmentedButton active={!isAdvanced} onClick={() => setIsAdvanced(false)}>
+            {t('settings.simpleMode')}
+          </SegmentedButton>
+          <SegmentedButton active={isAdvanced} onClick={() => setIsAdvanced(true)}>
+            {t('settings.advancedThresholds')}
+          </SegmentedButton>
+        </Segmented>
+      </div>
+      <List strong inset className="my-0!">
+        {!isAdvanced ? (
+          <ListItem
+            innerChildren={sliderRow(
+              <span className="flex items-center gap-1.5"><Layers className="w-4 h-4" aria-hidden="true" />{t('settings.categories.general')}</span>,
+              settings.thresholds.general,
+              settings.thresholds.general.toFixed(2),
+              updateOverallThreshold,
+              0, 0.95, 0.05,
+            )}
+          />
+        ) : (
+          categories.map(cat => (
+            <ListItem
+              key={cat.id}
+              innerChildren={sliderRow(
+                <span className={`flex items-center gap-1.5 font-medium ${cat.color}`}>{cat.icon}{cat.label}</span>,
+                settings.thresholds[cat.id],
+                settings.thresholds[cat.id].toFixed(2),
+                v => updateThreshold(cat.id, v),
+                0, 0.95, 0.05,
+              )}
+            />
+          ))
+        )}
+      </List>
     </div>
   );
 };

@@ -1,135 +1,130 @@
 {
   "app": {
     "title": "Farterrogator",
-    "subtitle": "AI 이미지 심문기",
-    "copyright": "© {{year}} Fartcore. 모든 권리 보유."
+    "subtitle": "AI 이미지 분석기",
+    "copyright": "© {{year}} Fartcore. All rights reserved."
+  },
+  "common": {
+    "close": "닫기",
+    "changeLanguage": "언어 변경",
+    "languageSelection": "언어 선택"
   },
   "header": {
     "whatIsThis": "이게 뭔가요?",
-    "poweredBy": "{{model}} 구동",
-    "nothingYet": "아직 없음"
+    "poweredBy": "모델: {{model}}",
+    "nothingYet": "없음"
   },
   "upload": {
     "inputImage": "입력 이미지",
-    "dragDrop": "이미지를 이곳에 드래그 앤 드롭하거나 클릭하여 선택하세요",
+    "dragDrop": "이미지를 여기에 드래그 앤 드롭하거나 클릭하여 선택하세요",
+    "dropHere": "여기에 파일을 놓으세요",
     "supports": "PNG, JPG, WEBP, GIF 지원",
     "clear": "이미지 지우기",
-    "interrogate": "심문하기"
+    "interrogate": "분석 시작",
+    "previewAlt": "업로드된 이미지 미리보기",
+    "filesSelected": "{{num}}개 파일 선택됨",
+    "batchReady": "일괄 처리 준비 완료"
   },
   "results": {
     "title": "분석 결과",
-    "ready": "심문 준비 완료",
-    "readySub": "태그와 설명을 보려면 이미지를 업로드하세요",
+    "ready": "분석 준비 완료",
+    "readySub": "이미지를 업로드하여 태깅을 시작하세요",
     "failed": "분석 실패",
-    "troubleshoot": "로컬 모드 문제 해결:",
-    "troubleshootOllama": "Ollama가 {{endpoint}}에서 실행 중인지 확인하세요",
-    "troubleshootTagger": "로컬 태거가 {{endpoint}}에서 실행 중인지 확인하세요",
-    "troubleshootCors": "두 로컬 서버의 CORS 헤더를 확인하세요",
+    "troubleshoot": "문제 해결:",
+    "troubleshootTagger": "태거가 {{endpoint}}에서 접근 가능한지 확인하세요",
     "processing": "처리 중...",
     "analyzing": "분석 중...",
-    "generatingTags": "기술 태그 생성 중...",
-    "descriptionNotGenerated": "설명이 생성되지 않았습니다.",
-    "generateDescription": "자연어 설명 생성",
-    "technicalTags": "기술 태그",
+    "technicalTags": "태그",
+    "noTags": "현재 임계값에서 태그를 찾을 수 없습니다.",
     "randomized": "무작위",
-    "noUnderscores": "밑줄 제거",
+    "noUnderscores": "밑줄 없음",
     "copyAll": "모두 복사",
     "copied": "복사됨!",
-    "naiReady": "NAI 준비됨",
+    "copiedItem": "복사됨: {{item}}",
+    "naiReady": "NAI Ready",
+    "downloadNai": "태그가 포함된 이미지 다운로드",
     "tagsCopied": "모든 태그가 클립보드에 복사되었습니다!",
-    "descriptionCopied": "설명이 클립보드에 복사되었습니다!",
-    "embedFailed": "NAI 준비 이미지를 생성하지 못했습니다."
+    "embedFailed": "NAI Ready 이미지를 만들지 못했습니다.",
+    "score": "점수",
+    "batchResults": "일괄 처리 결과",
+    "artistSimilarity": "작가 유사도",
+    "matchingArtists": "작가 스타일 매칭 중...",
+    "copyArtist": "작가 이름 복사"
   },
   "status": {
     "starting": "시작 중...",
-    "done": "완료",
-    "initializingGemini": "Gemini 클라이언트 초기화 중...",
-    "sendingToGemini": "Gemini로 이미지 전송 중...",
-    "processingGemini": "Gemini 응답 처리 중...",
-    "finalizing": "마무리 중...",
-    "analyzingLocal": "로컬 태거로 이미지 분석 중...",
-    "enrichingCopyrights": "저작권 데이터로 태그 보강 중...",
-    "consultingOllama": "비전 모델 (Ollama) 상담 중...",
-    "skippingOllama": "비전 모델 건너뛰는 중 (비활성화됨)...",
-    "merging": "결과 병합 및 구체화 중...",
-    "generatingDescription": "자연어 설명 생성 중..."
+    "done": "완료"
   },
   "settings": {
     "title": "설정",
     "thresholds": "임계값",
-    "outputSettings": "출력 설정",
-    "backendSettings": "백엔드 설정",
-    "topK": "상위 K 태그",
-    "maxTags": "최대 태그 (0 = 무제한)",
-    "triggerPhrase": "트리거 문구",
+    "outputSettings": "출력",
+    "topK": "상위 K개 태그",
     "randomize": "순서 무작위화",
     "removeUnderscores": "밑줄 제거",
-    "backendType": "백엔드 유형",
-    "geminiKey": "Gemini API 키",
-    "ollamaEndpoint": "Ollama 엔드포인트",
-    "ollamaModel": "Ollama 모델",
-    "refresh": "새로고침",
-    "taggerEndpoint": "로컬 태거 엔드포인트",
-    "enableNaturalLanguage": "자연어 사용",
-    "naturalLanguageWarning": "(시간이 더 걸립니다)",
-    "simpleMode": "간편 모드",
-    "advancedThresholds": "고급 임계값",
+    "simpleMode": "간단",
+    "advancedThresholds": "고급",
     "backend": {
-      "provider": "제공자",
-      "eva": "EVA (Ollama + Tagger)",
-      "gemini": "Google Gemini",
-      "keyStorage": "키는 메모리에만 저장됩니다.",
-      "evaDescription": "로컬 태거 결과와 Ollama의 추론 및 캡션 기능을 매끄럽게 결합합니다.",
-      "ollamaEndpointLabel": "Ollama 엔드포인트 (LLM/Vision)",
-      "ollamaModel": "Ollama 모델"
+      "model": "태거 모델",
+      "baseUrl": "기본 URL",
+      "baseUrlHint": "엔드포인트 기본 주소, 예: https://localtagger.gpu.garden 또는 http://localhost:8000",
+      "familyWd": "WD 계열",
+      "models": {
+        "wd": "Danbooru 중심",
+        "pixai": "일러스트 최적화",
+        "camie": "특화된 출력",
+        "taggerine": "확장된 커버리지"
+      }
     },
     "categories": {
       "general": "일반",
       "character": "캐릭터",
       "copyright": "저작권",
-      "artist": "아티스트",
+      "artist": "작가",
       "meta": "메타",
       "rating": "등급"
-    }
+    },
+    "maxTags": "최대 태그 수 (0 = 무제한)",
+    "triggerPhrase": "트리거 문구",
+    "triggerPlaceholder": "예: masterpiece, best quality"
   },
   "errors": {
-    "geminiKeyRequired": "Gemini API 키가 필요합니다. 설정 패널에서 구성해 주세요.",
-    "ollamaRequired": "EVA 모드에는 Ollama 엔드포인트가 필요합니다.",
-    "taggerRequired": "EVA 모드에는 로컬 태거 엔드포인트가 필요합니다.",
+    "taggerRequired": "태거 기본 URL이 필요합니다. 백엔드 설정에서 구성해 주세요.",
     "unknown": "알 수 없는 오류가 발생했습니다"
   },
   "info": {
-    "title": "Farterrogator란 무엇인가요?",
-    "description": "<strong>파테로게이터(Farterrogator)</strong>는 이미지를 분석하고 상세한 메타데이터, 태그, 자연어 설명을 추출하도록 설계된 고급 AI 이미지 심문 도구입니다. 아티스트, 개발자, 애호가가 이미지의 내용을 이해하고 추가 AI 처리를 준비하는 데 도움을 줍니다.",
+    "title": "Farterrogator란?",
+    "description": "<strong>Farterrogator</strong>는 빠른 로컬 Booru 스타일 이미지 태거입니다. WD 계열 및 일러스트 중심 모델로 이미지를 분석하여 데이터셋 제작과 프롬프트 엔지니어링을 위한 Danbooru 호환 태그를 추출합니다.",
     "features": {
-      "dualModes": {
-        "title": "이중 분석 모드",
-        "description": "클라우드 기반 최첨단 분석을 위한 <strong>Google Gemini</strong>와 <strong>gpu.garden</strong>에서 호스팅되는 Ollama(Vision 모델)와 WD1.4 태거를 결합한 <strong>EVA</strong> 중에서 선택하세요."
+      "models": {
+        "title": "다양한 태거 모델",
+        "description": "<strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong>, <strong>Taggerine</strong> 중에서 선택할 수 있으며, Kaloscope 작가 스타일 유사도도 제공합니다."
       },
       "naiReady": {
-        "title": "NAI 준비 임베딩",
-        "description": "생성된 태그나 설명을 PNG 메타데이터에 자동으로 임베딩합니다. 결과 이미지는 \"NAI 준비됨(NAI Ready)\" 상태가 되며, NovelAI에 드래그하면 분석된 데이터로 프롬프트가 자동 채워집니다."
+        "title": "NAI Ready 임베딩",
+        "description": "생성된 태그를 PNG 메타데이터에 자동으로 임베딩합니다. 결과 이미지는 \"NAI Ready\"로, NovelAI에 드래그하기만 하면 프롬프트가 자동 입력됩니다."
       },
       "privacy": {
-        "title": "개인정보 보호 및 보안",
-        "description": "EVA 모드에서 이미지는 <strong>Fartcore 데이터 센터</strong>를 통해 <strong>gpu.garden</strong>에서 안전하게 처리됩니다. 기기에서 실행되지는 않지만, 데이터는 엄격한 개인정보 보호 표준에 따라 처리됩니다."
+        "title": "개인정보 보호 및 성능",
+        "description": "모든 추론은 구성된 백엔드(gpu.garden 또는 로컬)에서 실행됩니다. 클라우드 API 키가 필요하지 않습니다."
       },
       "gpuGarden": {
         "title": "GPU Garden 통합",
-        "description": "GPU Garden 인프라와 함께 사용하도록 최적화되어 있어, 무거운 작업을 위해 원격 GPU 인스턴스로 원활하게 프록시할 수 있습니다."
+        "description": "자동 CORS 프록시 라우팅으로 gpu.garden 인프라에 최적화되어 있습니다."
       }
     },
     "howTo": {
       "title": "사용 방법",
       "step1": "이미지를 업로드하거나 캔버스에 드래그 앤 드롭하세요.",
-      "step2": "선호하는 백엔드(Gemini 또는 EVA)를 선택하세요.",
-      "step3": "태그를 필터링하기 위해 신뢰도 임계값을 조정하세요.",
-      "step4": "<strong>심문 시작</strong>을 클릭하세요.",
-      "step5": "태그를 복사하거나 워크플로우에 사용할 <strong>NAI 준비</strong> PNG를 다운로드하세요."
+      "step2": "태거 모델(WD, PixAI, Camie, Taggerine)을 선택하세요.",
+      "step3": "신뢰도 임계값을 조정하여 태그를 필터링하세요.",
+      "step4": "<strong>분석 시작</strong>을 클릭하세요.",
+      "step5": "태그를 복사하거나 <strong>NAI Ready</strong> PNG를 다운로드하세요."
     },
     "madeBy": "제작:"
   },
   "theme": {
+    "label": "테마 선택",
     "light": "라이트 모드",
     "auto": "시스템 자동",
     "dark": "다크 모드"

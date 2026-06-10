@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
           target: 'https://localtagger.gpu.garden',
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => {
+          rewrite: (path: string) => {
             const p = path.replace(/^\/interrogate\/gpu-garden/, '');
             return p === '' ? '/' : p;
           }
@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
           target: 'https://ollama.gpu.garden',
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => {
+          rewrite: (path: string) => {
             const p = path.replace(/^\/ollama\/gpu-garden/, '');
             return p === '' ? '/' : p;
           }
@@ -38,6 +38,11 @@ export default defineConfig(({ mode }) => {
           secure: false,
         },
         '/tag': {
+          target: 'http://localhost:8000',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/kaloscope': {
           target: 'http://localhost:8000',
           changeOrigin: true,
           secure: false,
@@ -56,7 +61,7 @@ export default defineConfig(({ mode }) => {
             target: 'https://localtagger.gpu.garden',
             changeOrigin: true,
             secure: false,
-            rewrite: (path) => {
+            rewrite: (path: string) => {
               const p = path.replace(/^\/interrogate\/gpu-garden/, '');
               return p === '' ? '/' : p;
             }
@@ -65,7 +70,7 @@ export default defineConfig(({ mode }) => {
             target: 'https://ollama.gpu.garden',
             changeOrigin: true,
             secure: false,
-            rewrite: (path) => {
+            rewrite: (path: string) => {
               const p = path.replace(/^\/ollama\/gpu-garden/, '');
               return p === '' ? '/' : p;
             }
@@ -76,6 +81,11 @@ export default defineConfig(({ mode }) => {
             secure: false,
           },
           '/tag': {
+            target: 'http://localhost:8000',
+            changeOrigin: true,
+            secure: false,
+          },
+          '/kaloscope': {
             target: 'http://localhost:8000',
             changeOrigin: true,
             secure: false,

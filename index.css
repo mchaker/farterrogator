@@ -1,6 +1,22 @@
 @import "tailwindcss";
+/* Konsta theme imported directly (not via konsta/react/theme.css) because that
+   file places @source before @import, which PostCSS rejects. */
+@import "konsta/theme.css";
 
-@variant dark (&:where(.dark, .dark *));
+@source "./node_modules/konsta/react";
+@source "./node_modules/konsta/shared";
+@source "./node_modules/konsta/styles";
+
+@theme {
+  /* Brand the Konsta/Material palette with Farterrogator red */
+  --color-brand-primary: #dc2626;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
 
 :root {
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

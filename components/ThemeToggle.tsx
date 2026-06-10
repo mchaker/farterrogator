@@ -8,49 +8,36 @@ interface ThemeToggleProps {
   setTheme: (theme: Theme) => void;
 }
 
+const OPTIONS: { value: Theme; icon: React.ReactNode; labelKey: string }[] = [
+  { value: 'light', icon: <Sun className="w-4 h-4" aria-hidden="true" />, labelKey: 'theme.light' },
+  { value: 'auto', icon: <Monitor className="w-4 h-4" aria-hidden="true" />, labelKey: 'theme.auto' },
+  { value: 'dark', icon: <Moon className="w-4 h-4" aria-hidden="true" />, labelKey: 'theme.dark' },
+];
+
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, setTheme }) => {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center p-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" role="group" aria-label={t('theme.label') || "Theme selection"}>
-      <button
-        onClick={() => setTheme('light')}
-        className={`p-1.5 rounded-full transition-all ${
-          theme === 'light' 
-            ? 'bg-white dark:bg-slate-600 text-red-600 dark:text-red-300 shadow-sm' 
-            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-        }`}
-        title={t('theme.light')}
-        aria-label={t('theme.light')}
-        aria-pressed={theme === 'light'}
-      >
-        <Sun className="w-4 h-4" aria-hidden="true" />
-      </button>
-      <button
-        onClick={() => setTheme('auto')}
-        className={`p-1.5 rounded-full transition-all ${
-          theme === 'auto' 
-            ? 'bg-white dark:bg-slate-600 text-red-600 dark:text-red-300 shadow-sm' 
-            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-        }`}
-        title={t('theme.auto')}
-        aria-label={t('theme.auto')}
-        aria-pressed={theme === 'auto'}
-      >
-        <Monitor className="w-4 h-4" aria-hidden="true" />
-      </button>
-      <button
-        onClick={() => setTheme('dark')}
-        className={`p-1.5 rounded-full transition-all ${
-          theme === 'dark' 
-            ? 'bg-white dark:bg-slate-600 text-red-600 dark:text-red-300 shadow-sm' 
-            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-        }`}
-        title={t('theme.dark')}
-        aria-label={t('theme.dark')}
-        aria-pressed={theme === 'dark'}
-      >
-        <Moon className="w-4 h-4" aria-hidden="true" />
-      </button>
+    <div
+      className="flex items-center gap-0.5 p-1 rounded-full bg-md-light-surface-3 dark:bg-md-dark-surface-3"
+      role="group"
+      aria-label={t('theme.label')}
+    >
+      {OPTIONS.map(opt => (
+        <button
+          key={opt.value}
+          onClick={() => setTheme(opt.value)}
+          className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
+            theme === opt.value
+              ? 'bg-md-light-primary-container dark:bg-md-dark-primary-container text-md-light-on-primary-container dark:text-md-dark-on-primary-container shadow-sm'
+              : 'text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:text-md-light-on-surface dark:hover:text-md-dark-on-surface'
+          }`}
+          title={t(opt.labelKey)}
+          aria-label={t(opt.labelKey)}
+          aria-pressed={theme === opt.value}
+        >
+          {opt.icon}
+        </button>
+      ))}
     </div>
   );
 };

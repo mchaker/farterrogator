@@ -1,136 +1,130 @@
 {
   "app": {
     "title": "Farterrogator",
-    "subtitle": "人工图像反推工具",
+    "subtitle": "AI 图像反推工具",
     "copyright": "© {{year}} Fartcore. 保留所有权利。"
   },
+  "common": {
+    "close": "关闭",
+    "changeLanguage": "切换语言",
+    "languageSelection": "语言选择"
+  },
   "header": {
-    "whatIsThis": "这是什么？",
-    "poweredBy": "由 {{model}} 驱动",
-    "nothingYet": "暂无内容"
+    "whatIsThis": "这是什么?",
+    "poweredBy": "模型: {{model}}",
+    "nothingYet": "无"
   },
   "upload": {
-    "inputImage": "输入图片",
-    "dragDrop": "拖放图片到此处，或点击选择",
-    "supports": "支持 PNG, JPG, WEBP, GIF",
-    "clear": "清除图片",
-    "interrogate": "开始反推"
+    "inputImage": "输入图像",
+    "dragDrop": "将图像拖放到此处，或点击选择",
+    "dropHere": "将文件放到这里",
+    "supports": "支持 PNG、JPG、WEBP、GIF",
+    "clear": "清除图像",
+    "interrogate": "开始反推",
+    "previewAlt": "已上传图像预览",
+    "filesSelected": "已选择 {{num}} 个文件",
+    "batchReady": "已准备好批量处理"
   },
   "results": {
     "title": "分析结果",
     "ready": "准备就绪",
-    "readySub": "上传图片以查看标签和描述",
+    "readySub": "上传图像以开始打标",
     "failed": "分析失败",
-    "troubleshoot": "本地模式故障排除：",
-    "troubleshootOllama": "确保 Ollama 正在运行于 {{endpoint}}",
-    "troubleshootTagger": "确保本地 Tagger 正在运行于 {{endpoint}}",
-    "troubleshootCors": "检查两个本地服务器的 CORS 标头",
+    "troubleshoot": "故障排查:",
+    "troubleshootTagger": "请确认打标器可在 {{endpoint}} 访问",
     "processing": "处理中...",
     "analyzing": "分析中...",
-    "generatingTags": "正在生成技术标签...",
-    "descriptionNotGenerated": "未生成描述。",
-    "generateDescription": "生成自然语言描述",
-    "naturalDescription": "自然语言描述",
-    "technicalTags": "技术标签",
-    "randomized": "随机排序",
-    "noUnderscores": "移除下划线",
-    "copyAll": "复制全部",
-    "copied": "已复制！",
-    "naiReady": "NAI 就绪",
-    "tagsCopied": "所有标签已复制到剪贴板！",
-    "descriptionCopied": "描述已复制到剪贴板！",
-    "embedFailed": "无法创建 NAI 就绪图片。"
+    "technicalTags": "标签",
+    "noTags": "在当前阈值下未找到标签。",
+    "randomized": "随机顺序",
+    "noUnderscores": "无下划线",
+    "copyAll": "全部复制",
+    "copied": "已复制!",
+    "copiedItem": "已复制: {{item}}",
+    "naiReady": "NAI Ready",
+    "downloadNai": "下载含嵌入标签的图像",
+    "tagsCopied": "所有标签已复制到剪贴板!",
+    "embedFailed": "创建 NAI Ready 图像失败。",
+    "score": "置信度",
+    "batchResults": "批量结果",
+    "artistSimilarity": "画师相似度",
+    "matchingArtists": "正在匹配画师风格...",
+    "copyArtist": "复制画师名称"
   },
   "status": {
     "starting": "正在启动...",
-    "done": "完成",
-    "initializingGemini": "正在初始化 Gemini 客户端...",
-    "sendingToGemini": "正在发送图片至 Gemini...",
-    "processingGemini": "正在处理 Gemini 响应...",
-    "finalizing": "正在完成...",
-    "analyzingLocal": "正在使用本地标注器分析图片...",
-    "enrichingCopyrights": "正在使用版权数据丰富标签...",
-    "consultingOllama": "正在咨询视觉模型 (Ollama)...",
-    "skippingOllama": "正在跳过视觉模型 (已禁用)...",
-    "merging": "正在合并并优化结果...",
-    "generatingDescription": "正在生成自然语言描述..."
+    "done": "完成"
   },
   "settings": {
     "title": "设置",
     "thresholds": "阈值",
-    "outputSettings": "输出设置",
-    "backendSettings": "后端设置",
-        "topK": "Top K 标签",
-    "maxTags": "最大标签数 (0 = 无限制)",
-    "triggerPhrase": "触发词",
-    "randomize": "随机顺序",
+    "outputSettings": "输出",
+    "topK": "前 K 个标签",
+    "randomize": "随机排序",
     "removeUnderscores": "移除下划线",
-    "backendType": "后端类型",
-    "geminiKey": "Gemini API 密钥",
-    "ollamaEndpoint": "Ollama 端点",
-    "ollamaModel": "Ollama 模型",
-    "refresh": "刷新",
-    "taggerEndpoint": "本地 Tagger 端点",
-    "enableNaturalLanguage": "启用自然语言",
-    "naturalLanguageWarning": "（这将花费更长时间）",
-    "simpleMode": "简单模式",
-    "advancedThresholds": "高级阈值",
+    "simpleMode": "简单",
+    "advancedThresholds": "高级",
     "backend": {
-      "provider": "提供商",
-      "eva": "EVA (Ollama + Tagger)",
-      "gemini": "Google Gemini",
-      "keyStorage": "密钥仅存储在内存中。",
-      "evaDescription": "无缝结合本地 Tagger 结果与 Ollama 的推理和字幕能力。",
-      "ollamaEndpointLabel": "Ollama 端点 (LLM/视觉)",
-      "ollamaModel": "Ollama 模型"
+      "model": "打标模型",
+      "baseUrl": "基础 URL",
+      "baseUrlHint": "端点基础地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
+      "familyWd": "WD 系列",
+      "models": {
+        "wd": "以 Danbooru 为中心",
+        "pixai": "插画优化",
+        "camie": "特化输出",
+        "taggerine": "更广覆盖"
+      }
     },
     "categories": {
-      "general": "常规",
+      "general": "一般",
       "character": "角色",
-      "copyright": "版权",
-      "artist": "艺术家",
+      "copyright": "版权作品",
+      "artist": "画师",
       "meta": "元数据",
-      "rating": "评级"
-    }
+      "rating": "分级"
+    },
+    "maxTags": "最大标签数 (0 = 不限)",
+    "triggerPhrase": "触发词",
+    "triggerPlaceholder": "例如 masterpiece, best quality"
   },
   "errors": {
-    "geminiKeyRequired": "需要 Gemini API 密钥。请在设置面板中配置。",
-    "ollamaRequired": "EVA 模式需要 Ollama 端点。",
-    "taggerRequired": "EVA 模式需要本地 Tagger 端点。",
+    "taggerRequired": "需要打标器的基础 URL。请在后端设置中配置。",
     "unknown": "发生未知错误"
   },
   "info": {
-    "title": "什么是 Farterrogator？",
-    "description": "<strong>Farterrogator</strong> 是一款先进的人工图像反推工具，旨在分析图像并提取详细的元数据、标签和自然语言描述。它帮助艺术家、开发者和爱好者理解图像内容，并为进一步的人工处理做好准备。",
+    "title": "Farterrogator 是什么?",
+    "description": "<strong>Farterrogator</strong> 是一款快速的本地 Booru 风格图像打标工具。它使用 WD 系列和插画特化模型分析图像，提取兼容 Danbooru 的标签，用于数据集制作和提示词工程。",
     "features": {
-      "dualModes": {
-        "title": "双重分析模式",
-        "description": "选择 <strong>Google Gemini</strong> 进行基于云的最先进分析，或选择 <strong>EVA</strong>，结合 WD1.4 Tagger 与托管在 <strong>gpu.garden</strong> 上的 Ollama（视觉模型）。"
+      "models": {
+        "title": "多种打标模型",
+        "description": "可在 <strong>WD14 EVA</strong>、<strong>PixAI</strong>、<strong>Camie</strong> 和 <strong>Taggerine</strong> 之间选择，另有 Kaloscope 画师风格相似度。"
       },
       "naiReady": {
-        "title": "NAI 就绪嵌入",
-        "description": "自动将生成的标签或描述嵌入 PNG 元数据。生成的图像是“NAI 就绪”的——只需将其拖入 NovelAI 即可自动使用分析数据填充提示词。"
+        "title": "NAI Ready 嵌入",
+        "description": "自动将生成的标签嵌入 PNG 元数据。生成的图像即为 \"NAI Ready\"——直接拖入 NovelAI 即可自动填充提示词。"
       },
       "privacy": {
-        "title": "隐私与安全",
-        "description": "在 EVA 模式下，您的图像通过 <strong>Fartcore 数据中心</strong> 在 <strong>gpu.garden</strong> 上安全处理。虽然不在您的设备上运行，但您的数据将按照严格的隐私标准进行处理。"
+        "title": "隐私与性能",
+        "description": "所有推理都在配置的后端 (gpu.garden 或本地) 上运行。无需云端 API 密钥。"
       },
       "gpuGarden": {
         "title": "GPU Garden 集成",
-        "description": "针对 GPU Garden 基础设施进行了优化，允许无缝代理到远程 GPU 实例以进行繁重的工作。"
+        "description": "针对 gpu.garden 基础设施优化，自动进行 CORS 代理路由。"
       }
     },
     "howTo": {
-      "title": "如何使用",
-      "step1": "上传图片或将其拖放到画布上。",
-      "step2": "选择您偏好的后端（Gemini 或 EVA）。",
+      "title": "使用方法",
+      "step1": "上传图像，或将其拖放到画布上。",
+      "step2": "选择打标模型 (WD、PixAI、Camie 或 Taggerine)。",
       "step3": "调整置信度阈值以过滤标签。",
       "step4": "点击<strong>开始反推</strong>。",
-      "step5": "复制标签或下载 <strong>NAI 就绪</strong> PNG 以在您的工作流程中使用。"
+      "step5": "复制标签，或下载 <strong>NAI Ready</strong> PNG。"
     },
-    "madeBy": "制作："
+    "madeBy": "制作者"
   },
   "theme": {
+    "label": "主题选择",
     "light": "浅色模式",
     "auto": "跟随系统",
     "dark": "深色模式"

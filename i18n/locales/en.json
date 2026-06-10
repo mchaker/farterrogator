@@ -4,83 +4,77 @@
     "subtitle": "AI Image Interrogator",
     "copyright": "© {{year}} Fartcore. All rights reserved."
   },
+  "common": {
+    "close": "Close",
+    "changeLanguage": "Change Language",
+    "languageSelection": "Language selection"
+  },
   "header": {
     "whatIsThis": "What is this?",
-    "poweredBy": "Powered by {{model}}",
-    "nothingYet": "Nothing yet"
+    "poweredBy": "Model: {{model}}",
+    "nothingYet": "None"
   },
   "upload": {
     "inputImage": "Input Image",
     "dragDrop": "Drag & drop an image here, or click to select",
+    "dropHere": "Drop files here",
     "supports": "Supports PNG, JPG, WEBP, GIF",
     "clear": "Clear Image",
-    "interrogate": "Interrogate"
+    "interrogate": "Interrogate",
+    "previewAlt": "Uploaded image preview",
+    "filesSelected": "{{num}} files selected",
+    "batchReady": "Ready for batch processing"
   },
   "results": {
     "title": "Analysis Result",
     "ready": "Ready to Interrogate",
-    "readySub": "Upload an image to see tags and description",
+    "readySub": "Upload an image to begin tagging",
     "failed": "Analysis Failed",
-    "troubleshoot": "Troubleshooting Local Mode:",
-    "troubleshootOllama": "Ensure Ollama is running at {{endpoint}}",
-    "troubleshootTagger": "Ensure Local Tagger is running at {{endpoint}}",
-    "troubleshootCors": "Check CORS headers on both local servers",
+    "troubleshoot": "Troubleshooting:",
+    "troubleshootTagger": "Ensure the tagger is reachable at {{endpoint}}",
     "processing": "Processing...",
     "analyzing": "Analyzing...",
-    "generatingTags": "Generating Technical tags...",
-    "descriptionNotGenerated": "Description not generated.",
-    "generateDescription": "Generate Natural Language Description",
-    "naturalDescription": "Natural Description",
-    "technicalTags": "Technical Tags",
+    "technicalTags": "Tags",
+    "noTags": "No tags found at current threshold.",
     "randomized": "Randomized",
     "noUnderscores": "No Underscores",
     "copyAll": "Copy All",
     "copied": "Copied!",
+    "copiedItem": "Copied: {{item}}",
     "naiReady": "NAI Ready",
+    "downloadNai": "Download with tags embedded",
     "tagsCopied": "All tags copied to clipboard!",
-    "descriptionCopied": "Description copied to clipboard!",
-    "embedFailed": "Failed to create NAI ready image."
+    "embedFailed": "Failed to create NAI ready image.",
+    "score": "Score",
+    "batchResults": "Batch Results",
+    "artistSimilarity": "Artist Similarity",
+    "matchingArtists": "Matching artist styles...",
+    "copyArtist": "Copy artist name"
   },
   "status": {
     "starting": "Starting...",
-    "done": "Done",
-    "initializingGemini": "Initializing Gemini client...",
-    "sendingToGemini": "Sending image to Gemini...",
-    "processingGemini": "Processing Gemini response...",
-    "finalizing": "Finalizing...",
-    "analyzingLocal": "Analyzing image with local tagger...",
-    "enrichingCopyrights": "Enriching tags with copyright data...",
-    "consultingOllama": "Consulting vision model (Ollama)...",
-    "skippingOllama": "Skipping vision model (disabled)...",
-    "merging": "Merging and refining results...",
-    "generatingDescription": "Generating natural language description..."
+    "done": "Done"
   },
   "settings": {
     "title": "Settings",
     "thresholds": "Thresholds",
-    "outputSettings": "Output Settings",
-    "backendSettings": "Backend Settings",
+    "outputSettings": "Output",
     "topK": "Top K Tags",
     "randomize": "Randomize Order",
     "removeUnderscores": "Remove Underscores",
-    "backendType": "Backend Type",
-    "geminiKey": "Gemini API Key",
-    "ollamaEndpoint": "Ollama Endpoint",
-    "ollamaModel": "Ollama Model",
-    "refresh": "Refresh",
-    "taggerEndpoint": "Local Tagger Endpoint",
-    "enableNaturalLanguage": "Enable Natural Language",
-    "naturalLanguageWarning": "(this will take longer)",
-    "simpleMode": "Simple Mode",
-    "advancedThresholds": "Advanced Thresholds",
+    "simpleMode": "Simple",
+    "advancedThresholds": "Advanced",
     "backend": {
-      "provider": "Provider",
-      "eva": "EVA (Ollama + Tagger)",
-      "gemini": "Google Gemini",
-      "keyStorage": "Key is stored in memory only.",
-      "evaDescription": "Seamlessly combines local tagger results with Ollama's reasoning and captioning capabilities.",
-      "ollamaEndpointLabel": "Ollama Endpoint (LLM/Vision)",
-      "ollamaModel": "Ollama Model"
+      "model": "Tagger Model",
+      "baseUrl": "Base URL",
+      "baseUrlHint": "Endpoint base, e.g. https://localtagger.gpu.garden or http://localhost:8000",
+      "familyWd": "WD Family",
+      "models": {
+        "wd": "Danbooru-centric",
+        "pixai": "Illustration-optimized",
+        "camie": "Specialized output",
+        "taggerine": "Extended coverage"
+      }
     },
     "categories": {
       "general": "General",
@@ -91,46 +85,46 @@
       "rating": "Rating"
     },
     "maxTags": "Max Tags (0 = Unlimited)",
-    "triggerPhrase": "Trigger Phrase"
+    "triggerPhrase": "Trigger Phrase",
+    "triggerPlaceholder": "e.g. masterpiece, best quality"
   },
   "errors": {
-    "geminiKeyRequired": "Gemini API Key is required. Please configure it in the settings panel.",
-    "ollamaRequired": "Ollama Endpoint is required for EVA mode.",
-    "taggerRequired": "Local Tagger Endpoint is required for EVA mode.",
+    "taggerRequired": "Tagger base URL is required. Please configure it in the backend settings.",
     "unknown": "An unknown error occurred"
   },
   "info": {
     "title": "What is Farterrogator?",
-    "description": "<strong>Farterrogator</strong> is an advanced AI image interrogation tool designed to analyze images and extract detailed metadata, tags, and natural language descriptions. It helps artists, developers, and enthusiasts understand the content of their images and prepare them for further AI processing.",
+    "description": "<strong>Farterrogator</strong> is a fast, local Booru-style image tagger. It analyzes images using WD-family and illustration-centric models to extract Danbooru-compatible tags for dataset creation and prompt engineering.",
     "features": {
-      "dualModes": {
-        "title": "Dual Analysis Modes",
-        "description": "Choose between <strong>Google Gemini</strong> for cloud-based state-of-the-art analysis, or <strong>EVA</strong> which combines a WD1.4 Tagger with Ollama (Vision Models) hosted on <strong>gpu.garden</strong>."
+      "models": {
+        "title": "Multiple Tagger Models",
+        "description": "Choose between <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> and <strong>Taggerine</strong> — plus Kaloscope artist style similarity."
       },
       "naiReady": {
         "title": "NAI Ready Embedding",
-        "description": "Automatically embed generated tags or descriptions into PNG metadata. The resulting images are \"NAI Ready\" - simply drag them into NovelAI to autopopulate prompts with the analyzed data."
+        "description": "Automatically embed generated tags into PNG metadata. The resulting images are \"NAI Ready\" — simply drag them into NovelAI to autopopulate prompts."
       },
       "privacy": {
-        "title": "Privacy & Security",
-        "description": "In EVA mode, your images are processed securely on <strong>gpu.garden</strong> via the <strong>Fartcore data center</strong>. While not running on your device, your data is handled with strict privacy standards."
+        "title": "Privacy & Performance",
+        "description": "All inference runs on the configured backend (gpu.garden or local). No cloud API keys required."
       },
       "gpuGarden": {
         "title": "GPU Garden Integration",
-        "description": "Optimized for use with GPU Garden's infrastructure, allowing for seamless proxying to remote GPU instances for heavy lifting."
+        "description": "Optimized for gpu.garden infrastructure with automatic CORS proxy routing."
       }
     },
     "howTo": {
       "title": "How to use",
-      "step1": "Upload an image or drag & drop one onto the canvas.",
-      "step2": "Select your preferred backend (Gemini or EVA).",
+      "step1": "Upload an image or drag & drop it onto the canvas.",
+      "step2": "Select a tagger model (WD, PixAI, Camie, or Taggerine).",
       "step3": "Adjust confidence thresholds to filter tags.",
-      "step4": "Click <strong>Start Interrogation</strong>.",
-      "step5": "Copy tags, or download an <strong>NAI Ready</strong> PNG to use in your workflow."
+      "step4": "Click <strong>Interrogate</strong>.",
+      "step5": "Copy tags, or download an <strong>NAI Ready</strong> PNG."
     },
     "madeBy": "Made by"
   },
   "theme": {
+    "label": "Theme selection",
     "light": "Light Mode",
     "auto": "System Auto",
     "dark": "Dark Mode"

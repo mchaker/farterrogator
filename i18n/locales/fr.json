@@ -4,85 +4,77 @@
     "subtitle": "Interrogateur d'images IA",
     "copyright": "© {{year}} Fartcore. Tous droits réservés."
   },
+  "common": {
+    "close": "Fermer",
+    "changeLanguage": "Changer de langue",
+    "languageSelection": "Sélection de la langue"
+  },
   "header": {
     "whatIsThis": "Qu'est-ce que c'est ?",
-    "poweredBy": "Propulsé par {{model}}",
-    "nothingYet": "Rien pour l'instant"
+    "poweredBy": "Modèle : {{model}}",
+    "nothingYet": "Aucun"
   },
   "upload": {
     "inputImage": "Image d'entrée",
     "dragDrop": "Glissez-déposez une image ici, ou cliquez pour sélectionner",
-    "supports": "Supporte PNG, JPG, WEBP, GIF",
-    "clear": "Effacer l'image",
-    "interrogate": "Interroger"
+    "dropHere": "Déposez les fichiers ici",
+    "supports": "Prend en charge PNG, JPG, WEBP, GIF",
+    "clear": "Retirer l'image",
+    "interrogate": "Interroger",
+    "previewAlt": "Aperçu de l'image téléversée",
+    "filesSelected": "{{num}} fichiers sélectionnés",
+    "batchReady": "Prêt pour le traitement par lots"
   },
   "results": {
     "title": "Résultat de l'analyse",
     "ready": "Prêt à interroger",
-    "readySub": "Téléchargez une image pour voir les tags et la description",
+    "readySub": "Téléversez une image pour commencer le tagging",
     "failed": "Échec de l'analyse",
-    "troubleshoot": "Dépannage du mode local :",
-    "troubleshootOllama": "Assurez-vous qu'Ollama fonctionne sur {{endpoint}}",
-    "troubleshootTagger": "Assurez-vous que le Tagger Local fonctionne sur {{endpoint}}",
-    "troubleshootCors": "Vérifiez les en-têtes CORS sur les deux serveurs locaux",
+    "troubleshoot": "Dépannage :",
+    "troubleshootTagger": "Vérifiez que le tagger est accessible à {{endpoint}}",
     "processing": "Traitement...",
     "analyzing": "Analyse...",
-    "generatingTags": "Génération des tags techniques...",
-    "descriptionNotGenerated": "Description non générée.",
-    "generateDescription": "Générer une description en langage naturel",
-    "naturalDescription": "Description Naturelle",
-    "technicalTags": "Tags Techniques",
+    "technicalTags": "Tags",
+    "noTags": "Aucun tag trouvé au seuil actuel.",
     "randomized": "Aléatoire",
-    "noUnderscores": "Sans tirets bas",
+    "noUnderscores": "Sans underscores",
     "copyAll": "Tout copier",
     "copied": "Copié !",
-    "naiReady": "Prêt pour NAI",
+    "copiedItem": "Copié : {{item}}",
+    "naiReady": "NAI Ready",
+    "downloadNai": "Télécharger avec les tags intégrés",
     "tagsCopied": "Tous les tags copiés dans le presse-papiers !",
-    "descriptionCopied": "Description copiée dans le presse-papiers !",
-    "embedFailed": "Échec de la création de l'image NAI Ready."
+    "embedFailed": "Échec de la création de l'image NAI Ready.",
+    "score": "Score",
+    "batchResults": "Résultats par lots",
+    "artistSimilarity": "Similarité d'artiste",
+    "matchingArtists": "Recherche de styles d'artistes...",
+    "copyArtist": "Copier le nom de l'artiste"
   },
   "status": {
     "starting": "Démarrage...",
-    "done": "Terminé",
-    "initializingGemini": "Initialisation du client Gemini...",
-    "sendingToGemini": "Envoi de l'image à Gemini...",
-    "processingGemini": "Traitement de la réponse de Gemini...",
-    "finalizing": "Finalisation...",
-    "analyzingLocal": "Analyse de l'image avec le tagueur local...",
-    "enrichingCopyrights": "Enrichissement des tags avec les données de droits d'auteur...",
-    "consultingOllama": "Consultation du modèle de vision (Ollama)...",
-    "skippingOllama": "Omission du modèle de vision (désactivé)...",
-    "merging": "Fusion et affinement des résultats...",
-    "generatingDescription": "Génération de la description en langage naturel..."
+    "done": "Terminé"
   },
   "settings": {
     "title": "Paramètres",
     "thresholds": "Seuils",
-    "outputSettings": "Paramètres de sortie",
-    "backendSettings": "Paramètres Backend",
-    "topK": "Top K Tags",
-    "maxTags": "Max Tags (0 = Illimité)",
-    "triggerPhrase": "Phrase de déclenchement",
-    "randomize": "Ordre Aléatoire",
-    "removeUnderscores": "Supprimer les tirets bas",
-    "backendType": "Type de Backend",
-    "geminiKey": "Clé API Gemini",
-    "ollamaEndpoint": "Point de terminaison Ollama",
-    "ollamaModel": "Modèle Ollama",
-    "refresh": "Actualiser",
-    "taggerEndpoint": "Point de terminaison Tagger Local",
-    "enableNaturalLanguage": "Activer le langage naturel",
-    "naturalLanguageWarning": "(cela prendra plus de temps)",
-    "simpleMode": "Mode Simple",
-    "advancedThresholds": "Seuils Avancés",
+    "outputSettings": "Sortie",
+    "topK": "Top K tags",
+    "randomize": "Ordre aléatoire",
+    "removeUnderscores": "Supprimer les underscores",
+    "simpleMode": "Simple",
+    "advancedThresholds": "Avancé",
     "backend": {
-      "provider": "Fournisseur",
-      "eva": "EVA (Ollama + Tagger)",
-      "gemini": "Google Gemini",
-      "keyStorage": "La clé est stockée en mémoire uniquement.",
-      "evaDescription": "Combine de manière transparente les résultats du tagger local avec les capacités de raisonnement et de sous-titrage d'Ollama.",
-      "ollamaEndpointLabel": "Point de terminaison Ollama (LLM/Vision)",
-      "ollamaModel": "Modèle Ollama"
+      "model": "Modèle de tagging",
+      "baseUrl": "URL de base",
+      "baseUrlHint": "Base de l'endpoint, p. ex. https://localtagger.gpu.garden ou http://localhost:8000",
+      "familyWd": "Famille WD",
+      "models": {
+        "wd": "Centré sur Danbooru",
+        "pixai": "Optimisé pour l'illustration",
+        "camie": "Sortie spécialisée",
+        "taggerine": "Couverture étendue"
+      }
     },
     "categories": {
       "general": "Général",
@@ -90,49 +82,51 @@
       "copyright": "Copyright",
       "artist": "Artiste",
       "meta": "Méta",
-      "rating": "Classement"
-    }
+      "rating": "Classification"
+    },
+    "maxTags": "Max. tags (0 = illimité)",
+    "triggerPhrase": "Phrase déclencheuse",
+    "triggerPlaceholder": "p. ex. masterpiece, best quality"
   },
   "errors": {
-    "geminiKeyRequired": "La clé API Gemini est requise. Veuillez la configurer dans le panneau des paramètres.",
-    "ollamaRequired": "Le point de terminaison Ollama est requis pour le mode EVA.",
-    "taggerRequired": "Le point de terminaison Tagger Local est requis pour le mode EVA.",
+    "taggerRequired": "L'URL de base du tagger est requise. Veuillez la configurer dans les paramètres du backend.",
     "unknown": "Une erreur inconnue s'est produite"
   },
   "info": {
     "title": "Qu'est-ce que Farterrogator ?",
-    "description": "<strong>Farterrogator</strong> est un outil avancé d'interrogation d'images par IA conçu pour analyser des images et extraire des métadonnées détaillées, des tags et des descriptions en langage naturel. Il aide les artistes, les développeurs et les passionnés à comprendre le contenu de leurs images et à les préparer pour un traitement ultérieur par IA.",
+    "description": "<strong>Farterrogator</strong> est un tagger d'images local et rapide de style Booru. Il analyse les images avec des modèles de la famille WD et des modèles centrés sur l'illustration pour extraire des tags compatibles Danbooru, pour la création de datasets et le prompt engineering.",
     "features": {
-      "dualModes": {
-        "title": "Modes d'analyse double",
-        "description": "Choisissez entre <strong>Google Gemini</strong> pour une analyse de pointe basée sur le cloud, ou <strong>EVA</strong> qui combine un Tagger WD1.4 avec Ollama (Modèles de vision) hébergé sur <strong>gpu.garden</strong>."
+      "models": {
+        "title": "Plusieurs modèles de tagging",
+        "description": "Choisissez entre <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> et <strong>Taggerine</strong> — plus la similarité de style d'artiste Kaloscope."
       },
       "naiReady": {
         "title": "Intégration NAI Ready",
-        "description": "Intégrez automatiquement les tags ou descriptions générés dans les métadonnées PNG. Les images résultantes sont \"NAI Ready\" - glissez-les simplement dans NovelAI pour remplir automatiquement les invites avec les données analysées."
+        "description": "Intègre automatiquement les tags générés dans les métadonnées PNG. Les images obtenues sont « NAI Ready » : glissez-les simplement dans NovelAI pour remplir automatiquement les prompts."
       },
       "privacy": {
-        "title": "Confidentialité et Sécurité",
-        "description": "En mode EVA, vos images sont traitées en toute sécurité sur <strong>gpu.garden</strong> via le <strong>centre de données Fartcore</strong>. Bien qu'elles ne s'exécutent pas sur votre appareil, vos données sont traitées selon des normes de confidentialité strictes."
+        "title": "Confidentialité et performances",
+        "description": "Toute l'inférence s'exécute sur le backend configuré (gpu.garden ou local). Aucune clé API cloud requise."
       },
       "gpuGarden": {
         "title": "Intégration GPU Garden",
-        "description": "Optimisé pour une utilisation avec l'infrastructure de GPU Garden, permettant un proxy transparent vers des instances GPU distantes pour les tâches lourdes."
+        "description": "Optimisé pour l'infrastructure gpu.garden avec routage automatique du proxy CORS."
       }
     },
     "howTo": {
-      "title": "Comment utiliser",
-      "step1": "Téléchargez une image ou glissez-déposez-en une sur le canevas.",
-      "step2": "Sélectionnez votre backend préféré (Gemini ou EVA).",
+      "title": "Mode d'emploi",
+      "step1": "Téléversez une image ou glissez-déposez-la sur la zone.",
+      "step2": "Sélectionnez un modèle de tagging (WD, PixAI, Camie ou Taggerine).",
       "step3": "Ajustez les seuils de confiance pour filtrer les tags.",
-      "step4": "Cliquez sur <strong>Démarrer l'interrogation</strong>.",
-      "step5": "Copiez les tags ou téléchargez un PNG <strong>NAI Ready</strong> pour l'utiliser dans votre flux de travail."
+      "step4": "Cliquez sur <strong>Interroger</strong>.",
+      "step5": "Copiez les tags ou téléchargez un PNG <strong>NAI Ready</strong>."
     },
-    "madeBy": "Fait par"
+    "madeBy": "Créé par"
   },
   "theme": {
-    "light": "Mode Clair",
-    "auto": "Système Auto",
-    "dark": "Mode Sombre"
+    "label": "Sélection du thème",
+    "light": "Mode clair",
+    "auto": "Auto (système)",
+    "dark": "Mode sombre"
   }
 }

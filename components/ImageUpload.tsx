@@ -211,26 +211,26 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
 
   if (selectedFiles.length > 0) {
     return (
-      <div className="relative group w-fit mx-auto bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+      <div className="relative group w-fit mx-auto bg-md-light-surface-1 dark:bg-md-dark-surface-1 rounded-[28px] overflow-hidden transition-colors duration-300 shadow-sm">
         {selectedFiles.length === 1 && previewUrl ? (
           <img 
             src={previewUrl} 
-            alt={t('upload.previewAlt') || "Uploaded image preview"} 
+            alt={t('upload.previewAlt')}
             className="max-w-full max-h-[600px] w-auto h-auto block"
           />
         ) : (
-          <div className="p-12 flex flex-col items-center justify-center gap-4 text-slate-600 dark:text-slate-300">
-            <Files className="w-16 h-16 text-blue-500" />
+          <div className="p-12 flex flex-col items-center justify-center gap-4 text-md-light-on-surface dark:text-md-dark-on-surface">
+            <Files className="w-16 h-16 text-amber-500" />
             <div className="text-center">
-              <p className="text-lg font-semibold">{selectedFiles.length} files selected</p>
-              <p className="text-sm text-slate-500">Ready for batch processing</p>
+              <p className="text-lg font-semibold">{t('upload.filesSelected', { num: selectedFiles.length })}</p>
+              <p className="text-sm text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">{t('upload.batchReady')}</p>
             </div>
           </div>
         )}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" aria-hidden="true" />
         <button 
           onClick={handleClear}
-          className="absolute top-4 right-4 p-2 bg-white/90 dark:bg-slate-900/80 text-slate-600 dark:text-slate-200 rounded-full hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors border border-slate-200 dark:border-slate-700 backdrop-blur-sm opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 duration-200"
+          className="absolute top-4 right-4 p-2 bg-md-light-surface/90 dark:bg-md-dark-surface/80 text-md-light-on-surface dark:text-md-dark-on-surface rounded-full hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors backdrop-blur-sm shadow-md opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 duration-200"
           title={t('upload.clear')}
           aria-label={t('upload.clear')}
         >
@@ -251,10 +251,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
   return (
     <div 
       className={`
-        relative w-full h-[400px] rounded-xl border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center gap-4
-        ${isDragging 
-          ? 'border-red-500 bg-red-500/10 dark:bg-red-500/10' 
-          : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/30 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-400 dark:hover:border-slate-600'
+        relative w-full h-[400px] rounded-[28px] border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center gap-4
+        ${isDragging
+          ? 'border-md-light-primary dark:border-md-dark-primary bg-md-light-primary-container/40 dark:bg-md-dark-primary-container/30'
+          : 'border-md-light-outline-variant dark:border-md-dark-outline-variant bg-md-light-surface-1 dark:bg-md-dark-surface-1 hover:bg-md-light-surface-2 dark:hover:bg-md-dark-surface-2 hover:border-md-light-outline dark:hover:border-md-dark-outline'
         }
       `}
       onDragOver={handleDragOver}
@@ -282,19 +282,19 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
         tabIndex={-1} // The parent div handles focus
       />
       
-      <div className="p-4 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300" aria-hidden="true">
+      <div className="p-5 rounded-full bg-md-light-primary-container dark:bg-md-dark-primary-container transition-colors duration-300" aria-hidden="true">
         {isProcessing ? (
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
         ) : (
-          <Upload className={`w-8 h-8 ${isDragging ? 'text-red-500 dark:text-red-400' : 'text-slate-400'}`} />
+          <Upload className={`w-8 h-8 ${isDragging ? 'text-md-light-primary dark:text-md-dark-primary' : 'text-md-light-on-primary-container dark:text-md-dark-on-primary-container'}`} />
         )}
       </div>
-      
+
       <div className="text-center space-y-1 pointer-events-none">
-        <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
-          {isDragging ? t('upload.dropHere') || "Drop files here" : t('upload.dragDrop')}
+        <p className="text-sm font-medium text-md-light-on-surface dark:text-md-dark-on-surface">
+          {isDragging ? t('upload.dropHere') : t('upload.dragDrop')}
         </p>
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
           {t('upload.supports')} <span className="opacity-70">(+ ZIP, TAR)</span>
         </p>
       </div>

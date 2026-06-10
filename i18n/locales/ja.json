@@ -1,138 +1,132 @@
 {
   "app": {
-    "title": "ファーテロゲーター",
-    "subtitle": "AI画像尋問ツール",
-    "copyright": "© {{year}} ファートコア. 全著作権所有。"
+    "title": "Farterrogator",
+    "subtitle": "AI画像解析ツール",
+    "copyright": "© {{year}} Fartcore. All rights reserved."
+  },
+  "common": {
+    "close": "閉じる",
+    "changeLanguage": "言語を変更",
+    "languageSelection": "言語の選択"
   },
   "header": {
-    "whatIsThis": "これは何？",
-    "poweredBy": "{{model}} 駆動",
-    "nothingYet": "未定"
+    "whatIsThis": "これは何?",
+    "poweredBy": "モデル: {{model}}",
+    "nothingYet": "なし"
   },
   "upload": {
     "inputImage": "入力画像",
-    "dragDrop": "画像をドラッグ＆ドロップ、またはクリックして選択",
-    "supports": "PNG, JPG, WEBP, GIF 対応",
+    "dragDrop": "ここに画像をドラッグ&ドロップ、またはクリックして選択",
+    "dropHere": "ここにファイルをドロップ",
+    "supports": "PNG、JPG、WEBP、GIF に対応",
     "clear": "画像をクリア",
-    "interrogate": "尋問開始"
+    "interrogate": "解析開始",
+    "previewAlt": "アップロードした画像のプレビュー",
+    "filesSelected": "{{num}} 件のファイルを選択中",
+    "batchReady": "バッチ処理の準備完了"
   },
   "results": {
-    "title": "分析結果",
-    "ready": "尋問の準備完了",
-    "readySub": "画像をアップロードしてタグと説明を表示",
-    "failed": "分析失敗",
-    "troubleshoot": "ローカルモードのトラブルシューティング:",
-    "troubleshootOllama": "Ollamaが {{endpoint}} で実行されていることを確認してください",
-    "troubleshootTagger": "ローカルTaggerが {{endpoint}} で実行されていることを確認してください",
-    "troubleshootCors": "両方のローカルサーバーのCORSヘッダーを確認してください",
+    "title": "解析結果",
+    "ready": "解析の準備完了",
+    "readySub": "画像をアップロードしてタグ付けを開始",
+    "failed": "解析に失敗しました",
+    "troubleshoot": "トラブルシューティング:",
+    "troubleshootTagger": "タガーが {{endpoint}} で利用可能か確認してください",
     "processing": "処理中...",
-    "analyzing": "分析中...",
-    "generatingTags": "テクニカルタグを生成中...",
-    "descriptionNotGenerated": "説明は生成されませんでした。",
-    "generateDescription": "自然言語の説明を生成",
-    "naturalDescription": "自然な説明",
-    "technicalTags": "テクニカルタグ",
-    "randomized": "ランダム化",
+    "analyzing": "解析中...",
+    "technicalTags": "タグ",
+    "noTags": "現在のしきい値ではタグが見つかりませんでした。",
+    "randomized": "ランダム",
     "noUnderscores": "アンダースコアなし",
     "copyAll": "すべてコピー",
-    "copied": "コピーしました！",
+    "copied": "コピーしました!",
+    "copiedItem": "コピー: {{item}}",
     "naiReady": "NAI Ready",
-    "tagsCopied": "すべてのタグをクリップボードにコピーしました！",
-    "descriptionCopied": "説明をクリップボードにコピーしました！",
-    "embedFailed": "NAI Ready画像の作成に失敗しました。"
+    "downloadNai": "タグを埋め込んでダウンロード",
+    "tagsCopied": "すべてのタグをクリップボードにコピーしました!",
+    "embedFailed": "NAI Ready 画像の作成に失敗しました。",
+    "score": "スコア",
+    "batchResults": "バッチ結果",
+    "artistSimilarity": "絵師の類似度",
+    "matchingArtists": "絵師のスタイルを照合中...",
+    "copyArtist": "絵師名をコピー"
   },
   "status": {
     "starting": "開始中...",
-    "done": "完了",
-    "initializingGemini": "Geminiクライアントを初期化中...",
-    "sendingToGemini": "画像をGeminiに送信中...",
-    "processingGemini": "Geminiの応答を処理中...",
-    "finalizing": "仕上げ中...",
-    "analyzingLocal": "ローカルタガーで画像を分析中...",
-    "enrichingCopyrights": "著作権データでタグを強化中...",
-    "consultingOllama": "ビジョンモデル (Ollama) に問い合わせ中...",
-    "skippingOllama": "ビジョンモデルをスキップ中 (無効)...",
-    "merging": "結果を統合して調整中...",
-    "generatingDescription": "自然言語の説明を生成中..."
+    "done": "完了"
   },
   "settings": {
     "title": "設定",
-    "thresholds": "閾値",
-    "outputSettings": "出力設定",
-    "backendSettings": "バックエンド設定",
-        "topK": "トップKタグ",
-    "maxTags": "最大タグ数 (0 = 無制限)",
-    "triggerPhrase": "トリガーフレーズ",
-    "randomize": "ランダム順序",
+    "thresholds": "しきい値",
+    "outputSettings": "出力",
+    "topK": "上位Kタグ",
+    "randomize": "順序をランダム化",
     "removeUnderscores": "アンダースコアを削除",
-    "backendType": "バックエンドタイプ",
-    "geminiKey": "Gemini APIキー",
-    "ollamaEndpoint": "Ollama エンドポイント",
-    "ollamaModel": "Ollama モデル",
-    "refresh": "更新",
-    "taggerEndpoint": "ローカルTagger エンドポイント",
-    "enableNaturalLanguage": "自然言語を有効化",
-    "naturalLanguageWarning": "(時間がかかります)",
-    "simpleMode": "シンプルモード",
-    "advancedThresholds": "詳細な閾値",
+    "simpleMode": "シンプル",
+    "advancedThresholds": "詳細",
     "backend": {
-      "provider": "プロバイダー",
-      "eva": "EVA (Ollama + Tagger)",
-      "gemini": "Google Gemini",
-      "keyStorage": "キーはメモリ内にのみ保存されます。",
-      "evaDescription": "ローカルTaggerの結果とOllamaの推論・キャプション機能をシームレスに組み合わせます。",
-      "ollamaEndpointLabel": "Ollama エンドポイント (LLM/Vision)",
-      "ollamaModel": "Ollama モデル"
+      "model": "タガーモデル",
+      "baseUrl": "ベースURL",
+      "baseUrlHint": "エンドポイントのベース。例: https://localtagger.gpu.garden または http://localhost:8000",
+      "familyWd": "WD ファミリー",
+      "models": {
+        "wd": "Danbooru 中心",
+        "pixai": "イラスト最適化",
+        "camie": "特化型出力",
+        "taggerine": "広範なカバレッジ"
+      }
     },
     "categories": {
       "general": "一般",
       "character": "キャラクター",
-      "copyright": "作品名",
-      "artist": "アーティスト",
+      "copyright": "作品",
+      "artist": "絵師",
       "meta": "メタ",
       "rating": "レーティング"
-    }
+    },
+    "maxTags": "最大タグ数 (0 = 無制限)",
+    "triggerPhrase": "トリガーフレーズ",
+    "triggerPlaceholder": "例: masterpiece, best quality"
   },
   "errors": {
-    "geminiKeyRequired": "Gemini APIキーが必要です。設定パネルで設定してください。",
-    "ollamaRequired": "EVAモードにはOllamaエンドポイントが必要です。",
-    "taggerRequired": "EVAモードにはローカルTaggerエンドポイントが必要です。",
+    "taggerRequired": "タガーのベースURLが必要です。バックエンド設定で構成してください。",
     "unknown": "不明なエラーが発生しました"
   },
   "info": {
-    "title": "ファーテロゲーターとは？",
-    "description": "<strong>ファーテロゲーター</strong>は、画像を分析し、詳細なメタデータ、タグ、自然言語の説明を抽出するために設計された高度なAI画像尋問ツールです。アーティスト、開発者、愛好家が画像の内容を理解し、さらなるAI処理の準備をするのに役立ちます。",
+    "title": "Farterrogator とは?",
+    "description": "<strong>Farterrogator</strong> は高速なローカル Booru 系画像タガーです。WD 系およびイラスト特化モデルで画像を解析し、データセット作成やプロンプトエンジニアリングのための Danbooru 互換タグを抽出します。",
     "features": {
-      "dualModes": {
-        "title": "デュアル分析モード",
-        "description": "クラウドベースの最先端分析を行う<strong>Google Gemini</strong>か、<strong>gpu.garden</strong>でホストされるWD1.4 TaggerとOllama (Vision Models)を組み合わせた<strong>EVA</strong>を選択できます。"
+      "models": {
+        "title": "複数のタガーモデル",
+        "description": "<strong>WD14 EVA</strong>、<strong>PixAI</strong>、<strong>Camie</strong>、<strong>Taggerine</strong> から選択可能。さらに Kaloscope による絵師スタイル類似度も。"
       },
       "naiReady": {
         "title": "NAI Ready 埋め込み",
-        "description": "生成されたタグや説明をPNGメタデータに自動的に埋め込みます。結果の画像は「NAI Ready」であり、NovelAIにドラッグするだけで、分析されたデータでプロンプトを自動入力できます。"
+        "description": "生成されたタグを PNG メタデータに自動的に埋め込みます。出来上がった画像は「NAI Ready」— NovelAI にドラッグするだけでプロンプトが自動入力されます。"
       },
       "privacy": {
-        "title": "プライバシーとセキュリティ",
-        "description": "EVAモードでは、画像は<strong>ファートコアデータセンター</strong>を経由して<strong>gpu.garden</strong>で安全に処理されます。デバイス上で実行されるわけではありませんが、データは厳格なプライバシー基準で扱われます。"
+        "title": "プライバシーとパフォーマンス",
+        "description": "すべての推論は設定されたバックエンド (gpu.garden またはローカル) で実行されます。クラウド API キーは不要です。"
       },
       "gpuGarden": {
-        "title": "GPU Garden 統合",
-        "description": "GPU Gardenのインフラストラクチャでの使用に最適化されており、重い処理のためにリモートGPUインスタンスへのシームレスなプロキシ接続を可能にします。"
+        "title": "GPU Garden 連携",
+        "description": "自動 CORS プロキシルーティングにより gpu.garden インフラ向けに最適化されています。"
       }
     },
     "howTo": {
       "title": "使い方",
-      "step1": "画像をアップロードするか、キャンバスにドラッグ＆ドロップします。",
-      "step2": "好みのバックエンド (Gemini または EVA) を選択します。",
-      "step3": "タグをフィルタリングするために信頼度の閾値を調整します。",
-      "step4": "<strong>尋問開始</strong>をクリックします。",
-      "step5": "タグをコピーするか、ワークフローで使用するために<strong>NAI Ready</strong> PNGをダウンロードします。"
+      "step1": "画像をアップロードするか、キャンバスにドラッグ&ドロップします。",
+      "step2": "タガーモデル (WD、PixAI、Camie、Taggerine) を選択します。",
+      "step3": "信頼度のしきい値を調整してタグをフィルタリングします。",
+      "step4": "<strong>解析開始</strong>をクリックします。",
+      "step5": "タグをコピーするか、<strong>NAI Ready</strong> PNG をダウンロードします。"
     },
-    "madeBy": "作成者"
+    "madeBy": "作者"
   },
   "theme": {
+    "label": "テーマの選択",
     "light": "ライトモード",
-    "auto": "システム自動",
+    "auto": "システム設定に従う",
     "dark": "ダークモード"
   }
 }

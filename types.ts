@@ -1,17 +1,20 @@
 export type TagCategory = 'general' | 'character' | 'copyright' | 'artist' | 'meta' | 'rating';
 
-export type BackendType = 'gemini' | 'local_hybrid';
+export type TaggerModel = 'wd' | 'pixai' | 'camie' | 'taggerine';
 
 export interface Tag {
   name: string;
   score: number;
   category: TagCategory;
-  source?: 'local' | 'ollama' | 'both';
 }
 
 export interface InterrogationResult {
-  naturalDescription?: string;
   tags: Tag[];
+}
+
+export interface ArtistMatch {
+  name: string;
+  score: number;
 }
 
 export interface BatchResult {
@@ -20,23 +23,15 @@ export interface BatchResult {
 }
 
 export interface BackendConfig {
-  type: BackendType;
-
-  // Gemini Specifics
-  geminiApiKey: string;
-
-  // Local Hybrid Specifics (Ollama + Local Tagger)
-  ollamaEndpoint: string;
-  ollamaModel: string; // e.g., 'qwen2.5-vl'
-  taggerEndpoint: string; // e.g., 'http://localhost:8000/tag'
-  enableNaturalLanguage: boolean; // Toggle for natural language output
+  taggerModel: TaggerModel;
+  taggerBaseUrl: string;
 }
 
 export interface TaggingSettings {
   thresholds: Record<TagCategory, number>;
   topK: number;
-  maxTags: number; // New: Server-side limit
-  triggerPhrase: string; // New: Server-side trigger phrase
+  maxTags: number;
+  triggerPhrase: string;
   randomize: boolean;
   removeUnderscores: boolean;
 }
@@ -44,14 +39,12 @@ export interface TaggingSettings {
 export enum AppState {
   IDLE = 'IDLE',
   ANALYZING = 'ANALYZING',
-  PARTIAL_SUCCESS = 'PARTIAL_SUCCESS',
   SUCCESS = 'SUCCESS',
   ERROR = 'ERROR'
 }
 
 export interface LoadingState {
   tags: boolean;
-  description: boolean;
   progress: number;
   status: string;
 }

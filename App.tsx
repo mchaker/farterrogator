@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { App as KonstaApp, Page, Button, Preloader } from "konsta/react";
+import { App as KonstaApp, Page, Button, Preloader, Toast } from "konsta/react";
 import { AlertCircle, Wand2, Sparkles } from "lucide-react";
 import { Header } from "./components/Header";
 import { ImageUpload } from "./components/ImageUpload";
@@ -30,6 +30,7 @@ const DEFAULT_BACKEND_CONFIG: BackendConfig = {
 
 const App: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const [toastOpened, setToastOpened] = useState(true);
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [result, setResult] = useState<InterrogationResult | null>(null);
@@ -208,6 +209,23 @@ const App: React.FC = () => {
 
   return (
     <KonstaApp theme="material" className="h-full selection:bg-red-500/30">
+      <Toast
+        position="center"
+        opened={toastOpened}
+        button={
+          <Button
+            rounded
+            clear
+            small
+            inline
+            onClick={() => setToastOpened(false)}
+          >
+            Close
+          </Button>
+        }
+      >
+        <div className="shrink">Only WD EVA 02 is functional right now</div>
+      </Toast>
       <Page className="flex flex-col min-h-screen">
         <Header theme={theme} setTheme={setTheme} />
 

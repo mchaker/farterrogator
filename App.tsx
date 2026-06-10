@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { App as KonstaApp, Page, Button, Chip, Preloader } from 'konsta/react';
-import { AlertCircle, Wand2, Sparkles } from 'lucide-react';
+import { AlertCircle, Wand2, Sparkles, HelpCircle } from 'lucide-react';
 import { Header } from './components/Header';
 import { ImageUpload } from './components/ImageUpload';
 import { ToleranceControl } from './components/ToleranceControl';
 import { Results } from './components/Results';
+import { InfoModal } from './components/InfoModal';
 import { generateTags, fileToBase64, fetchBatchTags } from './services/taggerService';
 import { fetchArtistMatches } from './services/kaloscopeService';
 import { AppState, InterrogationResult, TaggingSettings, BackendConfig, BatchResult, ArtistMatch } from './types';
@@ -24,6 +25,7 @@ const App: React.FC = () => {
   const [batchResults, setBatchResults] = useState<Record<string, BatchResult> | null>(null);
   const [artistMatches, setArtistMatches] = useState<ArtistMatch[] | null>(null);
   const [isMatchingArtists, setIsMatchingArtists] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -155,12 +157,12 @@ const App: React.FC = () => {
       <Page className="flex flex-col">
         <Header theme={theme} setTheme={setTheme} backendConfig={backendConfig} />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 gap-6 lg:gap-8 flex flex-col lg:flex-row lg:items-start">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 lg:p-8 gap-4 sm:gap-6 lg:gap-8 flex flex-col lg:flex-row lg:items-start pb-4">
 
           {/* Left Column: Input */}
-          <div className="w-full lg:w-[400px] xl:w-[450px] flex flex-col gap-6 shrink-0">
+          <div className="w-full lg:w-[380px] xl:w-[440px] flex flex-col gap-4 sm:gap-6 shrink-0">
             <div className="space-y-2">
-              <h2 className="text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface px-1">
+              <h2 className="text-base sm:text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface px-1">
                 {t('upload.inputImage')}
               </h2>
               <ImageUpload
@@ -175,7 +177,7 @@ const App: React.FC = () => {
               rounded
               onClick={handleInterrogate}
               disabled={selectedFiles.length === 0 || appState === AppState.ANALYZING}
-              className="h-14! text-base font-semibold gap-2 shadow-md disabled:opacity-40"
+              className="h-12! sm:h-14! text-base font-semibold gap-2 shadow-md disabled:opacity-40"
             >
               {appState === AppState.ANALYZING ? (
                 <>
@@ -200,39 +202,39 @@ const App: React.FC = () => {
           </div>
 
           {/* Right Column: Output */}
-          <div className="flex-1 flex flex-col min-h-[500px] lg:h-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex-1 flex flex-col min-h-[360px] sm:min-h-[480px] lg:h-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center gap-3 mb-2 px-1">
-              <h2 className="text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface">{t('results.title')}</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface">{t('results.title')}</h2>
               <Chip className="uppercase text-[10px] font-semibold tracking-wide">
                 {backendConfig.taggerModel}
               </Chip>
             </div>
 
-            <div className="flex-1 bg-md-light-surface-1 dark:bg-md-dark-surface-1 rounded-[28px] p-2 transition-colors duration-300 relative min-h-[500px]">
+            <div className="flex-1 bg-md-light-surface-1 dark:bg-md-dark-surface-1 rounded-3xl sm:rounded-[28px] p-2 transition-colors duration-300 relative min-h-[360px] sm:min-h-[480px]">
               {!result && !batchResults && appState !== AppState.ERROR && (
                 <div className="absolute inset-0 m-3 rounded-3xl border-2 border-dashed border-md-light-outline-variant dark:border-md-dark-outline-variant flex flex-col items-center justify-center text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-                  <Sparkles className="w-12 h-12 mb-3 opacity-20" />
+                  <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 mb-3 opacity-20" />
                   <p className="font-medium opacity-60">{t('results.ready')}</p>
                   <p className="text-sm opacity-40 mt-1">{t('results.readySub')}</p>
                 </div>
               )}
 
               {appState === AppState.ERROR && (
-                <div className="h-full flex flex-col items-center justify-center text-red-500 dark:text-red-400 p-8 text-center">
-                  <AlertCircle className="w-12 h-12 mb-4 opacity-50" />
+                <div className="h-full flex flex-col items-center justify-center text-red-500 dark:text-red-400 p-6 sm:p-8 text-center">
+                  <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 mb-4 opacity-50" />
                   <h3 className="text-lg font-bold mb-2">{t('results.failed')}</h3>
-                  <p className="text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant max-w-md">{error}</p>
-                  <div className="mt-4 p-3 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-xl text-xs text-left">
+                  <p className="text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant max-w-md text-sm sm:text-base">{error}</p>
+                  <div className="mt-4 p-3 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-xl text-xs text-left w-full max-w-sm">
                     <p className="font-semibold mb-1">{t('results.troubleshoot')}</p>
                     <ul className="list-disc list-inside opacity-70 space-y-1">
-                      <li>{t('results.troubleshootTagger', { endpoint: backendConfig.taggerBaseUrl })}</li>
+                      <li className="break-all">{t('results.troubleshootTagger', { endpoint: backendConfig.taggerBaseUrl })}</li>
                     </ul>
                   </div>
                 </div>
               )}
 
               {result && selectedFiles.length === 1 && (
-                <div className="h-full p-4">
+                <div className="h-full p-2 sm:p-4">
                   <Results
                     result={result}
                     settings={settings}
@@ -245,12 +247,12 @@ const App: React.FC = () => {
               )}
 
               {batchResults && (
-                <div className="h-full p-4 overflow-auto">
+                <div className="h-full p-3 sm:p-4 overflow-auto">
                   <h3 className="text-lg font-bold mb-4">{t('results.batchResults')}</h3>
                   <div className="space-y-4">
                     {Object.entries(batchResults).map(([filename, data]: [string, BatchResult]) => (
-                      <div key={filename} className="p-4 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl">
-                        <h4 className="font-semibold mb-2 text-sm">{filename}</h4>
+                      <div key={filename} className="p-3 sm:p-4 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl">
+                        <h4 className="font-semibold mb-2 text-sm break-all">{filename}</h4>
                         <div className="bg-md-light-surface dark:bg-md-dark-surface p-3 rounded-xl font-mono text-xs break-all">
                           {data.tag_string}
                         </div>
@@ -263,22 +265,32 @@ const App: React.FC = () => {
           </div>
         </main>
 
-        <footer className="sticky bottom-0 z-20 py-3 flex flex-col items-center gap-1.5 text-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant bg-md-light-surface-2/80 dark:bg-md-dark-surface-2/80 backdrop-blur-md">
+        <footer className="sticky bottom-0 z-20 px-4 py-2 flex items-center justify-between text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant bg-md-light-surface-2/80 dark:bg-md-dark-surface-2/80 backdrop-blur-md">
           <a
             href="https://gpu.garden"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95"
+            className="flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95"
             title="GPU Garden"
             aria-label="GPU Garden"
           >
-            <img src="/gpu-garden-logo.webp" alt="" className="w-6 h-6" aria-hidden="true" />
-            <span className="text-sm font-bold bg-clip-text text-transparent bg-linear-to-r from-red-600 to-green-600 dark:from-red-400 dark:to-green-400">
+            <img src="/gpu-garden-logo.webp" alt="" className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+            <span className="font-bold bg-clip-text text-transparent bg-linear-to-r from-red-600 to-green-600 dark:from-red-400 dark:to-green-400 text-xs sm:text-sm">
               gpu.garden
             </span>
           </a>
-          <p className="opacity-60">{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>
+          <p className="opacity-60 text-center hidden sm:block">{t('app.copyright', { year: new Date().getFullYear() > 2025 ? `2025-${new Date().getFullYear()}` : '2025' })}</p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            aria-label={t('header.whatIsThis')}
+            title={t('header.whatIsThis')}
+            className="p-1.5 rounded-full text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:bg-md-light-surface-3 dark:hover:bg-md-dark-surface-3 transition-colors"
+          >
+            <HelpCircle className="w-5 h-5" aria-hidden="true" />
+          </button>
         </footer>
+
+        <InfoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </Page>
     </KonstaApp>
   );

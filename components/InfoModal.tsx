@@ -21,7 +21,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
       aria-labelledby="info-modal-title"
     >
       <div 
-        className="bg-white dark:bg-stone-950 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto border border-stone-200 dark:border-stone-800 animate-in zoom-in-50 duration-300"
+        className="bg-white dark:bg-stone-950 rounded-2xl shadow-2xl max-w-336 w-full max-h-[95vh] overflow-y-auto border border-stone-200 dark:border-stone-800 animate-in zoom-in-50 duration-300"
         onClick={e => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-white/80 dark:bg-stone-950/80 backdrop-blur-md p-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between z-10">

@@ -221,8 +221,25 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
 
         {/* Raw tag string */}
         {!loadingState.tags && processedTags.length > 0 && (
-          <div className="p-3 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl transition-colors duration-300">
-            <p className="text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant font-mono wrap-break-word line-clamp-2 opacity-80 hover:opacity-100 transition-opacity select-all">
+          <div className="bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl transition-colors duration-300 overflow-hidden">
+            <div className="flex items-center justify-between gap-2 px-3 pt-2.5 pb-1">
+              <span className="text-2xs font-semibold uppercase tracking-wider text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-50">
+                {t('results.copyAll')}
+              </span>
+              <Button
+                small
+                rounded
+                tonal
+                inline
+                onClick={handleCopyTags}
+                className="gap-1 text-2xs disabled:opacity-50"
+                aria-label={copiedTags ? t('results.copied') : t('results.copyAll')}
+              >
+                {copiedTags ? <Check className="w-3 h-3" aria-hidden="true" /> : <Copy className="w-3 h-3" aria-hidden="true" />}
+                {copiedTags ? t('results.copied') : t('results.copyAll')}
+              </Button>
+            </div>
+            <p className="px-3 pb-3 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant font-mono wrap-break-word opacity-80 select-all leading-relaxed">
               {tagString}
             </p>
           </div>

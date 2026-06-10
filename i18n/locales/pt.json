@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "Interrogador de Imagem IA",
-    "copyright": "© {{year}} Fartcore. Todos os direitos reservados."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
   },
   "common": {
     "close": "Fechar",

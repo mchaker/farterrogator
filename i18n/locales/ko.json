@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI 이미지 분석기",
-    "copyright": "© {{year}} Fartcore. All rights reserved."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
   },
   "common": {
     "close": "닫기",

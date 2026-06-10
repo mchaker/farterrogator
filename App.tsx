@@ -359,12 +359,12 @@ const App: React.FC = () => {
           </div>
         </main>
 
-        <footer className="px-3 pb-2.5 pt-1 flex items-center justify-between text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant relative">
+        <footer className="px-3 pb-2.5 pt-1 flex flex-wrap items-center justify-between gap-3 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
           <a
             href="https://gpu.garden"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md active:scale-95 transition-transform"
+            className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md active:scale-95 transition-transform shrink-0"
             title="GPU Garden"
             aria-label="GPU Garden"
           >
@@ -389,7 +389,8 @@ const App: React.FC = () => {
               </span>
             </span>
           </a>
-          <p className="opacity-50 absolute left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md whitespace-nowrap">
+          
+          <p className="opacity-50 px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md text-center shrink-0 order-3 sm:order-2 basis-full sm:basis-auto whitespace-normal break-words">
             {t("app.copyright", {
               year:
                 new Date().getFullYear() > 2025
@@ -397,7 +398,8 @@ const App: React.FC = () => {
                   : "2025",
             })}
           </p>
-          <span className="px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md opacity-60">
+
+          <span className="px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md opacity-60 shrink-0 order-2 sm:order-3">
             made by{" "}
             <a
               href="https://mooshieblob.com/"

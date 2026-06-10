@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "KI-Bild-Interrogator",
-    "copyright": "© {{year}} Fartcore. Alle Rechte vorbehalten."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
   },
   "common": {
     "close": "Schließen",

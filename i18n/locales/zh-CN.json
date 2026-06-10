@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI 图像反推工具",
-    "copyright": "© {{year}} Fartcore. 保留所有权利。"
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
   },
   "common": {
     "close": "关闭",

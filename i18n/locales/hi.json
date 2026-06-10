@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI इमेज एनालाइज़र",
-    "copyright": "© {{year}} Fartcore. सर्वाधिकार सुरक्षित।"
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
   },
   "common": {
     "close": "बंद करें",

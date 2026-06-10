@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "ИИ-анализатор изображений",
-    "copyright": "© {{year}} Fartcore. Все права защищены."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
   },
   "common": {
     "close": "Закрыть",

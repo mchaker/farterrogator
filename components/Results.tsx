@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { Button, Progressbar, Preloader } from 'konsta/react';
@@ -19,9 +19,43 @@ interface ResultsProps {
 export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState, selectedFile, artistMatches, isMatchingArtists }) => {
   const { t } = useTranslation();
   const [copiedTags, setCopiedTags] = useState(false);
-
   const [isEmbedding, setIsEmbedding] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [artistPreview, setArtistPreview] = useState<{
+    name: string; url: string | null; loading: boolean; x: number; y: number;
+  } | null>(null);
+  const previewCache = useRef<Map<string, string | null>>(new Map());
+  const previewHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleArtistEnter = async (artistName: string, e: React.MouseEvent<HTMLLIElement>) => {
+    if (previewHideTimer.current) clearTimeout(previewHideTimer.current);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left - 168;
+    const y = Math.max(8, Math.min(rect.top + rect.height / 2 - 80, window.innerHeight - 168));
+
+    if (previewCache.current.has(artistName)) {
+      setArtistPreview({ name: artistName, url: previewCache.current.get(artistName)!, loading: false, x, y });
+      return;
+    }
+
+    setArtistPreview({ name: artistName, url: null, loading: true, x, y });
+    try {
+      const res = await fetch(
+        `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(artistName + ' -rating:e -rating:q')}&limit=1`
+      );
+      const data = await res.json();
+      const url: string | null = data.length > 0 ? (data[0].preview_file_url ?? null) : null;
+      previewCache.current.set(artistName, url);
+      setArtistPreview(prev => prev?.name === artistName ? { ...prev, url, loading: false } : prev);
+    } catch {
+      previewCache.current.set(artistName, null);
+      setArtistPreview(prev => prev?.name === artistName ? { ...prev, url: null, loading: false } : prev);
+    }
+  };
+
+  const handleArtistLeave = () => {
+    previewHideTimer.current = setTimeout(() => setArtistPreview(null), 150);
+  };
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -252,7 +286,7 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                 {artistMatches!.map((artist, i) => {
                   const isTop = i < 5;
                   return (
-                    <li key={artist.name} className={`flex items-center gap-1 rounded-xl transition-opacity ${!isTop ? 'opacity-40 hover:opacity-70' : ''}`}>
+                    <li key={artist.name} onMouseEnter={e => handleArtistEnter(artist.name, e)} onMouseLeave={handleArtistLeave} className={`flex items-center gap-1 rounded-xl transition-opacity ${!isTop ? 'opacity-40 hover:opacity-70' : ''}`}>
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(formatTag(artist.name));
@@ -286,6 +320,28 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
             )}
           </div>
         </div>
+      )}
+
+      {artistPreview && createPortal(
+        <div
+          className="fixed z-50 pointer-events-none animate-in fade-in duration-150"
+          style={{ left: Math.max(8, artistPreview.x), top: artistPreview.y }}
+        >
+          <div className="w-40 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 dark:ring-white/10 bg-md-light-surface-2 dark:bg-md-dark-surface-2">
+            {artistPreview.loading ? (
+              <div className="w-40 h-40 flex items-center justify-center">
+                <Preloader className="w-5 h-5" />
+              </div>
+            ) : artistPreview.url ? (
+              <img src={artistPreview.url} alt="" className="w-full h-auto block" />
+            ) : (
+              <div className="w-40 h-20 flex items-center justify-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-40">
+                No preview
+              </div>
+            )}
+          </div>
+        </div>,
+        document.body
       )}
 
       {toastMessage && createPortal(

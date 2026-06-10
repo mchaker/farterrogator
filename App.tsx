@@ -24,7 +24,7 @@ import {
 import { useTheme } from "./hooks/useTheme";
 
 const DEFAULT_BACKEND_CONFIG: BackendConfig = {
-  taggerModel: "wd",
+  taggerModel: "wd_eva_02",
   taggerBaseUrl: "https://localtagger.gpu.garden",
 };
 

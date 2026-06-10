@@ -70,7 +70,7 @@
       "baseUrlHint": "API 端点地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
       "familyWd": "WD 系列",
       "models": {
-        "wd": "以 Danbooru 为中心",
+        "wd_eva_02": "以 Danbooru 为中心",
         "pixai": "插画优化",
         "camie": "特化输出",
         "taggerine": "更广覆盖"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "Farterrogator 是什么?",
-    "description": "<strong>Farterrogator</strong> 是一款快速的本地 Booru 风格图像标注工具。它使用 WD 系列和插画特化模型分析图像，提取兼容 Danbooru 的标签，用于数据集制作和提示词工程。",
+    "description": "<strong>Farterrogator</strong> 是一款快速的本地 Booru 风格图像标注工具。它使用 WD EVA 02 系列和插画特化模型分析图像，提取兼容 Danbooru 的标签，用于数据集制作和提示词工程。",
     "features": {
       "models": {
         "title": "多种标注模型",
-        "description": "可在 <strong>WD14 EVA</strong>、<strong>PixAI</strong>、<strong>Camie</strong> 和 <strong>Taggerine</strong> 之间选择，另有 Kaloscope 画师风格相似度。"
+        "description": "可在 <strong>WD EVA 02</strong>、<strong>PixAI</strong>、<strong>Camie</strong> 和 <strong>Taggerine</strong> 之间选择，另有 Kaloscope 画师风格相似度。"
       },
       "naiReady": {
         "title": "NAI Ready 嵌入",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "使用方法",
       "step1": "上传图像，或将其拖放到画布上。",
-      "step2": "选择标注模型 (WD、PixAI、Camie 或 Taggerine)。",
+      "step2": "选择标注模型 (WD EVA 02、PixAI、Camie 或 Taggerine)。",
       "step3": "调整置信度阈值以过滤标签。",
       "step4": "点击<strong>开始反推</strong>。",
       "step5": "复制标签，或下载 <strong>NAI Ready</strong> PNG。"

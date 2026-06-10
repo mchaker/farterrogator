@@ -70,7 +70,7 @@
       "baseUrlHint": "API एंडपॉइंट URL, जैसे https://localtagger.gpu.garden या http://localhost:8000",
       "familyWd": "WD परिवार",
       "models": {
-        "wd": "Danbooru-केंद्रित",
+        "wd_eva_02": "Danbooru-केंद्रित",
         "pixai": "इलस्ट्रेशन-अनुकूलित",
         "camie": "विशेषीकृत आउटपुट",
         "taggerine": "विस्तृत कवरेज"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "Farterrogator क्या है?",
-    "description": "<strong>Farterrogator</strong> एक तेज़, लोकल Booru-शैली इमेज टैगर है। यह डेटासेट निर्माण और प्रॉम्प्ट इंजीनियरिंग के लिए WD-परिवार और इलस्ट्रेशन-केंद्रित मॉडलों से इमेज का विश्लेषण करके Danbooru-संगत टैग निकालता है।",
+    "description": "<strong>Farterrogator</strong> एक तेज़, लोकल Booru-शैली इमेज टैगर है। यह डेटासेट निर्माण और प्रॉम्प्ट इंजीनियरिंग के लिए WD EVA 02-परिवार और इलस्ट्रेशन-केंद्रित मॉडलों से इमेज का विश्लेषण करके Danbooru-संगत टैग निकालता है।",
     "features": {
       "models": {
         "title": "कई टैगर मॉडल",
-        "description": "<strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> और <strong>Taggerine</strong> में से चुनें — साथ ही Kaloscope कलाकार शैली समानता।"
+        "description": "<strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> और <strong>Taggerine</strong> में से चुनें — साथ ही Kaloscope कलाकार शैली समानता।"
       },
       "naiReady": {
         "title": "NAI Ready एम्बेडिंग",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "उपयोग कैसे करें",
       "step1": "इमेज अपलोड करें या उसे कैनवास पर खींचकर छोड़ें।",
-      "step2": "टैगर मॉडल चुनें (WD, PixAI, Camie या Taggerine)।",
+      "step2": "टैगर मॉडल चुनें (WD EVA 02, PixAI, Camie या Taggerine)।",
       "step3": "टैग फ़िल्टर करने के लिए विश्वास थ्रेशोल्ड समायोजित करें।",
       "step4": "<strong>विश्लेषण करें</strong> पर क्लिक करें।",
       "step5": "टैग कॉपी करें, या <strong>NAI Ready</strong> PNG डाउनलोड करें।"

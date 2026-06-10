@@ -70,7 +70,7 @@
       "baseUrlHint": "API endpoint URL, e.g. https://localtagger.gpu.garden or http://localhost:8000",
       "familyWd": "WD Family",
       "models": {
-        "wd": "Danbooru-centric",
+        "wd_eva_02": "Danbooru-centric",
         "pixai": "Illustration-optimized",
         "camie": "Specialized output",
         "taggerine": "Extended coverage"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "What is Farterrogator?",
-    "description": "<strong>Farterrogator</strong> is a fast, local Booru-style image tagger. It analyzes images using WD-family and illustration-centric models to extract Danbooru-compatible tags for dataset creation and prompt engineering.",
+    "description": "<strong>Farterrogator</strong> is a fast, local Booru-style image tagger. It analyzes images using WD EVA 02-family and illustration-centric models to extract Danbooru-compatible tags for dataset creation and prompt engineering.",
     "features": {
       "models": {
         "title": "Multiple Tagger Models",
-        "description": "Choose between <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> and <strong>Taggerine</strong> — plus Kaloscope artist style similarity."
+        "description": "Choose between <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> and <strong>Taggerine</strong> — plus Kaloscope artist style similarity."
       },
       "naiReady": {
         "title": "NAI Ready Embedding",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "How to use",
       "step1": "Upload an image or drag & drop it onto the canvas.",
-      "step2": "Select a tagger model (WD, PixAI, Camie, or Taggerine).",
+      "step2": "Select a tagger model (WD EVA 02, PixAI, Camie, or Taggerine).",
       "step3": "Adjust confidence thresholds to filter tags.",
       "step4": "Click <strong>Interrogate</strong>.",
       "step5": "Copy tags, or download an <strong>NAI Ready</strong> PNG."

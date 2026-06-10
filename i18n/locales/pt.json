@@ -70,7 +70,7 @@
       "baseUrlHint": "URL do endpoint API, ex.: https://localtagger.gpu.garden ou http://localhost:8000",
       "familyWd": "Família WD",
       "models": {
-        "wd": "Centrado no Danbooru",
+        "wd_eva_02": "Centrado no Danbooru",
         "pixai": "Otimizado para ilustração",
         "camie": "Saída especializada",
         "taggerine": "Cobertura estendida"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "O que é o Farterrogator?",
-    "description": "<strong>Farterrogator</strong> é um tagger de imagens local e rápido no estilo Booru. Ele analisa imagens com modelos da família WD e modelos focados em ilustração para extrair tags compatíveis com o Danbooru, para criação de datasets e prompt engineering.",
+    "description": "<strong>Farterrogator</strong> é um tagger de imagens local e rápido no estilo Booru. Ele analisa imagens com modelos da família WD EVA 02 e modelos focados em ilustração para extrair tags compatíveis com o Danbooru, para criação de datasets e prompt engineering.",
     "features": {
       "models": {
         "title": "Vários modelos de tagging",
-        "description": "Escolha entre <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> e <strong>Taggerine</strong> — além da similaridade de estilo de artista Kaloscope."
+        "description": "Escolha entre <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> e <strong>Taggerine</strong> — além da similaridade de estilo de artista Kaloscope."
       },
       "naiReady": {
         "title": "Incorporação NAI Ready",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "Como usar",
       "step1": "Envie uma imagem ou arraste-a para a área.",
-      "step2": "Selecione um modelo de tagging (WD, PixAI, Camie ou Taggerine).",
+      "step2": "Selecione um modelo de tagging (WD EVA 02, PixAI, Camie ou Taggerine).",
       "step3": "Ajuste os limiares de confiança para filtrar as tags.",
       "step4": "Clique em <strong>Interrogar</strong>.",
       "step5": "Copie as tags ou baixe um PNG <strong>NAI Ready</strong>."

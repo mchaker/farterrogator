@@ -70,7 +70,7 @@
       "baseUrlHint": "URL del endpoint API, p. ej. https://localtagger.gpu.garden o http://localhost:8000",
       "familyWd": "Familia WD",
       "models": {
-        "wd": "Centrado en Danbooru",
+        "wd_eva_02": "Centrado en Danbooru",
         "pixai": "Optimizado para ilustración",
         "camie": "Salida especializada",
         "taggerine": "Cobertura ampliada"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "¿Qué es Farterrogator?",
-    "description": "<strong>Farterrogator</strong> es un etiquetador de imágenes local y rápido al estilo Booru. Analiza imágenes con modelos de la familia WD y modelos centrados en ilustración para extraer etiquetas compatibles con Danbooru, ideales para crear datasets y diseñar prompts.",
+    "description": "<strong>Farterrogator</strong> es un etiquetador de imágenes local y rápido al estilo Booru. Analiza imágenes con modelos de la familia WD EVA 02 y modelos centrados en ilustración para extraer etiquetas compatibles con Danbooru, ideales para crear datasets y diseñar prompts.",
     "features": {
       "models": {
         "title": "Varios modelos de etiquetado",
-        "description": "Elige entre <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> y <strong>Taggerine</strong>, además de la similitud de estilo de artista con Kaloscope."
+        "description": "Elige entre <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> y <strong>Taggerine</strong>, además de la similitud de estilo de artista con Kaloscope."
       },
       "naiReady": {
         "title": "Incrustación NAI Ready",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "Cómo usarlo",
       "step1": "Sube una imagen o arrástrala al lienzo.",
-      "step2": "Selecciona un modelo de etiquetado (WD, PixAI, Camie o Taggerine).",
+      "step2": "Selecciona un modelo de etiquetado (WD EVA 02, PixAI, Camie o Taggerine).",
       "step3": "Ajusta los umbrales de confianza para filtrar etiquetas.",
       "step4": "Haz clic en <strong>Interrogar</strong>.",
       "step5": "Copia las etiquetas o descarga un PNG <strong>NAI Ready</strong>."

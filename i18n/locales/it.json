@@ -70,7 +70,7 @@
       "baseUrlHint": "URL endpoint API, es. https://localtagger.gpu.garden o http://localhost:8000",
       "familyWd": "Famiglia WD",
       "models": {
-        "wd": "Incentrato su Danbooru",
+        "wd_eva_02": "Incentrato su Danbooru",
         "pixai": "Ottimizzato per illustrazioni",
         "camie": "Output specializzato",
         "taggerine": "Copertura estesa"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "Cos'è Farterrogator?",
-    "description": "<strong>Farterrogator</strong> è un tagger di immagini locale e veloce in stile Booru. Analizza le immagini con modelli della famiglia WD e modelli incentrati sull'illustrazione per estrarre tag compatibili con Danbooru, per la creazione di dataset e il prompt engineering.",
+    "description": "<strong>Farterrogator</strong> è un tagger di immagini locale e veloce in stile Booru. Analizza le immagini con modelli della famiglia WD EVA 02 e modelli incentrati sull'illustrazione per estrarre tag compatibili con Danbooru, per la creazione di dataset e il prompt engineering.",
     "features": {
       "models": {
         "title": "Più modelli di tagging",
-        "description": "Scegli tra <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> e <strong>Taggerine</strong> — più la somiglianza di stile artistico Kaloscope."
+        "description": "Scegli tra <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> e <strong>Taggerine</strong> — più la somiglianza di stile artistico Kaloscope."
       },
       "naiReady": {
         "title": "Incorporamento NAI Ready",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "Come si usa",
       "step1": "Carica un'immagine o trascinala sull'area.",
-      "step2": "Seleziona un modello di tagging (WD, PixAI, Camie o Taggerine).",
+      "step2": "Seleziona un modello di tagging (WD EVA 02, PixAI, Camie o Taggerine).",
       "step3": "Regola le soglie di confidenza per filtrare i tag.",
       "step4": "Clicca su <strong>Interroga</strong>.",
       "step5": "Copia i tag o scarica un PNG <strong>NAI Ready</strong>."

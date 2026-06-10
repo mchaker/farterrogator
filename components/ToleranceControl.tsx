@@ -19,7 +19,7 @@ const TAGGER_MODEL_GROUPS: { family: string; familyKey?: string; models: { id: T
     family: 'WD Family',
     familyKey: 'settings.backend.familyWd',
     models: [
-      { id: 'wd', label: 'WD' },
+      { id: 'wd_eva_02', label: 'WD EVA 02' },
       { id: 'pixai', label: 'PixAI' },
     ],
   },

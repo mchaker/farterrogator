@@ -70,7 +70,7 @@
       "baseUrlHint": "URL API-эндпоинта, напр. https://localtagger.gpu.garden или http://localhost:8000",
       "familyWd": "Семейство WD",
       "models": {
-        "wd": "Ориентирован на Danbooru",
+        "wd_eva_02": "Ориентирован на Danbooru",
         "pixai": "Оптимизирован для иллюстраций",
         "camie": "Специализированный вывод",
         "taggerine": "Расширенный охват"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "Что такое Farterrogator?",
-    "description": "<strong>Farterrogator</strong> — это быстрый локальный теггер изображений в стиле Booru. Он анализирует изображения с помощью моделей семейства WD и моделей, ориентированных на иллюстрации, извлекая совместимые с Danbooru теги для создания датасетов и инженерии промптов.",
+    "description": "<strong>Farterrogator</strong> — это быстрый локальный теггер изображений в стиле Booru. Он анализирует изображения с помощью моделей семейства WD EVA 02 и моделей, ориентированных на иллюстрации, извлекая совместимые с Danbooru теги для создания датасетов и инженерии промптов.",
     "features": {
       "models": {
         "title": "Несколько моделей теггера",
-        "description": "Выбирайте между <strong>WD14 EVA</strong>, <strong>PixAI</strong>, <strong>Camie</strong> и <strong>Taggerine</strong> — плюс определение сходства стиля художника Kaloscope."
+        "description": "Выбирайте между <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> и <strong>Taggerine</strong> — плюс определение сходства стиля художника Kaloscope."
       },
       "naiReady": {
         "title": "Встраивание NAI Ready",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "Как пользоваться",
       "step1": "Загрузите изображение или перетащите его на холст.",
-      "step2": "Выберите модель теггера (WD, PixAI, Camie или Taggerine).",
+      "step2": "Выберите модель теггера (WD EVA 02, PixAI, Camie или Taggerine).",
       "step3": "Настройте пороги уверенности для фильтрации тегов.",
       "step4": "Нажмите <strong>Анализировать</strong>.",
       "step5": "Скопируйте теги или скачайте PNG <strong>NAI Ready</strong>."

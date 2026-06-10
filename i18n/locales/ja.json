@@ -70,7 +70,7 @@
       "baseUrlHint": "APIエンドポイントURL。例: https://localtagger.gpu.garden または http://localhost:8000",
       "familyWd": "WD ファミリー",
       "models": {
-        "wd": "Danbooru 中心",
+        "wd_eva_02": "Danbooru 中心",
         "pixai": "イラスト最適化",
         "camie": "特化型出力",
         "taggerine": "広範なカバレッジ"
@@ -97,11 +97,11 @@
   },
   "info": {
     "title": "Farterrogator とは?",
-    "description": "<strong>Farterrogator</strong> は高速なローカル Booru 系画像タガーです。WD 系およびイラスト特化モデルで画像を解析し、データセット作成やプロンプトエンジニアリングのための Danbooru 互換タグを抽出します。",
+    "description": "<strong>Farterrogator</strong> は高速なローカル Booru 系画像タガーです。WD EVA 02 系およびイラスト特化モデルで画像を解析し、データセット作成やプロンプトエンジニアリングのための Danbooru 互換タグを抽出します。",
     "features": {
       "models": {
         "title": "複数のタガーモデル",
-        "description": "<strong>WD14 EVA</strong>、<strong>PixAI</strong>、<strong>Camie</strong>、<strong>Taggerine</strong> から選択可能。さらに Kaloscope による絵師スタイル類似度も。"
+        "description": "<strong>WD EVA 02</strong>、<strong>PixAI</strong>、<strong>Camie</strong>、<strong>Taggerine</strong> から選択可能。さらに Kaloscope による絵師スタイル類似度も。"
       },
       "naiReady": {
         "title": "NAI Ready 埋め込み",
@@ -119,7 +119,7 @@
     "howTo": {
       "title": "使い方",
       "step1": "画像をアップロードするか、キャンバスにドラッグ&ドロップします。",
-      "step2": "タガーモデル (WD、PixAI、Camie、Taggerine) を選択します。",
+      "step2": "タガーモデル (WD EVA 02、PixAI、Camie、Taggerine) を選択します。",
       "step3": "信頼度のしきい値を調整してタグをフィルタリングします。",
       "step4": "<strong>解析開始</strong>をクリックします。",
       "step5": "タグをコピーするか、<strong>NAI Ready</strong> PNG をダウンロードします。"

@@ -30,8 +30,8 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
   const handleArtistEnter = async (artistName: string, e: React.MouseEvent<HTMLLIElement>) => {
     if (previewHideTimer.current) clearTimeout(previewHideTimer.current);
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left - 168;
-    const y = Math.max(8, Math.min(rect.top + rect.height / 2 - 80, window.innerHeight - 168));
+    const x = rect.left - 248;
+    const y = Math.max(8, Math.min(rect.top + rect.height / 2 - 120, window.innerHeight - 248));
 
     // Only skip fetch for artists confirmed to have no matching posts
     if (previewCache.current.get(artistName) === null) {
@@ -327,15 +327,15 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
           className="fixed z-50 pointer-events-none animate-in fade-in duration-150"
           style={{ left: Math.max(8, artistPreview.x), top: artistPreview.y }}
         >
-          <div className="w-40 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 dark:ring-white/10 bg-md-light-surface-2 dark:bg-md-dark-surface-2">
+          <div className="w-60 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 dark:ring-white/10 bg-md-light-surface-2 dark:bg-md-dark-surface-2">
             {artistPreview.loading ? (
-              <div className="w-40 h-40 flex items-center justify-center">
+              <div className="w-60 h-60 flex items-center justify-center">
                 <Preloader className="w-5 h-5" />
               </div>
             ) : artistPreview.url ? (
               <img src={artistPreview.url} alt="" className="w-full h-auto block" />
             ) : (
-              <div className="w-40 h-20 flex items-center justify-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-40">
+              <div className="w-60 h-32 flex items-center justify-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-40">
                 No preview
               </div>
             )}

@@ -230,7 +230,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" aria-hidden="true" />
         <button 
           onClick={handleClear}
-          className="absolute top-4 right-4 p-2 bg-md-light-surface/90 dark:bg-md-dark-surface/80 text-md-light-on-surface dark:text-md-dark-on-surface rounded-full hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors backdrop-blur-sm shadow-md opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 duration-200"
+          className="absolute top-4 right-4 p-2 bg-md-light-surface/90 dark:bg-md-dark-surface/80 text-md-light-on-surface dark:text-md-dark-on-surface rounded-full hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors backdrop-blur-sm shadow-md opacity-100 duration-200"
           title={t('upload.clear')}
           aria-label={t('upload.clear')}
         >

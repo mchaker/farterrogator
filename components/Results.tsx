@@ -247,37 +247,29 @@ export const Results: React.FC<ResultsProps> = ({ result, settings, loadingState
                 <span className="text-sm">{t('results.matchingArtists')}</span>
               </div>
             ) : (
-              <ul className="space-y-2">
-                {artistMatches!.map((artist, i) => (
-                  <li key={artist.name}>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(formatTag(artist.name));
-                        showToast(t('results.copiedItem', { item: formatTag(artist.name) }));
-                      }}
-                      className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 transition-colors text-left cursor-pointer"
-                      title={t('results.copyArtist')}
-                    >
-                      <span className="w-6 shrink-0 text-center text-xs font-bold text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-                        {i + 1}
-                      </span>
-                      <span className="flex-1 min-w-0">
-                        <span className="block text-sm font-medium font-mono truncate text-md-light-on-surface dark:text-md-dark-on-surface">
+              <ul className="space-y-0.5">
+                {artistMatches!.map((artist, i) => {
+                  const isTop = i < 5;
+                  return (
+                    <li key={artist.name}>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(formatTag(artist.name));
+                          showToast(t('results.copiedItem', { item: formatTag(artist.name) }));
+                        }}
+                        className={`w-full flex items-center gap-3 px-2 py-1.5 rounded-xl transition-colors text-left cursor-pointer hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 ${!isTop ? 'opacity-40 hover:opacity-70' : ''}`}
+                        title={t('results.copyArtist')}
+                      >
+                        <span className={`w-5 shrink-0 text-center text-xs font-bold tabular-nums ${isTop ? 'text-primary dark:text-md-dark-primary' : 'text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant'}`}>
+                          {i + 1}
+                        </span>
+                        <span className="flex-1 min-w-0 text-sm font-medium font-mono truncate text-md-light-on-surface dark:text-md-dark-on-surface">
                           {formatTag(artist.name)}
                         </span>
-                        <span className="block h-1.5 mt-1 rounded-full bg-md-light-surface-5 dark:bg-md-dark-surface-5 overflow-hidden">
-                          <span
-                            className="block h-full rounded-full bg-primary dark:bg-md-dark-primary transition-all duration-500"
-                            style={{ width: `${Math.max(2, artist.score * 100)}%` }}
-                          />
-                        </span>
-                      </span>
-                      <span className="shrink-0 text-xs font-mono text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-                        {(artist.score * 100).toFixed(1)}%
-                      </span>
-                    </button>
-                  </li>
-                ))}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

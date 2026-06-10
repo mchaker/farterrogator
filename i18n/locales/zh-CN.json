@@ -70,7 +70,7 @@
       "baseUrlHint": "API 端点地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
       "familyWd": "WD 系列",
       "models": {
-        "wd_eva_02": "以 Danbooru 为中心",
+        "wd": "以 Danbooru 为中心",
         "pixai": "插画优化",
         "camie": "特化输出",
         "taggerine": "更广覆盖"

@@ -70,7 +70,7 @@
       "baseUrlHint": "API-Endpunkt-URL, z. B. https://localtagger.gpu.garden oder http://localhost:8000",
       "familyWd": "WD-Familie",
       "models": {
-        "wd_eva_02": "Danbooru-zentriert",
+        "wd": "Danbooru-zentriert",
         "pixai": "Für Illustrationen optimiert",
         "camie": "Spezialisierte Ausgabe",
         "taggerine": "Erweiterte Abdeckung"

@@ -24,7 +24,7 @@ import {
 import { useTheme } from "./hooks/useTheme";
 
 const DEFAULT_BACKEND_CONFIG: BackendConfig = {
-  taggerModel: "wd_eva_02",
+  taggerModel: "wd",
   taggerBaseUrl: "https://localtagger.gpu.garden",
 };
 
@@ -224,7 +224,10 @@ const App: React.FC = () => {
           </Button>
         }
       >
-        <div className="shrink">Only WD EVA 02 is functional right now</div>
+        <div className="shrink">
+          Only WD EVA 02 is functional right now, every model option redirects
+          to it...
+        </div>
       </Toast>
       <Page className="flex flex-col min-h-screen">
         <Header theme={theme} setTheme={setTheme} />
@@ -389,7 +392,7 @@ const App: React.FC = () => {
               </span>
             </span>
           </a>
-          
+
           <p className="opacity-50 px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md text-center shrink-0 order-3 sm:order-2 basis-full sm:basis-auto whitespace-normal break-words">
             {t("app.copyright", {
               year:

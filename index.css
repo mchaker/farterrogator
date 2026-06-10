@@ -19,11 +19,25 @@ body,
 }
 
 :root {
+  color-scheme: light dark;
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 body {
   font-family: var(--font-sans);
+}
+
+/* Fix Chromium select dropdown colors */
+select option,
+select optgroup {
+  background-color: white !important;
+  color: rgb(31, 31, 31) !important;
+}
+
+.dark select option,
+.dark select optgroup {
+  background-color: rgb(26, 28, 30) !important;
+  color: rgb(226, 226, 230) !important;
 }
 
 :lang(hi) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { App as KonstaApp, Page, Button, Preloader, Toast } from "konsta/react";
 import { AlertCircle, Wand2, Sparkles } from "lucide-react";
 import { Header } from "./components/Header";
@@ -20,6 +20,7 @@ import {
   BatchResult,
   ArtistMatch,
   TaggerModel,
+  I18nError,
 } from "./types";
 import { useTheme } from "./hooks/useTheme";
 
@@ -201,7 +202,13 @@ const App: React.FC = () => {
     } catch (err) {
       console.error(err);
       setAppState(AppState.ERROR);
-      setError(err instanceof Error ? err.message : t("errors.unknown"));
+      setError(
+        err instanceof I18nError
+          ? t(err.key, err.params)
+          : err instanceof Error
+            ? err.message
+            : t("errors.unknown"),
+      );
     } finally {
       setLoadingState({ tags: false, progress: 100, status: t("status.done") });
     }
@@ -220,14 +227,11 @@ const App: React.FC = () => {
             inline
             onClick={() => setToastOpened(false)}
           >
-            Close
+            {t("common.close")}
           </Button>
         }
       >
-        <div className="shrink">
-          Only WD EVA 02 is functional right now, every model option redirects
-          to it...
-        </div>
+        <div className="shrink">{t("app.modelNotice")}</div>
       </Toast>
       <Page className="flex flex-col min-h-screen">
         <Header theme={theme} setTheme={setTheme} />
@@ -403,24 +407,27 @@ const App: React.FC = () => {
           </p>
 
           <span className="px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md opacity-60 shrink-0 order-2 sm:order-3">
-            made by{" "}
-            <a
-              href="https://mooshieblob.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-md-light-primary dark:hover:text-md-dark-primary hover:opacity-100 transition-colors"
-            >
-              mooshieblob
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://github.com/AshtakaOOf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-md-light-primary dark:hover:text-md-dark-primary hover:opacity-100 transition-colors"
-            >
-              ashtaka
-            </a>
+            <Trans
+              i18nKey="app.madeBy"
+              components={{
+                mooshieblob: (
+                  <a
+                    href="https://mooshieblob.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-md-light-primary dark:hover:text-md-dark-primary hover:opacity-100 transition-colors"
+                  />
+                ),
+                ashtaka: (
+                  <a
+                    href="https://github.com/AshtakaOOf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-md-light-primary dark:hover:text-md-dark-primary hover:opacity-100 transition-colors"
+                  />
+                ),
+              }}
+            />
           </span>
         </footer>
       </Page>

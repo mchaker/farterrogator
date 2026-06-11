@@ -295,7 +295,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
           {isDragging ? t('upload.dropHere') : t('upload.dragDrop')}
         </p>
         <p className="text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-          {t('upload.supports')} <span className="opacity-70">(+ ZIP, TAR)</span>
+          {t('upload.supports')} <span className="opacity-70">{t('upload.supportsArchives')}</span>
         </p>
       </div>
     </div>

@@ -2,7 +2,10 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI इमेज एनालाइज़र",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "logoAlt": "Farterrogator लोगो",
+    "modelNotice": "फ़िलहाल केवल WD EVA 02 ही काम करता है, बाकी सभी मॉडल विकल्प उसी पर रीडायरेक्ट होते हैं...",
+    "madeBy": "<mooshieblob>mooshieblob</mooshieblob> और <ashtaka>ashtaka</ashtaka> द्वारा निर्मित"
   },
   "common": {
     "close": "बंद करें",
@@ -19,6 +22,7 @@
     "dragDrop": "इमेज को यहाँ खींचकर छोड़ें, या चुनने के लिए क्लिक करें",
     "dropHere": "फ़ाइलें यहाँ छोड़ें",
     "supports": "PNG, JPG, WEBP, GIF समर्थित",
+    "supportsArchives": "(+ ZIP, TAR)",
     "clear": "इमेज हटाएँ",
     "interrogate": "विश्लेषण करें",
     "previewAlt": "अपलोड की गई इमेज का पूर्वावलोकन",
@@ -49,7 +53,10 @@
     "batchResults": "बैच परिणाम",
     "artistSimilarity": "कलाकार समानता",
     "matchingArtists": "कलाकार शैलियों का मिलान हो रहा है...",
-    "copyArtist": "कलाकार का नाम कॉपी करें"
+    "copyArtist": "कलाकार का नाम कॉपी करें",
+    "noPreview": "कोई पूर्वावलोकन नहीं",
+    "openOnDanbooru": "Danbooru पर खोलें",
+    "openArtistOnDanbooru": "{{artist}} को Danbooru पर खोलें"
   },
   "status": {
     "starting": "शुरू हो रहा है...",
@@ -93,6 +100,9 @@
   },
   "errors": {
     "taggerRequired": "टैगर का बेस URL आवश्यक है। कृपया इसे बैकएंड सेटिंग्स में कॉन्फ़िगर करें।",
+    "taggerError": "टैगर त्रुटि: {{status}} {{statusText}}",
+    "batchTaggerError": "बैच टैगर त्रुटि: {{status}} {{statusText}}",
+    "decodeImage": "छवि डेटा डिकोड करने में विफल: {{detail}}",
     "unknown": "एक अज्ञात त्रुटि हुई"
   },
   "info": {

@@ -2,7 +2,10 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "Interrogador de Imágenes IA",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "logoAlt": "Logotipo de Farterrogator",
+    "modelNotice": "Por ahora solo funciona WD EVA 02, todas las demás opciones de modelo redirigen a él...",
+    "madeBy": "hecho por <mooshieblob>mooshieblob</mooshieblob> y <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
     "close": "Cerrar",
@@ -19,6 +22,7 @@
     "dragDrop": "Arrastra y suelta una imagen aquí, o haz clic para seleccionar",
     "dropHere": "Suelta los archivos aquí",
     "supports": "Compatible con PNG, JPG, WEBP, GIF",
+    "supportsArchives": "(+ ZIP, TAR)",
     "clear": "Quitar imagen",
     "interrogate": "Interrogar",
     "previewAlt": "Vista previa de la imagen subida",
@@ -49,7 +53,10 @@
     "batchResults": "Resultados por lotes",
     "artistSimilarity": "Similitud de artista",
     "matchingArtists": "Buscando estilos de artistas...",
-    "copyArtist": "Copiar nombre del artista"
+    "copyArtist": "Copiar nombre del artista",
+    "noPreview": "Sin vista previa",
+    "openOnDanbooru": "Abrir en Danbooru",
+    "openArtistOnDanbooru": "Abrir {{artist}} en Danbooru"
   },
   "status": {
     "starting": "Iniciando...",
@@ -93,6 +100,9 @@
   },
   "errors": {
     "taggerRequired": "Se requiere la URL base del etiquetador. Configúrala en los ajustes del backend.",
+    "taggerError": "Error del etiquetador: {{status}} {{statusText}}",
+    "batchTaggerError": "Error del etiquetador por lotes: {{status}} {{statusText}}",
+    "decodeImage": "No se pudieron decodificar los datos de la imagen: {{detail}}",
     "unknown": "Ocurrió un error desconocido"
   },
   "info": {

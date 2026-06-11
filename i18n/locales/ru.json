@@ -2,7 +2,10 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "ИИ-анализатор изображений",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "logoAlt": "Логотип Farterrogator",
+    "modelNotice": "Сейчас работает только WD EVA 02, все остальные варианты моделей перенаправляются на неё...",
+    "madeBy": "сделано <mooshieblob>mooshieblob</mooshieblob> и <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
     "close": "Закрыть",
@@ -19,6 +22,7 @@
     "dragDrop": "Перетащите изображение сюда или нажмите для выбора",
     "dropHere": "Отпустите файлы здесь",
     "supports": "Поддерживаются PNG, JPG, WEBP, GIF",
+    "supportsArchives": "(+ ZIP, TAR)",
     "clear": "Убрать изображение",
     "interrogate": "Анализировать",
     "previewAlt": "Предпросмотр загруженного изображения",
@@ -49,7 +53,10 @@
     "batchResults": "Результаты пакетной обработки",
     "artistSimilarity": "Сходство с художниками",
     "matchingArtists": "Подбор стилей художников...",
-    "copyArtist": "Скопировать имя художника"
+    "copyArtist": "Скопировать имя художника",
+    "noPreview": "Нет превью",
+    "openOnDanbooru": "Открыть на Danbooru",
+    "openArtistOnDanbooru": "Открыть {{artist}} на Danbooru"
   },
   "status": {
     "starting": "Запуск...",
@@ -93,6 +100,9 @@
   },
   "errors": {
     "taggerRequired": "Требуется базовый URL теггера. Настройте его в параметрах бэкенда.",
+    "taggerError": "Ошибка теггера: {{status}} {{statusText}}",
+    "batchTaggerError": "Ошибка пакетного теггера: {{status}} {{statusText}}",
+    "decodeImage": "Не удалось декодировать данные изображения: {{detail}}",
     "unknown": "Произошла неизвестная ошибка"
   },
   "info": {

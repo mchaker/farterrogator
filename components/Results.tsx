@@ -459,8 +459,10 @@ export const Results: React.FC<ResultsProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 p-1.5 rounded-lg text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:text-primary dark:hover:text-md-dark-primary hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 transition-colors"
-                        title="Open on Danbooru"
-                        aria-label={`Open ${formatTag(artist.name)} on Danbooru`}
+                        title={t("results.openOnDanbooru")}
+                        aria-label={t("results.openArtistOnDanbooru", {
+                          artist: formatTag(artist.name),
+                        })}
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink
@@ -496,7 +498,7 @@ export const Results: React.FC<ResultsProps> = ({
                 />
               ) : (
                 <div className="w-60 h-32 flex items-center justify-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant opacity-40">
-                  No preview
+                  {t("results.noPreview")}
                 </div>
               )}
             </div>

@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, setTheme }) => {
         <div className="flex items-center gap-2.5 pl-2">
           <img
             src="/favicon.webp"
-            alt="Logo"
+            alt={t("app.logoAlt")}
             className="w-8 h-8 object-contain drop-shadow-sm"
           />
           <h1 className="text-lg font-bold leading-tight tracking-tight text-md-light-on-surface dark:text-md-dark-on-surface">

@@ -2,7 +2,10 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI Image Interrogator",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "logoAlt": "Farterrogator logo",
+    "modelNotice": "Only WD EVA 02 is functional right now, every model option redirects to it...",
+    "madeBy": "made by <mooshieblob>mooshieblob</mooshieblob> and <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
     "close": "Close",
@@ -19,6 +22,7 @@
     "dragDrop": "Drag & drop an image here, or click to select",
     "dropHere": "Drop files here",
     "supports": "Supports PNG, JPG, WEBP, GIF",
+    "supportsArchives": "(+ ZIP, TAR)",
     "clear": "Clear Image",
     "interrogate": "Interrogate",
     "previewAlt": "Uploaded image preview",
@@ -49,7 +53,10 @@
     "batchResults": "Batch Results",
     "artistSimilarity": "Artist Similarity",
     "matchingArtists": "Matching artist styles...",
-    "copyArtist": "Copy artist name"
+    "copyArtist": "Copy artist name",
+    "noPreview": "No preview",
+    "openOnDanbooru": "Open on Danbooru",
+    "openArtistOnDanbooru": "Open {{artist}} on Danbooru"
   },
   "status": {
     "starting": "Starting...",
@@ -93,6 +100,9 @@
   },
   "errors": {
     "taggerRequired": "Tagger base URL is required. Please configure it in the backend settings.",
+    "taggerError": "Tagger error: {{status}} {{statusText}}",
+    "batchTaggerError": "Batch tagger error: {{status}} {{statusText}}",
+    "decodeImage": "Failed to decode image data: {{detail}}",
     "unknown": "An unknown error occurred"
   },
   "info": {

@@ -98,9 +98,9 @@ All locale files currently have **identical key sets** (95 keys each). Keep it t
   ```tsx
   <Trans i18nKey="info.description" components={{ strong: <strong /> }} />
   ```
-  Keep the same tags present in every locale's version of the string. `<strong>` is the only tag currently used in locale files (the `info.*` keys); prefer keeping it that way.
+  Keep the same tags present in every locale's version of the string. Named components are also used for links (e.g. `app.madeBy` is `"made by <mooshieblob>mooshieblob</mooshieblob> and <ashtaka>ashtaka</ashtaka>"` rendered with `components={{ mooshieblob: <a … />, ashtaka: <a … /> }}`).
 - Never build sentences by concatenating `t()` fragments or embedding English words around a `t()` call — word order differs across languages. Put the whole sentence in one key and interpolate.
-- Strings produced in non-component code (e.g. status/error messages flowing out of services) should be passed back as data and translated at the component layer, or selected from `errors.*` / `status.*` keys by the caller.
+- Strings produced in non-component code (e.g. error messages flowing out of services) must not be baked-in English. Services throw `I18nError` (defined in `types.ts`) carrying an i18n key + interpolation params; the component layer catches it and renders `t(err.key, err.params)` — see the catch block in `App.tsx` and the throws in `services/taggerService.ts`.
 
 ### What NOT to translate
 

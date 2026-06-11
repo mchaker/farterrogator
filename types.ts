@@ -49,3 +49,17 @@ export interface LoadingState {
   progress: number;
   status: string;
 }
+
+// Error carrying an i18n key + params instead of a fixed-language message,
+// so services stay translation-agnostic and the UI layer calls t()
+export class I18nError extends Error {
+  key: string;
+  params?: Record<string, string | number>;
+
+  constructor(key: string, params?: Record<string, string | number>) {
+    super(key);
+    this.name = 'I18nError';
+    this.key = key;
+    this.params = params;
+  }
+}

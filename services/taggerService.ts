@@ -1,4 +1,4 @@
-import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModel } from "../types";
+import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModel, I18nError } from "../types";
 import { getCategory, loadTagDatabase } from './tagService';
 
 const MODEL_PATHS: Record<TaggerModel, string> = {
@@ -98,7 +98,7 @@ export const fetchTags = async (
     const byteArray = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0));
     blob = new Blob([byteArray], { type: normalizedMime });
   } catch (error) {
-    throw new Error(`Failed to decode image data: ${error}`);
+    throw new I18nError('errors.decodeImage', { detail: String(error) });
   }
 
   const ext = getExtensionFromMimeType(normalizedMime);
@@ -116,7 +116,7 @@ export const fetchTags = async (
   const finalUrl = `${endpoint}?${queryParams}`;
 
   const response = await fetch(finalUrl, { method: 'POST', body: formData });
-  if (!response.ok) throw new Error(`Tagger error: ${response.status} ${response.statusText}`);
+  if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
 
   const data = await response.json();
   const tags = parseTags(data).sort((a, b) => b.score - a.score);
@@ -150,7 +150,7 @@ export const fetchBatchTags = async (
 
   const finalUrl = `${endpoint}?${queryParams}`;
   const response = await fetch(finalUrl, { method: 'POST', body: formData });
-  if (!response.ok) throw new Error(`Batch tagger error: ${response.status} ${response.statusText}`);
+  if (!response.ok) throw new I18nError('errors.batchTaggerError', { status: response.status, statusText: response.statusText });
 
   const contentType = response.headers.get('content-type') ?? '';
   if (contentType.includes('application/zip') || contentType.includes('application/octet-stream')) {

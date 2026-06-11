@@ -2,7 +2,10 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI 圖像反推工具",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "logoAlt": "Farterrogator 標誌",
+    "modelNotice": "目前只有 WD EVA 02 可用，其他模型選項都會重新導向到它……",
+    "madeBy": "由 <mooshieblob>mooshieblob</mooshieblob> 和 <ashtaka>ashtaka</ashtaka> 製作"
   },
   "common": {
     "close": "關閉",
@@ -19,6 +22,7 @@
     "dragDrop": "將圖像拖放到此處，或點擊選擇",
     "dropHere": "將檔案放到這裡",
     "supports": "支援 PNG、JPG、WEBP、GIF",
+    "supportsArchives": "（+ ZIP、TAR）",
     "clear": "清除圖像",
     "interrogate": "開始反推",
     "previewAlt": "已上傳圖像預覽",
@@ -49,7 +53,10 @@
     "batchResults": "批次結果",
     "artistSimilarity": "繪師相似度",
     "matchingArtists": "正在比對繪師風格...",
-    "copyArtist": "複製繪師名稱"
+    "copyArtist": "複製繪師名稱",
+    "noPreview": "無預覽",
+    "openOnDanbooru": "在 Danbooru 上開啟",
+    "openArtistOnDanbooru": "在 Danbooru 上開啟 {{artist}}"
   },
   "status": {
     "starting": "正在啟動...",
@@ -93,6 +100,9 @@
   },
   "errors": {
     "taggerRequired": "需要標註器的基礎 URL。請在後端設定中設定。",
+    "taggerError": "標籤器錯誤：{{status}} {{statusText}}",
+    "batchTaggerError": "批次標籤器錯誤：{{status}} {{statusText}}",
+    "decodeImage": "無法解碼影像資料：{{detail}}",
     "unknown": "發生未知錯誤"
   },
   "info": {

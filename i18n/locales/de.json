@@ -2,7 +2,10 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "KI-Bild-Interrogator",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge."
+    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "logoAlt": "Farterrogator-Logo",
+    "modelNotice": "Derzeit funktioniert nur WD EVA 02, alle anderen Modelloptionen werden darauf umgeleitet …",
+    "madeBy": "erstellt von <mooshieblob>mooshieblob</mooshieblob> und <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
     "close": "Schließen",
@@ -19,6 +22,7 @@
     "dragDrop": "Bild hierher ziehen oder klicken zum Auswählen",
     "dropHere": "Dateien hier ablegen",
     "supports": "Unterstützt PNG, JPG, WEBP, GIF",
+    "supportsArchives": "(+ ZIP, TAR)",
     "clear": "Bild entfernen",
     "interrogate": "Analysieren",
     "previewAlt": "Vorschau des hochgeladenen Bildes",
@@ -49,7 +53,10 @@
     "batchResults": "Stapelergebnisse",
     "artistSimilarity": "Künstler-Ähnlichkeit",
     "matchingArtists": "Künstlerstile werden abgeglichen...",
-    "copyArtist": "Künstlernamen kopieren"
+    "copyArtist": "Künstlernamen kopieren",
+    "noPreview": "Keine Vorschau",
+    "openOnDanbooru": "Auf Danbooru öffnen",
+    "openArtistOnDanbooru": "{{artist}} auf Danbooru öffnen"
   },
   "status": {
     "starting": "Starte...",
@@ -93,6 +100,9 @@
   },
   "errors": {
     "taggerRequired": "Die Basis-URL des Taggers ist erforderlich. Bitte in den Backend-Einstellungen konfigurieren.",
+    "taggerError": "Tagger-Fehler: {{status}} {{statusText}}",
+    "batchTaggerError": "Batch-Tagger-Fehler: {{status}} {{statusText}}",
+    "decodeImage": "Bilddaten konnten nicht dekodiert werden: {{detail}}",
     "unknown": "Ein unbekannter Fehler ist aufgetreten"
   },
   "info": {

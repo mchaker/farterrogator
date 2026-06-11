@@ -11,19 +11,16 @@
 
 ---
 
-**Farterrogator** is a powerful image interrogation tool designed for Stable Diffusion enthusiasts and dataset creators. It analyzes images to generate strict Danbooru-style tags and detailed natural language descriptions, offering a seamless workflow between local AI models and cloud services.
+**Farterrogator** is a powerful image interrogation tool designed for Stable Diffusion enthusiasts and dataset creators. It analyzes images to generate strict Danbooru-style tags, offering a seamless workflow between local AI models and cloud services.
 
 ## ✨ Features
 
 - **Dual Backend Support**:
   - **Google Gemini**: Fast, cloud-based analysis using Gemini models.
-  - **EVA**: Combines a local tagger (WD1.4/ViT/EVA) for precision tags with **Ollama** for visual reasoning and description.
+  - **EVA**: Uses a local tagger (WD1.4/ViT/EVA) for high-precision Danbooru tagging.
 - **Strict Danbooru Tagging**:
   - Automatically categorizes tags into **Copyright**, **Character**, **Artist**, **General**, **Meta**, and **Rating**.
   - Filters and sorts tags by confidence score.
-- **Smart Natural Language Generation**:
-  - Generates detailed captions on-demand.
-  - Uses existing tags to ground the LLM, ensuring the description matches the visual elements perfectly (no hallucinations).
 - **Modern UI**:
   - Built with **React**, **Vite**, and **Tailwind CSS**.
   - Fully responsive with **Dark Mode** support.
@@ -61,36 +58,17 @@
 
 ## 🛠️ EVA Setup (Recommended)
 
-To use the **EVA** mode for privacy and zero-cost inference, you need two local services running:
+To use the **EVA** mode for privacy and zero-cost inference, you need a local service running:
 
 ### 1. Local Tagger (WD1.4 / ViT / EVA)
 You need a backend that serves a tagging model. This project is configured to work with a service running on port `8000`.
 - **Endpoint**: `http://localhost:8000/interrogate/eva`
 - **Expected Output**: JSON with `tags` object.
 
-### 2. Ollama (LLM & Vision)
-Install [Ollama](https://ollama.com/) for the natural language descriptions.
-- **Endpoint**: `http://localhost:11434`
-- **Recommended Model**: `qwen3-vl:30b` (Vision-Language model) or `llava`.
-
-#### ⚠️ Important: CORS Configuration
-If you are accessing Ollama from a different domain (e.g., your web app is on `tagger.gpu.garden` and Ollama is on `ollama.gpu.garden`), you **must** configure Ollama to allow Cross-Origin requests.
-
-Set the `OLLAMA_ORIGINS` environment variable when starting Ollama:
-
-```bash
-# Allow all origins (Development)
-OLLAMA_ORIGINS="*" ollama serve
-
-# Allow specific domain (Production)
-OLLAMA_ORIGINS="https://tagger.gpu.garden" ollama serve
-```
-
 **Configuration in App:**
 1. Click the **Configuration** panel in the UI.
 2. Select **EVA** under "AI Backend".
 3. Ensure endpoints match your local setup.
-4. (Optional) Enable "Natural Language Output" to generate captions.
 
 ## ☁️ Gemini Setup
 1. Get an API Key from [Google AI Studio](https://aistudio.google.com/).

@@ -23,15 +23,6 @@ export default defineConfig(({ mode }) => {
             return p === '' ? '/' : p;
           }
         },
-        '/ollama/gpu-garden': {
-          target: 'https://ollama.gpu.garden',
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path: string) => {
-            const p = path.replace(/^\/ollama\/gpu-garden/, '');
-            return p === '' ? '/' : p;
-          }
-        },
         '/interrogate': {
           target: 'http://localhost:8000',
           changeOrigin: true,
@@ -63,15 +54,6 @@ export default defineConfig(({ mode }) => {
             secure: false,
             rewrite: (path: string) => {
               const p = path.replace(/^\/interrogate\/gpu-garden/, '');
-              return p === '' ? '/' : p;
-            }
-          },
-          '/ollama/gpu-garden': {
-            target: 'https://ollama.gpu.garden',
-            changeOrigin: true,
-            secure: false,
-            rewrite: (path: string) => {
-              const p = path.replace(/^\/ollama\/gpu-garden/, '');
               return p === '' ? '/' : p;
             }
           },

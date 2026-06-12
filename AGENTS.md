@@ -69,7 +69,7 @@ header.*    upload.*    results.*    status.*    settings.*    errors.*    info.
 
 ### The cardinal rule: key parity across all 12 locales
 
-All locale files currently have **identical key sets** (95 keys each). Keep it that way:
+All locale files currently have **identical key sets** (108 keys each). Keep it that way:
 
 1. Adding a string → add the key to `en.json` **and all 11 other locale files** in the same change, with real translations (not English copies, not machine-garbled placeholders — write the best native translation you can).
 2. Removing/renaming a key → apply to all 12 files.
@@ -105,7 +105,7 @@ All locale files currently have **identical key sets** (95 keys each). Keep it t
 ### What NOT to translate
 
 - Brand and product names: **Farterrogator**, **NAI**, **NovelAI**, **GPU Garden** / `gpu.garden`, **Kaloscope**.
-- Tagger model identifiers (`wd`, `pixai`, `camie`, `taggerine`) and Danbooru tags/categories as data — category *labels* shown in the UI come from `settings.categories.*` and ARE translated.
+- Tagger model identifiers (e.g. `wd-swinv2-v3`, `camie-v2`) and Danbooru tags/categories as data — category *labels* shown in the UI come from `settings.categories.*` and ARE translated.
 - URLs, endpoints, code, and file formats (PNG, JPG, WEBP, GIF).
 
 ### Adding a new language

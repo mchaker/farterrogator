@@ -4,7 +4,7 @@
     "subtitle": "AI इमेज एनालाइज़र",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Farterrogator लोगो",
-    "modelNotice": "फ़िलहाल केवल WD EVA 02 ही काम करता है, बाकी सभी मॉडल विकल्प उसी पर रीडायरेक्ट होते हैं...",
+    "modelsNotice": "नया: अब कई टैगर मॉडल उपलब्ध हैं! सेटिंग्स में से कोई एक चुनें।",
     "madeBy": "<mooshieblob>mooshieblob</mooshieblob> और <ashtaka>ashtaka</ashtaka> द्वारा निर्मित"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "टैगर मॉडल",
       "baseUrl": "API URL",
       "baseUrlHint": "API एंडपॉइंट URL, जैसे https://localtagger.gpu.garden या http://localhost:8000",
-      "familyWd": "WD परिवार",
-      "models": {
-        "wd": "Danbooru-केंद्रित",
-        "pixai": "इलस्ट्रेशन-अनुकूलित",
-        "camie": "विशेषीकृत आउटपुट",
-        "taggerine": "विस्तृत कवरेज"
+      "families": {
+        "wd14": "WD परिवार",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "तेज़ और संतुलित WD टैगर। सामान्य उपयोग के लिए अच्छा डिफ़ॉल्ट।",
+        "wd-eva02-large-v3": "बड़ा WD EVA02 टैगर। धीमा लेकिन अधिक सटीक।",
+        "animetimm-caformer-b36": "आधुनिक CAFormer टैगर, समग्र रूप से उच्च सटीकता के साथ।",
+        "camie-v2": "बहुत व्यापक टैग कवरेज वाला टैगर।"
+      },
+      "gatedHint": "सर्वर पर Hugging Face टोकन आवश्यक है।",
+      "warmupHint": "मॉडल अभी लोड नहीं हुआ है — पहली रिक्वेस्ट में अधिक समय लग सकता है।",
       "resetToDefault": "डिफ़ॉल्ट पर रीसेट करें"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "कई टैगर मॉडल",
-        "description": "<strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> और <strong>Taggerine</strong> में से चुनें — साथ ही Kaloscope कलाकार शैली समानता।"
+        "description": "<strong>WD SwinV2</strong>, <strong>WD EVA02</strong>, <strong>AnimeTimm</strong> और <strong>Camie</strong> मॉडलों में से चुनें — साथ ही Kaloscope कलाकार शैली समानता।"
       },
       "naiReady": {
         "title": "NAI Ready एम्बेडिंग",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "उपयोग कैसे करें",
       "step1": "इमेज अपलोड करें या उसे कैनवास पर खींचकर छोड़ें।",
-      "step2": "टैगर मॉडल चुनें (WD EVA 02, PixAI, Camie या Taggerine)।",
+      "step2": "टैगर मॉडल चुनें — सूची बैकएंड से लोड होती है।",
       "step3": "टैग फ़िल्टर करने के लिए विश्वास थ्रेशोल्ड समायोजित करें।",
       "step4": "<strong>विश्लेषण करें</strong> पर क्लिक करें।",
       "step5": "टैग कॉपी करें, या <strong>NAI Ready</strong> PNG डाउनलोड करें।"

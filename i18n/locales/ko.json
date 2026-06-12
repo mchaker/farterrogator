@@ -4,7 +4,7 @@
     "subtitle": "AI 이미지 분석기",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Farterrogator 로고",
-    "modelNotice": "현재 WD EVA 02만 작동하며, 다른 모델 옵션은 모두 WD EVA 02로 리디렉션됩니다...",
+    "modelsNotice": "신규: 이제 여러 태거 모델을 사용할 수 있습니다! 설정에서 하나를 선택하세요.",
     "madeBy": "제작: <mooshieblob>mooshieblob</mooshieblob> 및 <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "태거 모델",
       "baseUrl": "API URL",
       "baseUrlHint": "API 엔드포인트 URL, 예: https://localtagger.gpu.garden 또는 http://localhost:8000",
-      "familyWd": "WD 계열",
-      "models": {
-        "wd": "Danbooru 중심",
-        "pixai": "일러스트 최적화",
-        "camie": "특화된 출력",
-        "taggerine": "확장된 커버리지"
+      "families": {
+        "wd14": "WD 계열",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "빠르고 균형 잡힌 WD 태거. 범용 기본값으로 적합합니다.",
+        "wd-eva02-large-v3": "대형 WD EVA02 태거. 느리지만 더 정확합니다.",
+        "animetimm-caformer-b36": "전반적으로 높은 정확도를 가진 최신 CAFormer 태거.",
+        "camie-v2": "매우 폭넓은 태그 커버리지를 제공하는 태거."
+      },
+      "gatedHint": "서버에 Hugging Face 토큰이 필요합니다.",
+      "warmupHint": "모델이 아직 로드되지 않았습니다. 첫 요청은 시간이 더 걸릴 수 있습니다.",
       "resetToDefault": "기본값으로 초기화"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "다양한 태거 모델",
-        "description": "<strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong>, <strong>Taggerine</strong> 중에서 선택할 수 있으며, Kaloscope 작가 스타일 유사도도 제공합니다."
+        "description": "<strong>WD SwinV2</strong>, <strong>WD EVA02</strong>, <strong>AnimeTimm</strong>, <strong>Camie</strong> 모델 중에서 선택할 수 있으며, Kaloscope 작가 스타일 유사도도 제공합니다."
       },
       "naiReady": {
         "title": "NAI Ready 임베딩",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "사용 방법",
       "step1": "이미지를 업로드하거나 캔버스에 드래그 앤 드롭하세요.",
-      "step2": "태거 모델(WD EVA 02, PixAI, Camie, Taggerine)을 선택하세요.",
+      "step2": "태거 모델을 선택하세요. 목록은 백엔드에서 불러옵니다.",
       "step3": "신뢰도 임계값을 조정하여 태그를 필터링하세요.",
       "step4": "<strong>분석 시작</strong>을 클릭하세요.",
       "step5": "태그를 복사하거나 <strong>NAI Ready</strong> PNG를 다운로드하세요."

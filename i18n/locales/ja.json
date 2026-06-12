@@ -4,7 +4,7 @@
     "subtitle": "AI画像解析ツール",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Farterrogatorのロゴ",
-    "modelNotice": "現在動作するのはWD EVA 02のみで、他のモデルを選択してもWD EVA 02にリダイレクトされます…",
+    "modelsNotice": "新機能：複数のタガーモデルが利用可能になりました！設定から選択してください。",
     "madeBy": "制作: <mooshieblob>mooshieblob</mooshieblob> と <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "タガーモデル",
       "baseUrl": "API URL",
       "baseUrlHint": "APIエンドポイントURL。例: https://localtagger.gpu.garden または http://localhost:8000",
-      "familyWd": "WD ファミリー",
-      "models": {
-        "wd": "Danbooru 中心",
-        "pixai": "イラスト最適化",
-        "camie": "特化型出力",
-        "taggerine": "広範なカバレッジ"
+      "families": {
+        "wd14": "WD ファミリー",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "高速でバランスの取れた WD タガー。汎用的なデフォルトに最適。",
+        "wd-eva02-large-v3": "大型の WD EVA02 タガー。低速ですがより高精度。",
+        "animetimm-caformer-b36": "全体的に高い精度を持つモダンな CAFormer タガー。",
+        "camie-v2": "非常に幅広いタグをカバーするタガー。"
+      },
+      "gatedHint": "サーバー側に Hugging Face トークンが必要です。",
+      "warmupHint": "モデルはまだ読み込まれていません。最初のリクエストには時間がかかる場合があります。",
       "resetToDefault": "デフォルトにリセット"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "複数のタガーモデル",
-        "description": "<strong>WD EVA 02</strong>、<strong>PixAI</strong>、<strong>Camie</strong>、<strong>Taggerine</strong> から選択可能。さらに Kaloscope による絵師スタイル類似度も。"
+        "description": "<strong>WD SwinV2</strong>、<strong>WD EVA02</strong>、<strong>AnimeTimm</strong>、<strong>Camie</strong> のモデルから選択可能。さらに Kaloscope による絵師スタイル類似度も。"
       },
       "naiReady": {
         "title": "NAI Ready 埋め込み",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "使い方",
       "step1": "画像をアップロードするか、キャンバスにドラッグ&ドロップします。",
-      "step2": "タガーモデル (WD EVA 02、PixAI、Camie、Taggerine) を選択します。",
+      "step2": "タガーモデルを選択します。モデル一覧はバックエンドから読み込まれます。",
       "step3": "信頼度のしきい値を調整してタグをフィルタリングします。",
       "step4": "<strong>解析開始</strong>をクリックします。",
       "step5": "タグをコピーするか、<strong>NAI Ready</strong> PNG をダウンロードします。"

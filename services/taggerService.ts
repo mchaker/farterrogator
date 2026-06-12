@@ -1,15 +1,10 @@
-import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModel, I18nError } from "../types";
+import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, I18nError } from "../types";
 import { getCategory, loadTagDatabase } from './tagService';
 
-const MODEL_PATHS: Record<TaggerModel, string> = {
-  wd: '/interrogate/eva',
-  pixai: '/interrogate/pixai',
-  camie: '/interrogate/camie',
-  taggerine: '/interrogate/taggerine',
-};
-
-function buildEndpoint(baseUrl: string, model: TaggerModel): string {
-  const path = MODEL_PATHS[model];
+// gpu.garden goes through the CORS proxy (Vite dev proxy / Cloudflare Pages
+// function), localhost goes through the Vite dev proxy, anything else is hit
+// directly.
+export function resolveApiUrl(baseUrl: string, path: string): string {
   const base = baseUrl.replace(/\/$/, '');
 
   if (base.includes('localtagger.gpu.garden')) {
@@ -42,13 +37,16 @@ const LOW_CONFIDENCE_SKIN_TAGS = new Set(['blue_skin', 'colored_skin']);
 
 function parseTags(data: any): Tag[] {
   const tags: Tag[] = [];
-  let tagsData = data.tags;
-
-  if (Array.isArray(data) && data.length > 0 && data[0].tags) {
-    tagsData = data[0].tags;
-  }
+  const entry = Array.isArray(data) ? data[0] : data;
+  const tagsData = entry?.tags;
 
   if (!tagsData) return tags;
+
+  // The response's `character` map is authoritative for character tags;
+  // anything else is categorized via the local tag database.
+  const characterNames = new Set(Object.keys(entry?.character ?? {}));
+  const categorize = (name: string): TagCategory =>
+    characterNames.has(name) ? 'character' : getCategory(name);
 
   if (Array.isArray(tagsData)) {
     tagsData.forEach((item: any) => {
@@ -62,36 +60,47 @@ function parseTags(data: any): Tag[] {
         score = Number(item.score ?? item.confidence ?? item.probability ?? 0);
       }
       if (name) {
-        tags.push({ name, score: score > 1.0 ? score / 100 : score, category: getCategory(name) });
+        tags.push({ name, score: score > 1.0 ? score / 100 : score, category: categorize(name) });
       }
     });
   } else if (typeof tagsData === 'object') {
     Object.entries(tagsData).forEach(([name, score]) => {
       let normalizedScore = Number(score);
       if (normalizedScore > 1.0) normalizedScore /= 100;
-      tags.push({ name, score: normalizedScore, category: getCategory(name) });
+      tags.push({ name, score: normalizedScore, category: categorize(name) });
     });
   }
 
   return tags.filter(tag => !(LOW_CONFIDENCE_SKIN_TAGS.has(tag.name) && tag.score < 0.85));
 }
 
+export const fetchAvailableModels = async (baseUrl: string): Promise<TaggerModelInfo[]> => {
+  const response = await fetch(resolveApiUrl(baseUrl, '/models'));
+  if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
+
+  const data = await response.json();
+  if (!Array.isArray(data?.models)) return [];
+  return data.models.filter((m: any) => m && typeof m.id === 'string');
+};
+
 export const fetchTags = async (
   image: File,
   config: BackendConfig,
   settings?: TaggingSettings
 ): Promise<Tag[]> => {
-  const endpoint = buildEndpoint(config.taggerBaseUrl, config.taggerModel);
+  const endpoint = resolveApiUrl(config.taggerBaseUrl, '/interrogate');
 
   const formData = new FormData();
   formData.append('file', image);
 
   const queryParams = new URLSearchParams();
+  queryParams.append('model', config.taggerModel);
   if (settings) {
-    if (settings.maxTags > 0) queryParams.append('max_tags', Math.floor(settings.maxTags).toString());
     queryParams.append('threshold', settings.thresholds.general.toString());
+    queryParams.append('character_threshold', settings.thresholds.character.toString());
   } else {
     queryParams.append('threshold', '0.35');
+    queryParams.append('character_threshold', '0.85');
   }
 
   const finalUrl = `${endpoint}?${queryParams}`;
@@ -117,20 +126,24 @@ export const fetchBatchTags = async (
   config: BackendConfig,
   settings?: TaggingSettings
 ): Promise<Record<string, BatchResult>> => {
-  const endpoint = buildEndpoint(config.taggerBaseUrl, config.taggerModel);
+  const endpoint = resolveApiUrl(config.taggerBaseUrl, '/interrogate');
 
   const formData = new FormData();
   files.forEach(file => formData.append('file', file));
 
   const queryParams = new URLSearchParams();
   queryParams.append('output_format', 'zip');
+  queryParams.append('model', config.taggerModel);
   if (settings) {
     // Whitelist tags are prepended server-side into the per-image .txt files
     if (settings.whitelist?.trim()) queryParams.append('trigger_word', settings.whitelist.trim());
     if (settings.randomize) queryParams.append('random_order', 'true');
+    if (settings.removeUnderscores) queryParams.append('use_spaces', 'true');
     queryParams.append('threshold', settings.thresholds.general.toString());
+    queryParams.append('character_threshold', settings.thresholds.character.toString());
   } else {
     queryParams.append('threshold', '0.35');
+    queryParams.append('character_threshold', '0.85');
   }
 
   const finalUrl = `${endpoint}?${queryParams}`;

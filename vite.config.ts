@@ -28,6 +28,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
         },
+        '/models': {
+          target: 'http://localhost:8000',
+          changeOrigin: true,
+          secure: false,
+        },
         '/tag': {
           target: 'http://localhost:8000',
           changeOrigin: true,
@@ -58,6 +63,11 @@ export default defineConfig(({ mode }) => {
             }
           },
           '/interrogate': {
+            target: 'http://localhost:8000',
+            changeOrigin: true,
+            secure: false,
+          },
+          '/models': {
             target: 'http://localhost:8000',
             changeOrigin: true,
             secure: false,

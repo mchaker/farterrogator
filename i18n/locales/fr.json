@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "Interrogateur d'images IA",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "copyright": "Farterrogator © {{year}} Fartcore. Tous droits réservés. Les modèles ne sont pas la propriété de Fartcore et sont fournis gratuitement.",
     "logoAlt": "Logo Farterrogator",
     "modelsNotice": "Nouveau : plusieurs modèles de tagging sont désormais disponibles ! Choisissez-en un dans les réglages.",
     "madeBy": "créé par <mooshieblob>mooshieblob</mooshieblob> et <ashtaka>ashtaka</ashtaka>"
@@ -60,6 +60,7 @@
   },
   "status": {
     "starting": "Démarrage...",
+    "analyzingImage": "Analyse de l'image...",
     "done": "Terminé"
   },
   "settings": {
@@ -108,6 +109,7 @@
     "taggerRequired": "L'URL de base du tagger est requise. Veuillez la configurer dans les paramètres du backend.",
     "taggerError": "Erreur du tagger : {{status}} {{statusText}}",
     "batchTaggerError": "Erreur du tagger par lots : {{status}} {{statusText}}",
+    "kaloscopeError": "Erreur Kaloscope : {{status}} {{statusText}}",
     "unknown": "Une erreur inconnue s'est produite"
   },
   "info": {

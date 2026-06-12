@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI 이미지 분석기",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "copyright": "Farterrogator © {{year}} Fartcore. 모든 권리 보유. 모델은 Fartcore의 소유가 아니며 무료로 제공됩니다.",
     "logoAlt": "Farterrogator 로고",
     "modelsNotice": "신규: 이제 여러 태거 모델을 사용할 수 있습니다! 설정에서 하나를 선택하세요.",
     "madeBy": "제작: <mooshieblob>mooshieblob</mooshieblob> 및 <ashtaka>ashtaka</ashtaka>"
@@ -60,6 +60,7 @@
   },
   "status": {
     "starting": "시작 중...",
+    "analyzingImage": "이미지 분석 중...",
     "done": "완료"
   },
   "settings": {
@@ -108,6 +109,7 @@
     "taggerRequired": "태거 기본 URL이 필요합니다. 백엔드 설정에서 구성해 주세요.",
     "taggerError": "태거 오류: {{status}} {{statusText}}",
     "batchTaggerError": "일괄 태거 오류: {{status}} {{statusText}}",
+    "kaloscopeError": "Kaloscope 오류: {{status}} {{statusText}}",
     "unknown": "알 수 없는 오류가 발생했습니다"
   },
   "info": {

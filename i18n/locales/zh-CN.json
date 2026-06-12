@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "AI 图像反推工具",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "copyright": "Farterrogator © {{year}} Fartcore。版权所有。模型不属于 Fartcore，且免费提供。",
     "logoAlt": "Farterrogator 标志",
     "modelsNotice": "新功能：现已支持多个标注模型！请在设置中选择。",
     "madeBy": "由 <mooshieblob>mooshieblob</mooshieblob> 和 <ashtaka>ashtaka</ashtaka> 制作"
@@ -60,6 +60,7 @@
   },
   "status": {
     "starting": "正在启动...",
+    "analyzingImage": "正在分析图像...",
     "done": "完成"
   },
   "settings": {
@@ -108,6 +109,7 @@
     "taggerRequired": "需要标注器的基础 URL。请在后端设置中配置。",
     "taggerError": "标签器错误：{{status}} {{statusText}}",
     "batchTaggerError": "批量标签器错误：{{status}} {{statusText}}",
+    "kaloscopeError": "Kaloscope 错误：{{status}} {{statusText}}",
     "unknown": "发生未知错误"
   },
   "info": {

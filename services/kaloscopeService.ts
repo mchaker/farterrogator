@@ -1,4 +1,4 @@
-import { ArtistMatch } from '../types';
+import { ArtistMatch, I18nError } from '../types';
 import { resolveApiUrl } from './taggerService';
 
 const KALOSCOPE_PATH = '/kaloscope/infer';
@@ -14,7 +14,7 @@ export const fetchArtistMatches = async (
   formData.append('file', file);
 
   const response = await fetch(`${endpoint}?top_k=${topK}`, { method: 'POST', body: formData });
-  if (!response.ok) throw new Error(`Kaloscope error: ${response.status} ${response.statusText}`);
+  if (!response.ok) throw new I18nError('errors.kaloscopeError', { status: response.status, statusText: response.statusText });
 
   const data = await response.json();
   if (!Array.isArray(data?.artists)) return [];

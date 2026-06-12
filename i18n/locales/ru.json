@@ -2,7 +2,7 @@
   "app": {
     "title": "Farterrogator",
     "subtitle": "ИИ-анализатор изображений",
-    "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
+    "copyright": "Farterrogator © {{year}} Fartcore. Все права защищены. Модели не являются собственностью Fartcore и предоставляются бесплатно.",
     "logoAlt": "Логотип Farterrogator",
     "modelsNotice": "Новое: теперь доступно несколько моделей теггера! Выберите одну в настройках.",
     "madeBy": "сделано <mooshieblob>mooshieblob</mooshieblob> и <ashtaka>ashtaka</ashtaka>"
@@ -60,6 +60,7 @@
   },
   "status": {
     "starting": "Запуск...",
+    "analyzingImage": "Анализ изображения...",
     "done": "Готово"
   },
   "settings": {
@@ -108,6 +109,7 @@
     "taggerRequired": "Требуется базовый URL теггера. Настройте его в параметрах бэкенда.",
     "taggerError": "Ошибка теггера: {{status}} {{statusText}}",
     "batchTaggerError": "Ошибка пакетного теггера: {{status}} {{statusText}}",
+    "kaloscopeError": "Ошибка Kaloscope: {{status}} {{statusText}}",
     "unknown": "Произошла неизвестная ошибка"
   },
   "info": {

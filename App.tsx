@@ -233,8 +233,8 @@ const App: React.FC = () => {
           backendConfig,
           settings,
           i18n.language,
-          (status, progress) => {
-            setLoadingState((prev) => ({ ...prev, status, progress }));
+          (statusKey, progress) => {
+            setLoadingState((prev) => ({ ...prev, status: t(statusKey), progress }));
           },
         );
         setResult(res);

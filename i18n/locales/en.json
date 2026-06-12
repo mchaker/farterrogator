@@ -60,6 +60,7 @@
   },
   "status": {
     "starting": "Starting...",
+    "analyzingImage": "Analyzing image...",
     "done": "Done"
   },
   "settings": {
@@ -108,6 +109,7 @@
     "taggerRequired": "Tagger base URL is required. Please configure it in the backend settings.",
     "taggerError": "Tagger error: {{status}} {{statusText}}",
     "batchTaggerError": "Batch tagger error: {{status}} {{statusText}}",
+    "kaloscopeError": "Kaloscope error: {{status}} {{statusText}}",
     "unknown": "An unknown error occurred"
   },
   "info": {

@@ -215,10 +215,11 @@ export const generateTags = async (
   config: BackendConfig,
   settings?: TaggingSettings,
   _language?: string,
-  onProgress?: (status: string, progress: number) => void
+  // statusKey is an i18n key (like I18nError); the UI layer calls t()
+  onProgress?: (statusKey: string, progress: number) => void
 ): Promise<InterrogationResult> => {
-  onProgress?.('Analyzing image...', 20);
+  onProgress?.('status.analyzingImage', 20);
   const tags = await fetchTags(image, config, settings);
-  onProgress?.('Done', 100);
+  onProgress?.('status.done', 100);
   return { tags };
 };

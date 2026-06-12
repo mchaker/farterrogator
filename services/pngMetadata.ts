@@ -1,4 +1,26 @@
 
+// CRC32 implementation
+const crcTable = new Uint32Array(256);
+for (let n = 0; n < 256; n++) {
+  let c = n;
+  for (let k = 0; k < 8; k++) {
+    if (c & 1) {
+      c = 0xedb88320 ^ (c >>> 1);
+    } else {
+      c = c >>> 1;
+    }
+  }
+  crcTable[n] = c;
+}
+
+const crc32 = (buf: Uint8Array) => {
+  let crc = 0xffffffff;
+  for (let i = 0; i < buf.length; i++) {
+    crc = crcTable[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
+  }
+  return crc ^ 0xffffffff;
+};
+
 export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob> => {
   // Always process image to resize to ~1MP and strip original metadata
   const pngBlob = await processImage(file);
@@ -36,28 +58,6 @@ export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob
     return buffer;
   };
 
-  // CRC32 implementation
-  const crcTable = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) {
-      if (c & 1) {
-        c = 0xedb88320 ^ (c >>> 1);
-      } else {
-        c = c >>> 1;
-      }
-    }
-    crcTable[n] = c;
-  }
-
-  const crc32 = (buf: Uint8Array) => {
-    let crc = 0xffffffff;
-    for (let i = 0; i < buf.length; i++) {
-      crc = crcTable[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
-    }
-    return crc ^ 0xffffffff;
-  };
-
   // Create metadata chunks
   const textEncoder = new TextEncoder();
   
@@ -81,11 +81,12 @@ export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob
     }))
   ];
 
-  // Reconstruct file with new chunks inserted after IHDR
-  chunks.push(data.slice(0, 8)); // Signature
+  // Reconstruct file with new chunks inserted after IHDR.
+  // subarray views are copy-free; the source buffer outlives the chunks list.
+  chunks.push(data.subarray(0, 8)); // Signature
 
+  const view = new DataView(arrayBuffer);
   while (offset < data.length) {
-    const view = new DataView(data.buffer);
     const length = view.getUint32(offset, false);
     const type = String.fromCharCode(
       data[offset + 4],
@@ -95,7 +96,7 @@ export const embedPngMetadata = async (file: File, prompt: string): Promise<Blob
     );
 
     const chunkTotalLength = length + 12;
-    const chunkData = data.slice(offset, offset + chunkTotalLength);
+    const chunkData = data.subarray(offset, offset + chunkTotalLength);
     
     chunks.push(chunkData);
     offset += chunkTotalLength;

@@ -12,6 +12,7 @@ import {
   fetchBatchTags,
 } from "./services/taggerService";
 import { fetchArtistMatches } from "./services/kaloscopeService";
+import { loadTagDatabase } from "./services/tagService";
 import {
   AppState,
   InterrogationResult,
@@ -23,6 +24,9 @@ import {
   I18nError,
 } from "./types";
 import { useTheme } from "./hooks/useTheme";
+
+const currentYear = new Date().getFullYear();
+const copyrightYear = currentYear > 2025 ? `2025-${currentYear}` : "2025";
 
 const DEFAULT_BACKEND_CONFIG: BackendConfig = {
   taggerModel: "wd",
@@ -47,6 +51,11 @@ const App: React.FC = () => {
   useEffect(() => {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
+
+  // Warm the tag database so the first interrogation doesn't wait on it
+  useEffect(() => {
+    loadTagDatabase();
+  }, []);
 
   const [settings, setSettings] = useState<TaggingSettings>(() => {
     try {
@@ -81,8 +90,12 @@ const App: React.FC = () => {
     };
   });
 
+  // Debounced: slider drags fire many changes per second
   useEffect(() => {
-    localStorage.setItem("taggingSettings", JSON.stringify(settings));
+    const id = setTimeout(() => {
+      localStorage.setItem("taggingSettings", JSON.stringify(settings));
+    }, 300);
+    return () => clearTimeout(id);
   }, [settings]);
 
   const [backendConfig, setBackendConfig] = useState<BackendConfig>(() => {
@@ -100,7 +113,10 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem("backendConfig", JSON.stringify(backendConfig));
+    const id = setTimeout(() => {
+      localStorage.setItem("backendConfig", JSON.stringify(backendConfig));
+    }, 300);
+    return () => clearTimeout(id);
   }, [backendConfig]);
 
   const [error, setError] = useState<string | null>(null);
@@ -398,12 +414,7 @@ const App: React.FC = () => {
           </a>
 
           <p className="opacity-50 px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md text-center shrink-0 order-3 sm:order-2 basis-full sm:basis-auto whitespace-normal break-words">
-            {t("app.copyright", {
-              year:
-                new Date().getFullYear() > 2025
-                  ? `2025-${new Date().getFullYear()}`
-                  : "2025",
-            })}
+            {t("app.copyright", { year: copyrightYear })}
           </p>
 
           <span className="px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md opacity-60 shrink-0 order-2 sm:order-3">

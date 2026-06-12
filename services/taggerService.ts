@@ -45,6 +45,9 @@ function getExtensionFromMimeType(mime: string): string {
   return subtype.split('+')[0] || 'bin';
 }
 
+// These tags are noisy false positives below high confidence
+const LOW_CONFIDENCE_SKIN_TAGS = new Set(['blue_skin', 'colored_skin']);
+
 function parseTags(data: any): Tag[] {
   const tags: Tag[] = [];
   let tagsData = data.tags;
@@ -78,10 +81,7 @@ function parseTags(data: any): Tag[] {
     });
   }
 
-  return tags.filter(tag => {
-    if (['blue_skin', 'colored_skin'].includes(tag.name) && tag.score < 0.85) return false;
-    return true;
-  });
+  return tags.filter(tag => !(LOW_CONFIDENCE_SKIN_TAGS.has(tag.name) && tag.score < 0.85));
 }
 
 export const fetchTags = async (
@@ -115,10 +115,14 @@ export const fetchTags = async (
 
   const finalUrl = `${endpoint}?${queryParams}`;
 
+  // The tag database is only needed to categorize the response, so let it
+  // download in parallel with the interrogation request.
+  const tagDbPromise = loadTagDatabase();
   const response = await fetch(finalUrl, { method: 'POST', body: formData });
   if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
 
   const data = await response.json();
+  await tagDbPromise;
   const tags = parseTags(data).sort((a, b) => b.score - a.score);
 
   if (settings?.maxTags && settings.maxTags > 0) {
@@ -229,7 +233,6 @@ export const generateTags = async (
   _language?: string,
   onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
-  await loadTagDatabase();
   onProgress?.('Analyzing image...', 20);
   const tags = await fetchTags(base64Image, config, settings, mimeType);
   onProgress?.('Done', 100);

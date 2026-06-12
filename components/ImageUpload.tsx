@@ -11,6 +11,42 @@ interface ImageUploadProps {
   onClear: () => void;
 }
 
+const ARCHIVE_IMAGE_PATTERN = /\.(png|jpg|jpeg|webp|gif)$/i;
+
+const EXT_MIME: Record<string, string> = {
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  webp: 'image/webp',
+  gif: 'image/gif',
+};
+
+const mimeFromExtension = (name: string): string =>
+  EXT_MIME[name.split('.').pop()?.toLowerCase() ?? ''] ?? '';
+
+// Run fn over items with at most `limit` in flight, preserving input order.
+// Items whose fn returns null (or throws) are dropped from the result.
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R | null>,
+): Promise<R[]> {
+  const results: (R | null)[] = new Array(items.length).fill(null);
+  let next = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const i = next++;
+      try {
+        results[i] = await fn(items[i]);
+      } catch {
+        results[i] = null;
+      }
+    }
+  });
+  await Promise.all(workers);
+  return results.filter((r): r is R => r !== null);
+}
+
 export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selectedFiles, onClear }) => {
   const { t } = useTranslation();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -36,47 +72,41 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
       img.src = URL.createObjectURL(file);
       img.onload = async () => {
         URL.revokeObjectURL(img.src);
-        let width = img.width;
-        let height = img.height;
+        // Compressed size tracks pixel count roughly linearly, so scaling
+        // dimensions by sqrt(byte ratio) should land under the limit in one
+        // encode; keep shrinking by 0.85x as a safety net since each encode
+        // is expensive.
+        let scale = Math.min(1, Math.sqrt(MAX_SIZE / file.size) * 0.95);
         let blob: Blob | null = null;
-        
+
         const canvas = document.createElement('canvas');
-        let attempts = 0;
-        
-        // Loop to downscale until under limit
-        while (attempts < 10) {
-             // Calculate scale factor based on area if we want to be smarter, 
-             // but simple iterative reduction is robust.
-             // If it's WAY too big, step down faster?
-             // Let's just do 0.85x dimension reduction per step (approx 0.72x area)
-             
-             if (attempts > 0) {
-                width = Math.floor(width * 0.85);
-                height = Math.floor(height * 0.85);
-             }
+
+        for (let attempts = 0; attempts < 10; attempts++) {
+             const width = Math.max(1, Math.floor(img.width * scale));
+             const height = Math.max(1, Math.floor(img.height * scale));
 
              canvas.width = width;
              canvas.height = height;
              const ctx = canvas.getContext('2d');
              if (!ctx) { reject(new Error('Canvas context failed')); return; }
-             
+
              // Better quality scaling
              ctx.imageSmoothingEnabled = true;
              ctx.imageSmoothingQuality = 'high';
              ctx.drawImage(img, 0, 0, width, height);
-             
+
              const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
              // For JPEG we could adjust quality, but for PNG we must resize.
              // We'll use 0.9 quality for JPEG as a baseline.
-             
+
              blob = await new Promise<Blob | null>(r => canvas.toBlob(r, mimeType, 0.9));
-             
+
              if (blob && blob.size <= MAX_SIZE) {
                  resolve(new File([blob], file.name, { type: mimeType }));
                  return;
              }
-             
-             attempts++;
+
+             scale *= 0.85;
         }
         
         // Fallback: return the last blob we managed to make, even if slightly over (unlikely after 10 steps of 0.85)
@@ -101,25 +131,17 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
            try {
              const zip = new JSZip();
              const content = await zip.loadAsync(file);
-             for (const filename of Object.keys(content.files)) {
-               const zipEntry = content.files[filename];
-               if (!zipEntry.dir && (filename.match(/\.(png|jpg|jpeg|webp|gif)$/i))) {
-                 const blob = await zipEntry.async('blob');
-                 // Determine mime type from extension if blob.type is empty
-                 let mimeType = blob.type;
-                 if (!mimeType) {
-                    const ext = filename.split('.').pop()?.toLowerCase();
-                    if (ext === 'png') mimeType = 'image/png';
-                    else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
-                    else if (ext === 'webp') mimeType = 'image/webp';
-                    else if (ext === 'gif') mimeType = 'image/gif';
-                 }
-                 
-                 const extractedFile = new File([blob], filename, { type: mimeType });
-                 const resized = await resizeImageIfNeeded(extractedFile);
-                 processedImages.push(resized);
-               }
-             }
+             const entries = Object.values(content.files).filter(
+               (zipEntry) => !zipEntry.dir && ARCHIVE_IMAGE_PATTERN.test(zipEntry.name)
+             );
+             const images = await mapWithConcurrency(entries, 4, async (zipEntry) => {
+               const blob = await zipEntry.async('blob');
+               // Determine mime type from extension if blob.type is empty
+               const mimeType = blob.type || mimeFromExtension(zipEntry.name);
+               const extractedFile = new File([blob], zipEntry.name, { type: mimeType });
+               return resizeImageIfNeeded(extractedFile);
+             });
+             processedImages.push(...images);
            } catch (e) {
              console.error("Failed to unzip file:", file.name, e);
            }
@@ -127,23 +149,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesSelect, selecte
            // Handle tar
            try {
              const arrayBuffer = await file.arrayBuffer();
-             const files = await untar(arrayBuffer);
-             for (const entry of files) {
-               if (entry.name.match(/\.(png|jpg|jpeg|webp|gif)$/i)) {
-                 const blob = new Blob([entry.buffer]);
-                 let mimeType = blob.type;
-                 if (!mimeType) {
-                    const ext = entry.name.split('.').pop()?.toLowerCase();
-                    if (ext === 'png') mimeType = 'image/png';
-                    else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
-                    else if (ext === 'webp') mimeType = 'image/webp';
-                    else if (ext === 'gif') mimeType = 'image/gif';
-                 }
-                 const extractedFile = new File([blob], entry.name, { type: mimeType });
-                 const resized = await resizeImageIfNeeded(extractedFile);
-                 processedImages.push(resized);
-               }
-             }
+             const entries = (await untar(arrayBuffer)).filter(
+               (entry: { name: string }) => ARCHIVE_IMAGE_PATTERN.test(entry.name)
+             );
+             const images = await mapWithConcurrency(entries, 4, async (entry: { name: string; buffer: ArrayBuffer }) => {
+               const blob = new Blob([entry.buffer]);
+               const mimeType = blob.type || mimeFromExtension(entry.name);
+               const extractedFile = new File([blob], entry.name, { type: mimeType });
+               return resizeImageIfNeeded(extractedFile);
+             });
+             processedImages.push(...images);
            } catch (e) {
              console.error("Failed to untar file:", file.name, e);
            }

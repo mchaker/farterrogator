@@ -66,22 +66,20 @@ export const Results: React.FC<ResultsProps> = ({
   useEffect(() => {
     if (!artistMatches || artistMatches.length === 0) return;
     setArtistPostCounts({});
-    Promise.all(
-      artistMatches.map(async (artist) => {
-        try {
-          const res = await fetch(
-            `https://danbooru.donmai.us/tags.json?search[name]=${encodeURIComponent(artist.name)}&limit=1`,
-          );
-          const data = await res.json();
-          return [
-            artist.name,
-            data.length > 0 ? (data[0].post_count ?? 0) : 0,
-          ] as const;
-        } catch {
-          return [artist.name, 0] as const;
+    const names = artistMatches.map((artist) => artist.name);
+    fetch(
+      `https://danbooru.donmai.us/tags.json?search[name_comma]=${encodeURIComponent(names.join(","))}&limit=${names.length}`,
+    )
+      .then((res) => res.json())
+      .then((data: { name: string; post_count?: number }[]) => {
+        const counts: Record<string, number> = {};
+        names.forEach((name) => (counts[name] = 0));
+        if (Array.isArray(data)) {
+          data.forEach((tag) => (counts[tag.name] = tag.post_count ?? 0));
         }
-      }),
-    ).then((entries) => setArtistPostCounts(Object.fromEntries(entries)));
+        setArtistPostCounts(counts);
+      })
+      .catch(() => {});
   }, [artistMatches]);
 
   const handleArtistEnter = async (
@@ -96,9 +94,10 @@ export const Results: React.FC<ResultsProps> = ({
       Math.min(rect.top + rect.height / 2 - 120, window.innerHeight - 248),
     );
 
-    // Only skip fetch for artists confirmed to have no matching posts
-    if (previewCache.current.get(artistName) === null) {
-      setArtistPreview({ name: artistName, url: null, loading: false, x, y });
+    // Serve repeat hovers from cache (both found URLs and confirmed misses)
+    const cached = previewCache.current.get(artistName);
+    if (cached !== undefined) {
+      setArtistPreview({ name: artistName, url: cached, loading: false, x, y });
       return;
     }
 
@@ -115,7 +114,7 @@ export const Results: React.FC<ResultsProps> = ({
             data[0].preview_file_url ??
             null)
           : null;
-      if (url === null) previewCache.current.set(artistName, null);
+      previewCache.current.set(artistName, url);
       setArtistPreview((prev) =>
         prev?.name === artistName ? { ...prev, url, loading: false } : prev,
       );

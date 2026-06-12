@@ -6,11 +6,7 @@ import { Header } from "./components/Header";
 import { ImageUpload } from "./components/ImageUpload";
 import { ToleranceControl } from "./components/ToleranceControl";
 import { Results } from "./components/Results";
-import {
-  generateTags,
-  fileToBase64,
-  fetchBatchTags,
-} from "./services/taggerService";
+import { generateTags, fetchBatchTags } from "./services/taggerService";
 import { fetchArtistMatches } from "./services/kaloscopeService";
 import { loadTagDatabase } from "./services/tagService";
 import {
@@ -185,10 +181,8 @@ const App: React.FC = () => {
           })
           .finally(() => setIsMatchingArtists(false));
 
-        const base64 = await fileToBase64(file);
         const res = await generateTags(
-          base64,
-          file.type,
+          file,
           backendConfig,
           settings,
           i18n.language,

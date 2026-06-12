@@ -102,7 +102,6 @@
     "taggerRequired": "Se requiere la URL base del etiquetador. Configúrala en los ajustes del backend.",
     "taggerError": "Error del etiquetador: {{status}} {{statusText}}",
     "batchTaggerError": "Error del etiquetador por lotes: {{status}} {{statusText}}",
-    "decodeImage": "No se pudieron decodificar los datos de la imagen: {{detail}}",
     "unknown": "Ocurrió un error desconocido"
   },
   "info": {

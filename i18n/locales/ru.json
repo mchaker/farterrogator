@@ -102,7 +102,6 @@
     "taggerRequired": "Требуется базовый URL теггера. Настройте его в параметрах бэкенда.",
     "taggerError": "Ошибка теггера: {{status}} {{statusText}}",
     "batchTaggerError": "Ошибка пакетного теггера: {{status}} {{statusText}}",
-    "decodeImage": "Не удалось декодировать данные изображения: {{detail}}",
     "unknown": "Произошла неизвестная ошибка"
   },
   "info": {

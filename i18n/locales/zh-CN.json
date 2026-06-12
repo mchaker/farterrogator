@@ -102,7 +102,6 @@
     "taggerRequired": "需要标注器的基础 URL。请在后端设置中配置。",
     "taggerError": "标签器错误：{{status}} {{statusText}}",
     "batchTaggerError": "批量标签器错误：{{status}} {{statusText}}",
-    "decodeImage": "无法解码图像数据：{{detail}}",
     "unknown": "发生未知错误"
   },
   "info": {

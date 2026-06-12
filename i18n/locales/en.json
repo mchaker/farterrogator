@@ -102,7 +102,6 @@
     "taggerRequired": "Tagger base URL is required. Please configure it in the backend settings.",
     "taggerError": "Tagger error: {{status}} {{statusText}}",
     "batchTaggerError": "Batch tagger error: {{status}} {{statusText}}",
-    "decodeImage": "Failed to decode image data: {{detail}}",
     "unknown": "An unknown error occurred"
   },
   "info": {

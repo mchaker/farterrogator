@@ -37,14 +37,6 @@ export function parseTagList(value?: string): Set<string> {
   );
 }
 
-const MIME_TYPE_PATTERN = /^[^/]+\/[^/]+$/;
-
-function getExtensionFromMimeType(mime: string): string {
-  if (!mime || mime.trim() === '' || !MIME_TYPE_PATTERN.test(mime)) return 'bin';
-  const [, subtype] = mime.split('/');
-  return subtype.split('+')[0] || 'bin';
-}
-
 // These tags are noisy false positives below high confidence
 const LOW_CONFIDENCE_SKIN_TAGS = new Set(['blue_skin', 'colored_skin']);
 
@@ -85,25 +77,14 @@ function parseTags(data: any): Tag[] {
 }
 
 export const fetchTags = async (
-  base64Image: string,
+  image: File,
   config: BackendConfig,
-  settings?: TaggingSettings,
-  mimeType?: string
+  settings?: TaggingSettings
 ): Promise<Tag[]> => {
   const endpoint = buildEndpoint(config.taggerBaseUrl, config.taggerModel);
-  const normalizedMime = mimeType?.trim() || 'image/png';
 
-  let blob: Blob;
-  try {
-    const byteArray = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0));
-    blob = new Blob([byteArray], { type: normalizedMime });
-  } catch (error) {
-    throw new I18nError('errors.decodeImage', { detail: String(error) });
-  }
-
-  const ext = getExtensionFromMimeType(normalizedMime);
   const formData = new FormData();
-  formData.append('file', blob, `image.${ext}`);
+  formData.append('file', image);
 
   const queryParams = new URLSearchParams();
   if (settings) {
@@ -216,25 +197,15 @@ export const fetchBatchTags = async (
   return data;
 };
 
-export const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve((reader.result as string).split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-};
-
 export const generateTags = async (
-  base64Image: string,
-  mimeType: string,
+  image: File,
   config: BackendConfig,
   settings?: TaggingSettings,
   _language?: string,
   onProgress?: (status: string, progress: number) => void
 ): Promise<InterrogationResult> => {
   onProgress?.('Analyzing image...', 20);
-  const tags = await fetchTags(base64Image, config, settings, mimeType);
+  const tags = await fetchTags(image, config, settings);
   onProgress?.('Done', 100);
   return { tags };
 };

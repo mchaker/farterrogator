@@ -102,7 +102,6 @@
     "taggerRequired": "태거 기본 URL이 필요합니다. 백엔드 설정에서 구성해 주세요.",
     "taggerError": "태거 오류: {{status}} {{statusText}}",
     "batchTaggerError": "일괄 태거 오류: {{status}} {{statusText}}",
-    "decodeImage": "이미지 데이터를 디코딩하지 못했습니다: {{detail}}",
     "unknown": "알 수 없는 오류가 발생했습니다"
   },
   "info": {

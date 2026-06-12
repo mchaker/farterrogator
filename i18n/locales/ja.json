@@ -102,7 +102,6 @@
     "taggerRequired": "タガーのベースURLが必要です。バックエンド設定で構成してください。",
     "taggerError": "タガーエラー: {{status}} {{statusText}}",
     "batchTaggerError": "バッチタガーエラー: {{status}} {{statusText}}",
-    "decodeImage": "画像データのデコードに失敗しました: {{detail}}",
     "unknown": "不明なエラーが発生しました"
   },
   "info": {

@@ -102,7 +102,6 @@
     "taggerRequired": "टैगर का बेस URL आवश्यक है। कृपया इसे बैकएंड सेटिंग्स में कॉन्फ़िगर करें।",
     "taggerError": "टैगर त्रुटि: {{status}} {{statusText}}",
     "batchTaggerError": "बैच टैगर त्रुटि: {{status}} {{statusText}}",
-    "decodeImage": "छवि डेटा डिकोड करने में विफल: {{detail}}",
     "unknown": "एक अज्ञात त्रुटि हुई"
   },
   "info": {

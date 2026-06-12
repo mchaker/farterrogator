@@ -62,8 +62,9 @@ To use the **EVA** mode for privacy and zero-cost inference, you need a local se
 
 ### 1. Local Tagger (WD1.4 / ViT / EVA)
 You need a backend that serves a tagging model. This project is configured to work with a service running on port `8000`.
-- **Endpoint**: `http://localhost:8000/interrogate/eva`
-- **Expected Output**: JSON with `tags` object.
+- **Endpoint**: `http://localhost:8000/interrogate` (model selected with the `model` query param)
+- **Model discovery**: `GET http://localhost:8000/models`
+- **Expected Output**: JSON array with one `tags` object per image.
 
 **Configuration in App:**
 1. Click the **Configuration** panel in the UI.

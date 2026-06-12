@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { App as KonstaApp, Page, Button, Preloader, Toast } from "konsta/react";
 import { AlertCircle, Wand2, Sparkles } from "lucide-react";
@@ -6,7 +6,11 @@ import { Header } from "./components/Header";
 import { ImageUpload } from "./components/ImageUpload";
 import { ToleranceControl } from "./components/ToleranceControl";
 import { Results } from "./components/Results";
-import { generateTags, fetchBatchTags } from "./services/taggerService";
+import {
+  generateTags,
+  fetchBatchTags,
+  fetchAvailableModels,
+} from "./services/taggerService";
 import { fetchArtistMatches } from "./services/kaloscopeService";
 import { loadTagDatabase } from "./services/tagService";
 import {
@@ -16,7 +20,7 @@ import {
   BackendConfig,
   BatchResult,
   ArtistMatch,
-  TaggerModel,
+  TaggerModelInfo,
   I18nError,
 } from "./types";
 import { useTheme } from "./hooks/useTheme";
@@ -25,8 +29,17 @@ const currentYear = new Date().getFullYear();
 const copyrightYear = currentYear > 2025 ? `2025-${currentYear}` : "2025";
 
 const DEFAULT_BACKEND_CONFIG: BackendConfig = {
-  taggerModel: "wd",
+  taggerModel: "wd-swinv2-v3",
   taggerBaseUrl: "https://localtagger.gpu.garden",
+};
+
+// Pre-multi-model configs stored alias ids that routed to fixed endpoints;
+// map them onto the concrete model ids the backend now exposes.
+const LEGACY_MODEL_IDS: Record<string, string> = {
+  wd: "wd-eva02-large-v3",
+  pixai: "wd-swinv2-v3",
+  camie: "camie-v2",
+  taggerine: "wd-swinv2-v3",
 };
 
 const App: React.FC = () => {
@@ -100,7 +113,11 @@ const App: React.FC = () => {
       if (saved) {
         const parsed = JSON.parse(saved);
         // Migrate old config shapes that had 'type' field
-        if (parsed.taggerModel && parsed.taggerBaseUrl) return parsed;
+        if (parsed.taggerModel && parsed.taggerBaseUrl) {
+          parsed.taggerModel =
+            LEGACY_MODEL_IDS[parsed.taggerModel] ?? parsed.taggerModel;
+          return parsed;
+        }
       }
     } catch {
       /* ignore */
@@ -115,8 +132,38 @@ const App: React.FC = () => {
     return () => clearTimeout(id);
   }, [backendConfig]);
 
+  // null = list unavailable (still loading or fetch failed); the picker then
+  // degrades to showing just the currently selected id
+  const [models, setModels] = useState<TaggerModelInfo[] | null>(null);
+
+  const loadModels = useCallback(async (baseUrl: string) => {
+    try {
+      setModels(await fetchAvailableModels(baseUrl));
+    } catch (err) {
+      console.warn("Failed to load model list:", err);
+    }
+  }, []);
+
+  // Debounced: the base URL input fires a change per keystroke
+  useEffect(() => {
+    const baseUrl = backendConfig.taggerBaseUrl?.trim();
+    if (!baseUrl) return;
+    const id = setTimeout(() => loadModels(baseUrl), 500);
+    return () => clearTimeout(id);
+  }, [backendConfig.taggerBaseUrl, loadModels]);
+
+  // The enabled set is server-configured and may change; if the saved model
+  // is no longer offered, fall back to a recommended one
+  useEffect(() => {
+    if (!models || models.length === 0) return;
+    if (!models.some((m) => m.id === backendConfig.taggerModel)) {
+      const fallback = models.find((m) => m.recommended) ?? models[0];
+      setBackendConfig((prev) => ({ ...prev, taggerModel: fallback.id }));
+    }
+  }, [models]);
+
   const [error, setError] = useState<string | null>(null);
-  const [lastTaggerModel, setLastTaggerModel] = useState<TaggerModel>(
+  const [lastTaggerModel, setLastTaggerModel] = useState<string>(
     backendConfig.taggerModel,
   );
   const [loadingState, setLoadingState] = useState<{
@@ -209,6 +256,8 @@ const App: React.FC = () => {
         setLastTaggerModel(backendConfig.taggerModel);
         setAppState(AppState.SUCCESS);
       }
+      // Refresh `loaded` flags now that this model's weights are warm
+      loadModels(backendConfig.taggerBaseUrl);
     } catch (err) {
       console.error(err);
       setAppState(AppState.ERROR);
@@ -219,6 +268,10 @@ const App: React.FC = () => {
             ? err.message
             : t("errors.unknown"),
       );
+      // 404 means the model is unknown/disabled server-side; re-sync the list
+      if (err instanceof I18nError && err.params?.status === 404) {
+        loadModels(backendConfig.taggerBaseUrl);
+      }
     } finally {
       setLoadingState({ tags: false, progress: 100, status: t("status.done") });
     }
@@ -241,7 +294,7 @@ const App: React.FC = () => {
           </Button>
         }
       >
-        <div className="shrink">{t("app.modelNotice")}</div>
+        <div className="shrink">{t("app.modelsNotice")}</div>
       </Toast>
       <Page className="flex flex-col min-h-screen">
         <Header theme={theme} setTheme={setTheme} />
@@ -285,6 +338,7 @@ const App: React.FC = () => {
             <ToleranceControl
               settings={settings}
               backendConfig={backendConfig}
+              models={models}
               onSettingsChange={setSettings}
               onBackendChange={setBackendConfig}
               disabled={appState === AppState.ANALYZING}
@@ -339,7 +393,10 @@ const App: React.FC = () => {
                   <Results
                     result={result}
                     settings={settings}
-                    taggerModel={lastTaggerModel}
+                    taggerModel={
+                      models?.find((m) => m.id === lastTaggerModel)?.label ??
+                      lastTaggerModel
+                    }
                     loadingState={loadingState}
                     selectedFile={selectedFiles[0]}
                     artistMatches={artistMatches}

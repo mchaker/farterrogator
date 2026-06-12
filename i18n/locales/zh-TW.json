@@ -4,7 +4,7 @@
     "subtitle": "AI 圖像反推工具",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Farterrogator 標誌",
-    "modelNotice": "目前只有 WD EVA 02 可用，其他模型選項都會重新導向到它……",
+    "modelsNotice": "新功能：現已支援多個標註模型！請在設定中選擇。",
     "madeBy": "由 <mooshieblob>mooshieblob</mooshieblob> 和 <ashtaka>ashtaka</ashtaka> 製作"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "標註模型",
       "baseUrl": "API 地址",
       "baseUrlHint": "API 端點地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
-      "familyWd": "WD 系列",
-      "models": {
-        "wd": "以 Danbooru 為中心",
-        "pixai": "插畫最佳化",
-        "camie": "特化輸出",
-        "taggerine": "更廣覆蓋"
+      "families": {
+        "wd14": "WD 系列",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "快速且均衡的 WD 標註器，適合作為通用預設選擇。",
+        "wd-eva02-large-v3": "大型 WD EVA02 標註器，速度較慢但更準確。",
+        "animetimm-caformer-b36": "現代 CAFormer 標註器，整體準確率較高。",
+        "camie-v2": "標籤覆蓋範圍非常廣的標註器。"
+      },
+      "gatedHint": "需要伺服器端設定 Hugging Face 權杖。",
+      "warmupHint": "模型尚未載入——首次請求可能需要更長時間。",
       "resetToDefault": "重設為預設"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "多種標註模型",
-        "description": "可在 <strong>WD EVA 02</strong>、<strong>PixAI</strong>、<strong>Camie</strong> 與 <strong>Taggerine</strong> 之間選擇，另有 Kaloscope 繪師風格相似度。"
+        "description": "可在 <strong>WD SwinV2</strong>、<strong>WD EVA02</strong>、<strong>AnimeTimm</strong> 與 <strong>Camie</strong> 模型之間選擇，另有 Kaloscope 繪師風格相似度。"
       },
       "naiReady": {
         "title": "NAI Ready 嵌入",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "使用方法",
       "step1": "上傳圖像，或將其拖放到畫布上。",
-      "step2": "選擇標註模型 (WD EVA 02、PixAI、Camie 或 Taggerine)。",
+      "step2": "選擇標註模型——清單從後端載入。",
       "step3": "調整信賴度閾值以過濾標籤。",
       "step4": "點擊<strong>開始反推</strong>。",
       "step5": "複製標籤，或下載 <strong>NAI Ready</strong> PNG。"

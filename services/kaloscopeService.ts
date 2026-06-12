@@ -1,29 +1,14 @@
 import { ArtistMatch } from '../types';
+import { resolveApiUrl } from './taggerService';
 
 const KALOSCOPE_PATH = '/kaloscope/infer';
-
-// Mirrors taggerService.buildEndpoint: gpu.garden goes through the CORS proxy,
-// localhost goes through the Vite dev proxy.
-function buildEndpoint(baseUrl: string): string {
-  const base = baseUrl.replace(/\/$/, '');
-
-  if (base.includes('localtagger.gpu.garden')) {
-    return `/interrogate/gpu-garden${KALOSCOPE_PATH}`;
-  }
-
-  if (base.includes('localhost') || base.includes('127.0.0.1')) {
-    return KALOSCOPE_PATH;
-  }
-
-  return `${base}${KALOSCOPE_PATH}`;
-}
 
 export const fetchArtistMatches = async (
   file: File,
   baseUrl: string,
   topK: number = 10
 ): Promise<ArtistMatch[]> => {
-  const endpoint = buildEndpoint(baseUrl);
+  const endpoint = resolveApiUrl(baseUrl, KALOSCOPE_PATH);
 
   const formData = new FormData();
   formData.append('file', file);

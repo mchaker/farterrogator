@@ -1,6 +1,18 @@
 export type TagCategory = 'general' | 'character' | 'copyright' | 'artist' | 'meta' | 'rating';
 
-export type TaggerModel = 'wd' | 'pixai' | 'camie' | 'taggerine';
+// One entry of the backend's GET /models response. `id` is what goes into
+// ?model= and doubles as the i18n key; label/description are english fallbacks.
+export interface TaggerModelInfo {
+  id: string;
+  label: string;
+  description: string;
+  family: string;
+  recommended: boolean;
+  gated: boolean;
+  loaded: boolean;
+  default_threshold: number;
+  default_character_threshold: number;
+}
 
 export interface Tag {
   name: string;
@@ -23,7 +35,7 @@ export interface BatchResult {
 }
 
 export interface BackendConfig {
-  taggerModel: TaggerModel;
+  taggerModel: string; // model id from GET /models
   taggerBaseUrl: string;
 }
 

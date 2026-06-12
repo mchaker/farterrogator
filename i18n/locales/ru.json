@@ -4,7 +4,7 @@
     "subtitle": "ИИ-анализатор изображений",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Логотип Farterrogator",
-    "modelNotice": "Сейчас работает только WD EVA 02, все остальные варианты моделей перенаправляются на неё...",
+    "modelsNotice": "Новое: теперь доступно несколько моделей теггера! Выберите одну в настройках.",
     "madeBy": "сделано <mooshieblob>mooshieblob</mooshieblob> и <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "Модель теггера",
       "baseUrl": "API URL",
       "baseUrlHint": "URL API-эндпоинта, напр. https://localtagger.gpu.garden или http://localhost:8000",
-      "familyWd": "Семейство WD",
-      "models": {
-        "wd": "Ориентирован на Danbooru",
-        "pixai": "Оптимизирован для иллюстраций",
-        "camie": "Специализированный вывод",
-        "taggerine": "Расширенный охват"
+      "families": {
+        "wd14": "Семейство WD",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "Быстрый и сбалансированный WD-теггер. Хороший универсальный вариант по умолчанию.",
+        "wd-eva02-large-v3": "Крупный WD-теггер EVA02. Медленнее, но точнее.",
+        "animetimm-caformer-b36": "Современный CAFormer-теггер с высокой общей точностью.",
+        "camie-v2": "Теггер с очень широким охватом тегов."
+      },
+      "gatedHint": "Требуется токен Hugging Face на сервере.",
+      "warmupHint": "Модель ещё не загружена — первый запрос может занять больше времени.",
       "resetToDefault": "Сбросить на умолчание"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "Несколько моделей теггера",
-        "description": "Выбирайте между <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> и <strong>Taggerine</strong> — плюс определение сходства стиля художника Kaloscope."
+        "description": "Выбирайте между моделями <strong>WD SwinV2</strong>, <strong>WD EVA02</strong>, <strong>AnimeTimm</strong> и <strong>Camie</strong> — плюс определение сходства стиля художника Kaloscope."
       },
       "naiReady": {
         "title": "Встраивание NAI Ready",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "Как пользоваться",
       "step1": "Загрузите изображение или перетащите его на холст.",
-      "step2": "Выберите модель теггера (WD EVA 02, PixAI, Camie или Taggerine).",
+      "step2": "Выберите модель теггера — список загружается с бэкенда.",
       "step3": "Настройте пороги уверенности для фильтрации тегов.",
       "step4": "Нажмите <strong>Анализировать</strong>.",
       "step5": "Скопируйте теги или скачайте PNG <strong>NAI Ready</strong>."

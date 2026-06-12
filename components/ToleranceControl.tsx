@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   BlockTitle,
@@ -22,56 +22,66 @@ import {
   Server,
   Link2,
   RotateCcw,
+  Lock,
+  Hourglass,
 } from "lucide-react";
 import {
   TaggingSettings,
   TagCategory,
   BackendConfig,
-  TaggerModel,
+  TaggerModelInfo,
 } from "../types";
 
 interface ToleranceControlProps {
   settings: TaggingSettings;
   backendConfig: BackendConfig;
+  models: TaggerModelInfo[] | null;
   onSettingsChange: (settings: TaggingSettings) => void;
   onBackendChange: (config: BackendConfig) => void;
   disabled?: boolean;
 }
 
-// Family/model names are product names and stay untranslated; descriptions
-// come from i18n via settings.backend.models.<id>
-const TAGGER_MODEL_GROUPS: {
-  family: string;
-  familyKey?: string;
-  models: { id: TaggerModel; label: string }[];
-}[] = [
-  {
-    family: "WD Family",
-    familyKey: "settings.backend.familyWd",
-    models: [
-      { id: "wd", label: "WD EVA 02" },
-      { id: "pixai", label: "PixAI" },
-    ],
-  },
-  {
-    family: "Camie",
-    models: [{ id: "camie", label: "Camie" }],
-  },
-  {
-    family: "Taggerine",
-    models: [{ id: "taggerine", label: "Taggerine" }],
-  },
-];
-
 export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   settings,
   backendConfig,
+  models,
   onSettingsChange,
   onBackendChange,
   disabled,
 }) => {
   const { t } = useTranslation();
   const [isAdvanced, setIsAdvanced] = useState(false);
+
+  // Group the server's model list by family, preserving server order
+  const modelGroups = useMemo(() => {
+    const byFamily = new Map<string, TaggerModelInfo[]>();
+    (models ?? []).forEach((m) => {
+      const list = byFamily.get(m.family) ?? [];
+      list.push(m);
+      byFamily.set(m.family, list);
+    });
+    return [...byFamily.entries()];
+  }, [models]);
+
+  const selectedModel = models?.find(
+    (m) => m.id === backendConfig.taggerModel,
+  );
+
+  const handleModelChange = (id: string) => {
+    onBackendChange({ ...backendConfig, taggerModel: id });
+    // Re-seed the thresholds from the newly selected model's defaults
+    const info = models?.find((m) => m.id === id);
+    if (info) {
+      onSettingsChange({
+        ...settings,
+        thresholds: {
+          ...settings.thresholds,
+          general: info.default_threshold,
+          character: info.default_character_threshold,
+        },
+      });
+    }
+  };
 
   const updateThreshold = (category: TagCategory, value: number) => {
     onSettingsChange({
@@ -182,24 +192,35 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           value={backendConfig.taggerModel}
           disabled={disabled}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            onBackendChange({
-              ...backendConfig,
-              taggerModel: e.target.value as TaggerModel,
-            })
+            handleModelChange(e.target.value)
           }
         >
-          {TAGGER_MODEL_GROUPS.map((group) => (
-            <optgroup
-              key={group.family}
-              label={group.familyKey ? t(group.familyKey) : group.family}
-            >
-              {group.models.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.label} — {t(`settings.backend.models.${m.id}`)}
-                </option>
-              ))}
-            </optgroup>
-          ))}
+          {models ? (
+            modelGroups.map(([family, familyModels]) => (
+              <optgroup
+                key={family}
+                label={t(`settings.backend.families.${family}`, {
+                  defaultValue: family,
+                })}
+              >
+                {familyModels.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.recommended ? "★ " : ""}
+                    {m.label} —{" "}
+                    {t(`settings.backend.models.${m.id}`, {
+                      defaultValue: m.description,
+                    })}
+                    {m.gated ? " 🔒" : ""}
+                  </option>
+                ))}
+              </optgroup>
+            ))
+          ) : (
+            // Model list not loaded (yet); keep the saved selection usable
+            <option value={backendConfig.taggerModel}>
+              {backendConfig.taggerModel}
+            </option>
+          )}
         </ListInput>
         <ListInput
           label={t("settings.backend.baseUrl")}
@@ -214,6 +235,18 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           }
         />
       </List>
+      {selectedModel?.gated && (
+        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+          <Lock className="w-3 h-3 shrink-0" aria-hidden="true" />
+          {t("settings.backend.gatedHint")}
+        </p>
+      )}
+      {selectedModel && !selectedModel.loaded && (
+        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+          <Hourglass className="w-3 h-3 shrink-0" aria-hidden="true" />
+          {t("settings.backend.warmupHint")}
+        </p>
+      )}
       <div className="flex justify-end px-4 pt-1">
         <button
           type="button"

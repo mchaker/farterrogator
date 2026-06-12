@@ -4,7 +4,7 @@
     "subtitle": "Interrogador de Imágenes IA",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Logotipo de Farterrogator",
-    "modelNotice": "Por ahora solo funciona WD EVA 02, todas las demás opciones de modelo redirigen a él...",
+    "modelsNotice": "Novedad: ¡ya hay varios modelos de etiquetado disponibles! Elige uno en los ajustes.",
     "madeBy": "hecho por <mooshieblob>mooshieblob</mooshieblob> y <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "Modelo de etiquetado",
       "baseUrl": "URL de la API",
       "baseUrlHint": "URL del endpoint API, p. ej. https://localtagger.gpu.garden o http://localhost:8000",
-      "familyWd": "Familia WD",
-      "models": {
-        "wd": "Centrado en Danbooru",
-        "pixai": "Optimizado para ilustración",
-        "camie": "Salida especializada",
-        "taggerine": "Cobertura ampliada"
+      "families": {
+        "wd14": "Familia WD",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "Etiquetador WD rápido y equilibrado. Buena opción predeterminada de uso general.",
+        "wd-eva02-large-v3": "Etiquetador WD EVA02 grande. Más lento pero más preciso.",
+        "animetimm-caformer-b36": "Etiquetador CAFormer moderno con gran precisión general.",
+        "camie-v2": "Etiquetador con una cobertura de etiquetas muy amplia."
+      },
+      "gatedHint": "Requiere un token de Hugging Face en el servidor.",
+      "warmupHint": "El modelo aún no está cargado: la primera solicitud puede tardar más.",
       "resetToDefault": "Restablecer predeterminado"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "Varios modelos de etiquetado",
-        "description": "Elige entre <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> y <strong>Taggerine</strong>, además de la similitud de estilo de artista con Kaloscope."
+        "description": "Elige entre los modelos <strong>WD SwinV2</strong>, <strong>WD EVA02</strong>, <strong>AnimeTimm</strong> y <strong>Camie</strong>, además de la similitud de estilo de artista con Kaloscope."
       },
       "naiReady": {
         "title": "Incrustación NAI Ready",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "Cómo usarlo",
       "step1": "Sube una imagen o arrástrala al lienzo.",
-      "step2": "Selecciona un modelo de etiquetado (WD EVA 02, PixAI, Camie o Taggerine).",
+      "step2": "Selecciona un modelo de etiquetado: la lista se carga desde el backend.",
       "step3": "Ajusta los umbrales de confianza para filtrar etiquetas.",
       "step4": "Haz clic en <strong>Interrogar</strong>.",
       "step5": "Copia las etiquetas o descarga un PNG <strong>NAI Ready</strong>."

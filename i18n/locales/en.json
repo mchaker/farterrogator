@@ -4,7 +4,7 @@
     "subtitle": "AI Image Interrogator",
     "copyright": "Farterrogator © {{year}} Fartcore. All rights reserved. Models are not property of Fartcore and are provided free of charge.",
     "logoAlt": "Farterrogator logo",
-    "modelNotice": "Only WD EVA 02 is functional right now, every model option redirects to it...",
+    "modelsNotice": "New: multiple tagger models are now available! Pick one in the settings.",
     "madeBy": "made by <mooshieblob>mooshieblob</mooshieblob> and <ashtaka>ashtaka</ashtaka>"
   },
   "common": {
@@ -75,13 +75,19 @@
       "model": "Tagger Model",
       "baseUrl": "API URL",
       "baseUrlHint": "API endpoint URL, e.g. https://localtagger.gpu.garden or http://localhost:8000",
-      "familyWd": "WD Family",
-      "models": {
-        "wd": "Danbooru-centric",
-        "pixai": "Illustration-optimized",
-        "camie": "Specialized output",
-        "taggerine": "Extended coverage"
+      "families": {
+        "wd14": "WD Family",
+        "animetimm": "AnimeTimm",
+        "camie": "Camie"
       },
+      "models": {
+        "wd-swinv2-v3": "Fast and balanced WD tagger. Good general-purpose default.",
+        "wd-eva02-large-v3": "Large WD EVA02 tagger. Slower but more accurate.",
+        "animetimm-caformer-b36": "Modern CAFormer tagger with strong overall accuracy.",
+        "camie-v2": "Tagger with very broad tag coverage."
+      },
+      "gatedHint": "Requires a Hugging Face token on the server.",
+      "warmupHint": "Model not loaded yet — the first request may take longer.",
       "resetToDefault": "Reset to default"
     },
     "categories": {
@@ -110,7 +116,7 @@
     "features": {
       "models": {
         "title": "Multiple Tagger Models",
-        "description": "Choose between <strong>WD EVA 02</strong>, <strong>PixAI</strong>, <strong>Camie</strong> and <strong>Taggerine</strong> — plus Kaloscope artist style similarity."
+        "description": "Choose between <strong>WD SwinV2</strong>, <strong>WD EVA02</strong>, <strong>AnimeTimm</strong> and <strong>Camie</strong> models — plus Kaloscope artist style similarity."
       },
       "naiReady": {
         "title": "NAI Ready Embedding",
@@ -128,7 +134,7 @@
     "howTo": {
       "title": "How to use",
       "step1": "Upload an image or drag & drop it onto the canvas.",
-      "step2": "Select a tagger model (WD EVA 02, PixAI, Camie, or Taggerine).",
+      "step2": "Select a tagger model — the list is loaded from the backend.",
       "step3": "Adjust confidence thresholds to filter tags.",
       "step4": "Click <strong>Interrogate</strong>.",
       "step5": "Copy tags, or download an <strong>NAI Ready</strong> PNG."

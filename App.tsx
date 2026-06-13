@@ -10,6 +10,7 @@ import {
   generateTags,
   fetchBatchTags,
   fetchAvailableModels,
+  checkHealth,
 } from "./services/taggerService";
 import { fetchArtistMatches } from "./services/kaloscopeService";
 import { loadTagDatabase } from "./services/tagService";
@@ -21,6 +22,7 @@ import {
   BatchResult,
   ArtistMatch,
   TaggerModelInfo,
+  BackendHealth,
   I18nError,
 } from "./types";
 import { useTheme } from "./hooks/useTheme";
@@ -37,9 +39,9 @@ const DEFAULT_BACKEND_CONFIG: BackendConfig = {
 // map them onto the concrete model ids the backend now exposes.
 const LEGACY_MODEL_IDS: Record<string, string> = {
   wd: "wd-eva02-large-v3",
-  pixai: "wd-swinv2-v3",
+  pixai: "pixai-v0.9",
   camie: "camie-v2",
-  taggerine: "wd-swinv2-v3",
+  taggerine: "animetimm-caformer-b36",
 };
 
 const App: React.FC = () => {
@@ -76,6 +78,10 @@ const App: React.FC = () => {
           parsed.whitelist = parsed.triggerPhrase ?? "";
         if (parsed.blacklist === undefined) parsed.blacklist = "";
         delete parsed.triggerPhrase;
+        // Backfill tag-string params added after this config was last saved
+        if (parsed.useEscape === undefined) parsed.useEscape = true;
+        if (parsed.includeRanks === undefined) parsed.includeRanks = false;
+        if (parsed.scoreDescend === undefined) parsed.scoreDescend = true;
         return parsed;
       }
     } catch {
@@ -96,6 +102,9 @@ const App: React.FC = () => {
       blacklist: "",
       randomize: false,
       removeUnderscores: false,
+      useEscape: true,
+      includeRanks: false,
+      scoreDescend: true,
     };
   });
 
@@ -135,6 +144,9 @@ const App: React.FC = () => {
   // null = list unavailable (still loading or fetch failed); the picker then
   // degrades to showing just the currently selected id
   const [models, setModels] = useState<TaggerModelInfo[] | null>(null);
+  // 'unknown' until the first probe resolves; only 'down' (unreachable) gates
+  // the UI, so a backend without a /health route stays fully usable.
+  const [health, setHealth] = useState<BackendHealth>("unknown");
 
   const loadModels = useCallback(async (baseUrl: string) => {
     try {
@@ -147,8 +159,14 @@ const App: React.FC = () => {
   // Debounced: the base URL input fires a change per keystroke
   useEffect(() => {
     const baseUrl = backendConfig.taggerBaseUrl?.trim();
-    if (!baseUrl) return;
-    const id = setTimeout(() => loadModels(baseUrl), 500);
+    if (!baseUrl) {
+      setHealth("unknown");
+      return;
+    }
+    const id = setTimeout(() => {
+      loadModels(baseUrl);
+      checkHealth(baseUrl).then(setHealth);
+    }, 500);
     return () => clearTimeout(id);
   }, [backendConfig.taggerBaseUrl, loadModels]);
 
@@ -272,6 +290,8 @@ const App: React.FC = () => {
       if (err instanceof I18nError && err.params?.status === 404) {
         loadModels(backendConfig.taggerBaseUrl);
       }
+      // Re-probe health so the indicator reflects a backend that just went down
+      checkHealth(backendConfig.taggerBaseUrl).then(setHealth);
     } finally {
       setLoadingState({ tags: false, progress: 100, status: t("status.done") });
     }
@@ -318,7 +338,9 @@ const App: React.FC = () => {
               rounded
               onClick={handleInterrogate}
               disabled={
-                selectedFiles.length === 0 || appState === AppState.ANALYZING
+                selectedFiles.length === 0 ||
+                appState === AppState.ANALYZING ||
+                health === "down"
               }
               className="h-12! sm:h-14! text-base font-semibold gap-2 shadow-md disabled:opacity-40"
             >
@@ -339,6 +361,7 @@ const App: React.FC = () => {
               settings={settings}
               backendConfig={backendConfig}
               models={models}
+              health={health}
               onSettingsChange={setSettings}
               onBackendChange={setBackendConfig}
               disabled={appState === AppState.ANALYZING}

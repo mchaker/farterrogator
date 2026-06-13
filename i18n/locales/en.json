@@ -70,6 +70,9 @@
     "topK": "Top K Tags",
     "randomize": "Randomize Order",
     "removeUnderscores": "Remove Underscores",
+    "scoreDescend": "Sort by Score",
+    "includeRanks": "Append Scores to Tags",
+    "useEscape": "Escape Parentheses",
     "simpleMode": "Simple",
     "advancedThresholds": "Advanced",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "Requires a Hugging Face token on the server.",
       "warmupHint": "Model not loaded yet — the first request may take longer.",
+      "onlineHint": "Backend online.",
+      "offlineHint": "Backend unreachable. Check the API URL or that the server is running.",
       "resetToDefault": "Reset to default"
     },
     "categories": {

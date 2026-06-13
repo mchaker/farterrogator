@@ -1,4 +1,4 @@
-import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, I18nError } from "../types";
+import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, BackendHealth, I18nError } from "../types";
 import { getCategory, loadTagDatabase } from './tagService';
 
 // gpu.garden goes through the CORS proxy (Vite dev proxy / Cloudflare Pages
@@ -40,8 +40,6 @@ function parseTags(data: any): Tag[] {
   const entry = Array.isArray(data) ? data[0] : data;
   const tagsData = entry?.tags;
 
-  if (!tagsData) return tags;
-
   // The response's `character` map is authoritative for character tags;
   // anything else is categorized via the local tag database.
   const characterNames = new Set(Object.keys(entry?.character ?? {}));
@@ -63,7 +61,7 @@ function parseTags(data: any): Tag[] {
         tags.push({ name, score: score > 1.0 ? score / 100 : score, category: categorize(name) });
       }
     });
-  } else if (typeof tagsData === 'object') {
+  } else if (tagsData && typeof tagsData === 'object') {
     Object.entries(tagsData).forEach(([name, score]) => {
       let normalizedScore = Number(score);
       if (normalizedScore > 1.0) normalizedScore /= 100;
@@ -71,8 +69,50 @@ function parseTags(data: any): Tag[] {
     });
   }
 
+  // The `rating` map is a separate content-rating breakdown (general/sensitive/
+  // questionable/explicit). It's authoritative for the rating category and is
+  // an empty {} for models that don't produce ratings (e.g. pixai). The merged
+  // `tags` field never contains these, so add them under the rating category.
+  const ratingData = entry?.rating;
+  if (ratingData && typeof ratingData === 'object') {
+    const existing = new Set(tags.map(tag => tag.name));
+    Object.entries(ratingData).forEach(([name, score]) => {
+      if (existing.has(name)) return;
+      let normalizedScore = Number(score);
+      if (normalizedScore > 1.0) normalizedScore /= 100;
+      tags.push({ name, score: normalizedScore, category: 'rating' });
+    });
+  }
+
   return tags.filter(tag => !(LOW_CONFIDENCE_SKIN_TAGS.has(tag.name) && tag.score < 0.85));
 }
+
+// Tag-string formatting params. These shape `tag_string` and the per-image .txt
+// files in a ZIP export; the single-image view rebuilds its own string so they
+// are mainly visible in batch/ZIP output. Sent explicitly so the UI toggles are
+// authoritative rather than relying on the backend defaults.
+function appendOutputParams(params: URLSearchParams, settings: TaggingSettings): void {
+  params.append('use_escape', String(settings.useEscape));
+  params.append('include_ranks', String(settings.includeRanks));
+  params.append('score_descend', String(settings.scoreDescend));
+}
+
+// Probes GET /health. A 2xx with {"status":"ok"} is `ok`; a 4xx means the server
+// answered but lacks the route (older backend) → `unknown`; anything else,
+// including a thrown fetch, is `down` (unreachable).
+export const checkHealth = async (baseUrl: string): Promise<BackendHealth> => {
+  try {
+    const response = await fetch(resolveApiUrl(baseUrl, '/health'));
+    if (response.ok) {
+      const data = await response.json().catch(() => null);
+      return data?.status && data.status !== 'ok' ? 'down' : 'ok';
+    }
+    if (response.status >= 400 && response.status < 500) return 'unknown';
+    return 'down';
+  } catch {
+    return 'down';
+  }
+};
 
 export const fetchAvailableModels = async (baseUrl: string): Promise<TaggerModelInfo[]> => {
   const response = await fetch(resolveApiUrl(baseUrl, '/models'));
@@ -98,6 +138,7 @@ export const fetchTags = async (
   if (settings) {
     queryParams.append('threshold', settings.thresholds.general.toString());
     queryParams.append('character_threshold', settings.thresholds.character.toString());
+    appendOutputParams(queryParams, settings);
   } else {
     queryParams.append('threshold', '0.35');
     queryParams.append('character_threshold', '0.85');
@@ -141,6 +182,7 @@ export const fetchBatchTags = async (
     if (settings.removeUnderscores) queryParams.append('use_spaces', 'true');
     queryParams.append('threshold', settings.thresholds.general.toString());
     queryParams.append('character_threshold', settings.thresholds.character.toString());
+    appendOutputParams(queryParams, settings);
   } else {
     queryParams.append('threshold', '0.35');
     queryParams.append('character_threshold', '0.85');

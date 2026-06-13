@@ -47,7 +47,16 @@ export interface TaggingSettings {
   blacklist: string;
   randomize: boolean;
   removeUnderscores: boolean;
+  // Passed straight through to the backend's /interrogate query params.
+  useEscape: boolean; // escape () in tag names (default true)
+  includeRanks: boolean; // append (tag:score) to tag_string (default false)
+  scoreDescend: boolean; // sort tags by score descending (default true)
 }
+
+// Result of the GET /health probe. `unknown` means the server answered but has
+// no /health route (an older backend) — distinct from `down` (unreachable), so
+// the UI can degrade gracefully instead of locking up old deployments.
+export type BackendHealth = 'ok' | 'down' | 'unknown';
 
 export enum AppState {
   IDLE = 'IDLE',

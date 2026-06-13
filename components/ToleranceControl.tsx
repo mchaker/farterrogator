@@ -24,18 +24,25 @@ import {
   RotateCcw,
   Lock,
   Hourglass,
+  Wifi,
+  WifiOff,
+  Parentheses,
+  Hash,
+  ArrowDownWideNarrow,
 } from "lucide-react";
 import {
   TaggingSettings,
   TagCategory,
   BackendConfig,
   TaggerModelInfo,
+  BackendHealth,
 } from "../types";
 
 interface ToleranceControlProps {
   settings: TaggingSettings;
   backendConfig: BackendConfig;
   models: TaggerModelInfo[] | null;
+  health: BackendHealth;
   onSettingsChange: (settings: TaggingSettings) => void;
   onBackendChange: (config: BackendConfig) => void;
   disabled?: boolean;
@@ -45,6 +52,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   settings,
   backendConfig,
   models,
+  health,
   onSettingsChange,
   onBackendChange,
   disabled,
@@ -235,6 +243,18 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           }
         />
       </List>
+      {health === "down" && (
+        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-rose-600 dark:text-rose-400">
+          <WifiOff className="w-3 h-3 shrink-0" aria-hidden="true" />
+          {t("settings.backend.offlineHint")}
+        </p>
+      )}
+      {health === "ok" && (
+        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-green-600 dark:text-green-400">
+          <Wifi className="w-3 h-3 shrink-0" aria-hidden="true" />
+          {t("settings.backend.onlineHint")}
+        </p>
+      )}
       {selectedModel?.gated && (
         <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
           <Lock className="w-3 h-3 shrink-0" aria-hidden="true" />
@@ -353,6 +373,72 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
                 onSettingsChange({
                   ...settings,
                   removeUnderscores: !settings.removeUnderscores,
+                })
+              }
+            />
+          }
+        />
+        <ListItem
+          label
+          title={t("settings.scoreDescend")}
+          media={
+            <ArrowDownWideNarrow
+              className={`w-5 h-5 ${settings.scoreDescend ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
+              aria-hidden="true"
+            />
+          }
+          after={
+            <Toggle
+              checked={settings.scoreDescend}
+              disabled={disabled}
+              onChange={() =>
+                onSettingsChange({
+                  ...settings,
+                  scoreDescend: !settings.scoreDescend,
+                })
+              }
+            />
+          }
+        />
+        <ListItem
+          label
+          title={t("settings.includeRanks")}
+          media={
+            <Hash
+              className={`w-5 h-5 ${settings.includeRanks ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
+              aria-hidden="true"
+            />
+          }
+          after={
+            <Toggle
+              checked={settings.includeRanks}
+              disabled={disabled}
+              onChange={() =>
+                onSettingsChange({
+                  ...settings,
+                  includeRanks: !settings.includeRanks,
+                })
+              }
+            />
+          }
+        />
+        <ListItem
+          label
+          title={t("settings.useEscape")}
+          media={
+            <Parentheses
+              className={`w-5 h-5 ${settings.useEscape ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
+              aria-hidden="true"
+            />
+          }
+          after={
+            <Toggle
+              checked={settings.useEscape}
+              disabled={disabled}
+              onChange={() =>
+                onSettingsChange({
+                  ...settings,
+                  useEscape: !settings.useEscape,
                 })
               }
             />

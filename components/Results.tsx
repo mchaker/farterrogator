@@ -388,7 +388,7 @@ export const Results: React.FC<ResultsProps> = ({
         {/* Raw tag string */}
         {!loadingState.tags && processedTags.length > 0 && (
           <div className="px-3 py-2.5 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-2xl transition-colors duration-300">
-            <p className="text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant font-mono wrap-break-word opacity-80 select-all leading-relaxed">
+            <p className="text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant font-mono wrap-break-word opacity-80 leading-relaxed">
               {tagString}
             </p>
           </div>

@@ -70,6 +70,9 @@
     "topK": "前 K 个标签",
     "randomize": "随机排序",
     "removeUnderscores": "移除下划线",
+    "scoreDescend": "按分数排序",
+    "includeRanks": "在标签后附加分数",
+    "useEscape": "转义括号",
     "simpleMode": "简单",
     "advancedThresholds": "高级",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "需要服务器端配置 Hugging Face 令牌。",
       "warmupHint": "模型尚未加载——首次请求可能需要更长时间。",
+      "onlineHint": "后端在线。",
+      "offlineHint": "无法连接后端。请检查 API URL 或服务器是否在运行。",
       "resetToDefault": "重置为默认"
     },
     "categories": {

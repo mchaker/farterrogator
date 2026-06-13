@@ -70,6 +70,9 @@
     "topK": "Top K tags",
     "randomize": "Ordre aléatoire",
     "removeUnderscores": "Supprimer les underscores",
+    "scoreDescend": "Trier par score",
+    "includeRanks": "Ajouter les scores aux tags",
+    "useEscape": "Échapper les parenthèses",
     "simpleMode": "Simple",
     "advancedThresholds": "Avancé",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "Nécessite un jeton Hugging Face côté serveur.",
       "warmupHint": "Modèle pas encore chargé — la première requête peut prendre plus de temps.",
+      "onlineHint": "Backend en ligne.",
+      "offlineHint": "Backend injoignable. Vérifiez l'URL de l'API ou que le serveur est démarré.",
       "resetToDefault": "Réinitialiser par défaut"
     },
     "categories": {

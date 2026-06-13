@@ -70,6 +70,9 @@
     "topK": "Топ-K тегов",
     "randomize": "Случайный порядок",
     "removeUnderscores": "Убрать подчёркивания",
+    "scoreDescend": "Сортировать по оценке",
+    "includeRanks": "Добавлять оценки к тегам",
+    "useEscape": "Экранировать скобки",
     "simpleMode": "Простой",
     "advancedThresholds": "Расширенный",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "Требуется токен Hugging Face на сервере.",
       "warmupHint": "Модель ещё не загружена — первый запрос может занять больше времени.",
+      "onlineHint": "Бэкенд в сети.",
+      "offlineHint": "Бэкенд недоступен. Проверьте URL API или работает ли сервер.",
       "resetToDefault": "Сбросить на умолчание"
     },
     "categories": {

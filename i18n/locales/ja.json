@@ -70,6 +70,9 @@
     "topK": "上位Kタグ",
     "randomize": "順序をランダム化",
     "removeUnderscores": "アンダースコアを削除",
+    "scoreDescend": "スコア順に並べ替え",
+    "includeRanks": "タグにスコアを付加",
+    "useEscape": "括弧をエスケープ",
     "simpleMode": "シンプル",
     "advancedThresholds": "詳細",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "サーバー側に Hugging Face トークンが必要です。",
       "warmupHint": "モデルはまだ読み込まれていません。最初のリクエストには時間がかかる場合があります。",
+      "onlineHint": "バックエンドはオンラインです。",
+      "offlineHint": "バックエンドに接続できません。API URL を確認するか、サーバーが起動しているか確認してください。",
       "resetToDefault": "デフォルトにリセット"
     },
     "categories": {

@@ -70,6 +70,9 @@
     "topK": "Top K tag",
     "randomize": "Ordine casuale",
     "removeUnderscores": "Rimuovi underscore",
+    "scoreDescend": "Ordina per punteggio",
+    "includeRanks": "Aggiungi punteggi ai tag",
+    "useEscape": "Esegui escape delle parentesi",
     "simpleMode": "Semplice",
     "advancedThresholds": "Avanzato",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "Richiede un token Hugging Face sul server.",
       "warmupHint": "Modello non ancora caricato: la prima richiesta potrebbe richiedere più tempo.",
+      "onlineHint": "Backend online.",
+      "offlineHint": "Backend non raggiungibile. Controlla l'URL dell'API o che il server sia in esecuzione.",
       "resetToDefault": "Ripristina predefinito"
     },
     "categories": {

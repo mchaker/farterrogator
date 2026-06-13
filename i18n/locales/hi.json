@@ -70,6 +70,9 @@
     "topK": "शीर्ष K टैग",
     "randomize": "क्रम यादृच्छिक करें",
     "removeUnderscores": "अंडरस्कोर हटाएँ",
+    "scoreDescend": "स्कोर के अनुसार क्रमबद्ध करें",
+    "includeRanks": "टैग में स्कोर जोड़ें",
+    "useEscape": "कोष्ठक एस्केप करें",
     "simpleMode": "सरल",
     "advancedThresholds": "उन्नत",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "सर्वर पर Hugging Face टोकन आवश्यक है।",
       "warmupHint": "मॉडल अभी लोड नहीं हुआ है — पहली रिक्वेस्ट में अधिक समय लग सकता है।",
+      "onlineHint": "बैकएंड ऑनलाइन है।",
+      "offlineHint": "बैकएंड तक नहीं पहुँचा जा सका। API URL जाँचें या सुनिश्चित करें कि सर्वर चल रहा है।",
       "resetToDefault": "डिफ़ॉल्ट पर रीसेट करें"
     },
     "categories": {

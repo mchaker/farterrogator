@@ -70,6 +70,9 @@
     "topK": "前 K 個標籤",
     "randomize": "隨機排序",
     "removeUnderscores": "移除底線",
+    "scoreDescend": "依分數排序",
+    "includeRanks": "在標籤後附加分數",
+    "useEscape": "跳脫括號",
     "simpleMode": "簡單",
     "advancedThresholds": "進階",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "需要伺服器端設定 Hugging Face 權杖。",
       "warmupHint": "模型尚未載入——首次請求可能需要更長時間。",
+      "onlineHint": "後端在線。",
+      "offlineHint": "無法連線後端。請檢查 API URL 或伺服器是否正在執行。",
       "resetToDefault": "重設為預設"
     },
     "categories": {

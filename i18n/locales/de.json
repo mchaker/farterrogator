@@ -70,6 +70,9 @@
     "topK": "Top-K-Tags",
     "randomize": "Zufällige Reihenfolge",
     "removeUnderscores": "Unterstriche entfernen",
+    "scoreDescend": "Nach Bewertung sortieren",
+    "includeRanks": "Werte an Tags anhängen",
+    "useEscape": "Klammern maskieren",
     "simpleMode": "Einfach",
     "advancedThresholds": "Erweitert",
     "backend": {
@@ -89,6 +92,8 @@
       },
       "gatedHint": "Erfordert ein Hugging-Face-Token auf dem Server.",
       "warmupHint": "Modell noch nicht geladen — die erste Anfrage kann länger dauern.",
+      "onlineHint": "Backend online.",
+      "offlineHint": "Backend nicht erreichbar. Überprüfe die API-URL oder ob der Server läuft.",
       "resetToDefault": "Auf Standard zurücksetzen"
     },
     "categories": {

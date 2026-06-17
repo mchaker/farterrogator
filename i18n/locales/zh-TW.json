@@ -40,8 +40,6 @@
     "analyzing": "分析中...",
     "technicalTags": "標籤",
     "noTags": "在目前閾值下未找到標籤。",
-    "randomized": "隨機順序",
-    "noUnderscores": "無底線",
     "copyAll": "全部複製",
     "copied": "已複製!",
     "copiedItem": "已複製: {{item}}",

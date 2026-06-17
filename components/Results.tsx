@@ -259,18 +259,6 @@ export const Results: React.FC<ResultsProps> = ({
             </span>
           </h3>
           <div className="flex gap-2 items-center">
-            <div className="flex gap-1">
-              {settings.randomize && (
-                <span className="px-2 py-0.5 rounded-full bg-md-light-secondary-container dark:bg-md-dark-secondary-container text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container text-2xs font-medium">
-                  {t("results.randomized")}
-                </span>
-              )}
-              {settings.removeUnderscores && (
-                <span className="px-2 py-0.5 rounded-full bg-md-light-secondary-container dark:bg-md-dark-secondary-container text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container text-2xs font-medium">
-                  {t("results.noUnderscores")}
-                </span>
-              )}
-            </div>
             <Button
               small
               rounded

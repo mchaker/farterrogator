@@ -40,8 +40,6 @@
     "analyzing": "Анализ...",
     "technicalTags": "Теги",
     "noTags": "При текущем пороге теги не найдены.",
-    "randomized": "Случайный порядок",
-    "noUnderscores": "Без подчёркиваний",
     "copyAll": "Копировать всё",
     "copied": "Скопировано!",
     "copiedItem": "Скопировано: {{item}}",

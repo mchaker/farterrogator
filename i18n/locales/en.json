@@ -40,8 +40,6 @@
     "analyzing": "Analyzing...",
     "technicalTags": "Tags",
     "noTags": "No tags found at current threshold.",
-    "randomized": "Randomized",
-    "noUnderscores": "No Underscores",
     "copyAll": "Copy All",
     "copied": "Copied!",
     "copiedItem": "Copied: {{item}}",

@@ -40,8 +40,6 @@
     "analyzing": "Analizando...",
     "technicalTags": "Etiquetas",
     "noTags": "No se encontraron etiquetas con el umbral actual.",
-    "randomized": "Aleatorio",
-    "noUnderscores": "Sin guiones bajos",
     "copyAll": "Copiar todo",
     "copied": "¡Copiado!",
     "copiedItem": "Copiado: {{item}}",

@@ -40,8 +40,6 @@
     "analyzing": "विश्लेषण हो रहा है...",
     "technicalTags": "टैग",
     "noTags": "वर्तमान थ्रेशोल्ड पर कोई टैग नहीं मिला।",
-    "randomized": "यादृच्छिक",
-    "noUnderscores": "बिना अंडरस्कोर",
     "copyAll": "सभी कॉपी करें",
     "copied": "कॉपी हो गया!",
     "copiedItem": "कॉपी किया गया: {{item}}",

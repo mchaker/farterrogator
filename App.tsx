@@ -46,7 +46,7 @@ const LEGACY_MODEL_IDS: Record<string, string> = {
 
 const App: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const [toastOpened, setToastOpened] = useState(true);
+  const [toastOpened, setToastOpened] = useState(false);
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [result, setResult] = useState<InterrogationResult | null>(null);
@@ -252,7 +252,11 @@ const App: React.FC = () => {
           settings,
           i18n.language,
           (statusKey, progress) => {
-            setLoadingState((prev) => ({ ...prev, status: t(statusKey), progress }));
+            setLoadingState((prev) => ({
+              ...prev,
+              status: t(statusKey),
+              progress,
+            }));
           },
         );
         setResult(res);

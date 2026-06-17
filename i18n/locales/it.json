@@ -40,8 +40,6 @@
     "analyzing": "Analisi in corso...",
     "technicalTags": "Tag",
     "noTags": "Nessun tag trovato con la soglia attuale.",
-    "randomized": "Casuale",
-    "noUnderscores": "Senza underscore",
     "copyAll": "Copia tutto",
     "copied": "Copiato!",
     "copiedItem": "Copiato: {{item}}",

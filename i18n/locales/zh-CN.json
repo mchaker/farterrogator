@@ -40,8 +40,6 @@
     "analyzing": "分析中...",
     "technicalTags": "标签",
     "noTags": "在当前阈值下未找到标签。",
-    "randomized": "随机顺序",
-    "noUnderscores": "无下划线",
     "copyAll": "全部复制",
     "copied": "已复制!",
     "copiedItem": "已复制: {{item}}",

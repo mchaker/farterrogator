@@ -40,8 +40,6 @@
     "analyzing": "解析中...",
     "technicalTags": "タグ",
     "noTags": "現在のしきい値ではタグが見つかりませんでした。",
-    "randomized": "ランダム",
-    "noUnderscores": "アンダースコアなし",
     "copyAll": "すべてコピー",
     "copied": "コピーしました!",
     "copiedItem": "コピー: {{item}}",

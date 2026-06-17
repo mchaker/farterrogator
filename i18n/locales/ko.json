@@ -40,8 +40,6 @@
     "analyzing": "분석 중...",
     "technicalTags": "태그",
     "noTags": "현재 임계값에서 태그를 찾을 수 없습니다.",
-    "randomized": "무작위",
-    "noUnderscores": "밑줄 없음",
     "copyAll": "모두 복사",
     "copied": "복사됨!",
     "copiedItem": "복사됨: {{item}}",

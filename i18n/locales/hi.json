@@ -73,7 +73,6 @@
     "scoreDescend": "स्कोर के अनुसार क्रमबद्ध करें",
     "includeRanks": "टैग में स्कोर जोड़ें",
     "useEscape": "कोष्ठक एस्केप करें",
-    "simpleMode": "सरल",
     "advancedThresholds": "उन्नत",
     "backend": {
       "model": "टैगर मॉडल",

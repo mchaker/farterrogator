@@ -73,7 +73,6 @@
     "scoreDescend": "Trier par score",
     "includeRanks": "Ajouter les scores aux tags",
     "useEscape": "Échapper les parenthèses",
-    "simpleMode": "Simple",
     "advancedThresholds": "Avancé",
     "backend": {
       "model": "Modèle de tagging",

@@ -7,8 +7,6 @@ import {
   ListInput,
   Toggle,
   Range,
-  Segmented,
-  SegmentedButton,
 } from "konsta/react";
 import {
   Shuffle,
@@ -71,9 +69,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
     return [...byFamily.entries()];
   }, [models]);
 
-  const selectedModel = models?.find(
-    (m) => m.id === backendConfig.taggerModel,
-  );
+  const selectedModel = models?.find((m) => m.id === backendConfig.taggerModel);
 
   const handleModelChange = (id: string) => {
     onBackendChange({ ...backendConfig, taggerModel: id });
@@ -450,23 +446,24 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
       <BlockTitle className="mt-6! mb-2!">
         {t("settings.thresholds")}
       </BlockTitle>
-      <div className="px-4 pb-2">
-        <Segmented strong rounded>
-          <SegmentedButton
-            active={!isAdvanced}
-            onClick={() => setIsAdvanced(false)}
-          >
-            {t("settings.simpleMode")}
-          </SegmentedButton>
-          <SegmentedButton
-            active={isAdvanced}
-            onClick={() => setIsAdvanced(true)}
-          >
-            {t("settings.advancedThresholds")}
-          </SegmentedButton>
-        </Segmented>
-      </div>
       <List strong inset className="my-0!">
+        <ListItem
+          label
+          title={t("settings.advancedThresholds")}
+          media={
+            <Layers
+              className={`w-5 h-5 ${isAdvanced ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
+              aria-hidden="true"
+            />
+          }
+          after={
+            <Toggle
+              checked={isAdvanced}
+              disabled={disabled}
+              onChange={() => setIsAdvanced(!isAdvanced)}
+            />
+          }
+        />
         {!isAdvanced ? (
           <ListItem
             innerChildren={sliderRow(

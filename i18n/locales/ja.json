@@ -73,7 +73,6 @@
     "scoreDescend": "スコア順に並べ替え",
     "includeRanks": "タグにスコアを付加",
     "useEscape": "括弧をエスケープ",
-    "simpleMode": "シンプル",
     "advancedThresholds": "詳細",
     "backend": {
       "model": "タガーモデル",

@@ -73,7 +73,6 @@
     "scoreDescend": "Сортировать по оценке",
     "includeRanks": "Добавлять оценки к тегам",
     "useEscape": "Экранировать скобки",
-    "simpleMode": "Простой",
     "advancedThresholds": "Расширенный",
     "backend": {
       "model": "Модель теггера",

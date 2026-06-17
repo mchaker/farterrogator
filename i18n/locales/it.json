@@ -73,7 +73,6 @@
     "scoreDescend": "Ordina per punteggio",
     "includeRanks": "Aggiungi punteggi ai tag",
     "useEscape": "Esegui escape delle parentesi",
-    "simpleMode": "Semplice",
     "advancedThresholds": "Avanzato",
     "backend": {
       "model": "Modello di tagging",

@@ -73,7 +73,6 @@
     "scoreDescend": "Ordenar por puntuación",
     "includeRanks": "Añadir puntuaciones a las etiquetas",
     "useEscape": "Escapar paréntesis",
-    "simpleMode": "Simple",
     "advancedThresholds": "Avanzado",
     "backend": {
       "model": "Modelo de etiquetado",

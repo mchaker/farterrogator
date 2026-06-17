@@ -73,7 +73,6 @@
     "scoreDescend": "Ordenar por pontuação",
     "includeRanks": "Anexar pontuações às tags",
     "useEscape": "Escapar parênteses",
-    "simpleMode": "Simples",
     "advancedThresholds": "Avançado",
     "backend": {
       "model": "Modelo de tagging",

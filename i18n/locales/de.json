@@ -73,7 +73,6 @@
     "scoreDescend": "Nach Bewertung sortieren",
     "includeRanks": "Werte an Tags anhängen",
     "useEscape": "Klammern maskieren",
-    "simpleMode": "Einfach",
     "advancedThresholds": "Erweitert",
     "backend": {
       "model": "Tagger-Modell",

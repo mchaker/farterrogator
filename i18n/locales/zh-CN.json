@@ -73,7 +73,6 @@
     "scoreDescend": "按分数排序",
     "includeRanks": "在标签后附加分数",
     "useEscape": "转义括号",
-    "simpleMode": "简单",
     "advancedThresholds": "高级",
     "backend": {
       "model": "标注模型",

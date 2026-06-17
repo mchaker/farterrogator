@@ -73,7 +73,6 @@
     "scoreDescend": "Sort by Score",
     "includeRanks": "Append Scores to Tags",
     "useEscape": "Escape Parentheses",
-    "simpleMode": "Simple",
     "advancedThresholds": "Advanced",
     "backend": {
       "model": "Tagger Model",

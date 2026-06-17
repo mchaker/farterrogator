@@ -4,7 +4,7 @@ import { App as KonstaApp, Page, Button, Preloader, Toast } from "konsta/react";
 import { AlertCircle, Wand2, Sparkles } from "lucide-react";
 import { Header } from "./components/Header";
 import { ImageUpload } from "./components/ImageUpload";
-import { ToleranceControl } from "./components/ToleranceControl";
+import { ToleranceControl, ModelSettings } from "./components/ToleranceControl";
 import { Results } from "./components/Results";
 import {
   generateTags,
@@ -319,9 +319,9 @@ const App: React.FC = () => {
       <Page className="flex flex-col min-h-screen">
         <Header theme={theme} setTheme={setTheme} />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 lg:p-8 gap-4 sm:gap-6 lg:gap-8 flex flex-col lg:flex-row lg:items-start pb-4">
-          {/* Left Column: Input */}
-          <div className="w-full lg:w-[380px] xl:w-[440px] flex flex-col gap-4 sm:gap-6 shrink-0">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 lg:p-8 gap-4 sm:gap-6 lg:gap-8 flex flex-col lg:grid lg:grid-cols-[380px_1fr] xl:grid-cols-[440px_1fr] lg:items-start pb-4">
+          {/* Input Panel */}
+          <div className="w-full flex flex-col gap-4 sm:gap-6 shrink-0 order-1 lg:col-start-1 lg:row-start-1">
             <div className="space-y-2">
               <h2 className="text-base sm:text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface px-1">
                 {t("upload.inputImage")}
@@ -356,8 +356,11 @@ const App: React.FC = () => {
                 </>
               )}
             </Button>
+          </div>
 
-            <ToleranceControl
+          {/* Model Settings Panel */}
+          <div className="w-full order-2 lg:col-start-1 lg:row-start-2">
+            <ModelSettings
               settings={settings}
               backendConfig={backendConfig}
               models={models}
@@ -368,8 +371,8 @@ const App: React.FC = () => {
             />
           </div>
 
-          {/* Right Column: Output */}
-          <div className="flex-1 flex flex-col min-h-[360px] sm:min-h-[480px] lg:h-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {/* Analysis Results Panel */}
+          <div className="w-full flex-1 flex flex-col min-h-[360px] sm:min-h-[480px] lg:h-auto animate-in fade-in slide-in-from-bottom-4 duration-500 order-3 lg:col-start-2 lg:row-start-1 lg:row-span-3">
             <div className="flex items-center gap-3 mb-2 px-1">
               <h2 className="text-base sm:text-lg font-semibold text-md-light-on-surface dark:text-md-dark-on-surface">
                 {t("results.title")}
@@ -453,6 +456,15 @@ const App: React.FC = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Other Settings Panel */}
+          <div className="w-full order-4 lg:col-start-1 lg:row-start-3">
+            <ToleranceControl
+              settings={settings}
+              onSettingsChange={setSettings}
+              disabled={appState === AppState.ANALYZING}
+            />
           </div>
         </main>
 

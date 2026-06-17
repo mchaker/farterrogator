@@ -36,7 +36,7 @@ import {
   BackendHealth,
 } from "../types";
 
-interface ToleranceControlProps {
+interface ModelSettingsProps {
   settings: TaggingSettings;
   backendConfig: BackendConfig;
   models: TaggerModelInfo[] | null;
@@ -46,7 +46,7 @@ interface ToleranceControlProps {
   disabled?: boolean;
 }
 
-export const ToleranceControl: React.FC<ToleranceControlProps> = ({
+export const ModelSettings: React.FC<ModelSettingsProps> = ({
   settings,
   backendConfig,
   models,
@@ -56,7 +56,6 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   disabled,
 }) => {
   const { t } = useTranslation();
-  const [isAdvanced, setIsAdvanced] = useState(false);
 
   // Group the server's model list by family, preserving server order
   const modelGroups = useMemo(() => {
@@ -86,100 +85,6 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
       });
     }
   };
-
-  const updateThreshold = (category: TagCategory, value: number) => {
-    onSettingsChange({
-      ...settings,
-      thresholds: { ...settings.thresholds, [category]: value },
-    });
-  };
-
-  const updateOverallThreshold = (value: number) => {
-    onSettingsChange({
-      ...settings,
-      thresholds: {
-        general: value,
-        character: value,
-        copyright: value,
-        artist: value,
-        meta: value,
-        rating: 0.8,
-      },
-    });
-  };
-
-  const categories: {
-    id: TagCategory;
-    label: string;
-    icon: React.ReactNode;
-    color: string;
-  }[] = [
-    {
-      id: "copyright",
-      label: t("settings.categories.copyright"),
-      icon: <Globe className="w-4 h-4" aria-hidden="true" />,
-      color: "text-purple-600 dark:text-purple-400",
-    },
-    {
-      id: "character",
-      label: t("settings.categories.character"),
-      icon: <User className="w-4 h-4" aria-hidden="true" />,
-      color: "text-green-600 dark:text-green-400",
-    },
-    {
-      id: "artist",
-      label: t("settings.categories.artist"),
-      icon: <Palette className="w-4 h-4" aria-hidden="true" />,
-      color: "text-amber-600 dark:text-amber-400",
-    },
-    {
-      id: "general",
-      label: t("settings.categories.general"),
-      icon: <Layers className="w-4 h-4" aria-hidden="true" />,
-      color: "text-blue-600 dark:text-blue-400",
-    },
-    {
-      id: "meta",
-      label: t("settings.categories.meta"),
-      icon: <Cpu className="w-4 h-4" aria-hidden="true" />,
-      color: "text-slate-600 dark:text-slate-400",
-    },
-    {
-      id: "rating",
-      label: t("settings.categories.rating"),
-      icon: <Shield className="w-4 h-4" aria-hidden="true" />,
-      color: "text-rose-600 dark:text-rose-400",
-    },
-  ];
-
-  const sliderRow = (
-    label: React.ReactNode,
-    value: number,
-    display: string,
-    onInput: (v: number) => void,
-    min: number,
-    max: number,
-    step: number,
-  ) => (
-    <div className="flex w-full flex-col gap-1">
-      <div className="flex items-center justify-between text-sm">
-        {label}
-        <span className="font-mono text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-          {display}
-        </span>
-      </div>
-      <Range
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        disabled={disabled}
-        onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-          onInput(parseFloat(e.target.value))
-        }
-      />
-    </div>
-  );
 
   return (
     <div>
@@ -282,9 +187,122 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           {t("settings.backend.resetToDefault")}
         </button>
       </div>
+    </div>
+  );
+};
 
+interface ToleranceControlProps {
+  settings: TaggingSettings;
+  onSettingsChange: (settings: TaggingSettings) => void;
+  disabled?: boolean;
+}
+
+export const ToleranceControl: React.FC<ToleranceControlProps> = ({
+  settings,
+  onSettingsChange,
+  disabled,
+}) => {
+  const { t } = useTranslation();
+  const [isAdvanced, setIsAdvanced] = useState(false);
+
+  const updateThreshold = (category: TagCategory, value: number) => {
+    onSettingsChange({
+      ...settings,
+      thresholds: { ...settings.thresholds, [category]: value },
+    });
+  };
+
+  const updateOverallThreshold = (value: number) => {
+    onSettingsChange({
+      ...settings,
+      thresholds: {
+        general: value,
+        character: value,
+        copyright: value,
+        artist: value,
+        meta: value,
+        rating: 0.8,
+      },
+    });
+  };
+
+  const categories: {
+    id: TagCategory;
+    label: string;
+    icon: React.ReactNode;
+    color: string;
+  }[] = [
+    {
+      id: "copyright",
+      label: t("settings.categories.copyright"),
+      icon: <Globe className="w-4 h-4" aria-hidden="true" />,
+      color: "text-purple-600 dark:text-purple-400",
+    },
+    {
+      id: "character",
+      label: t("settings.categories.character"),
+      icon: <User className="w-4 h-4" aria-hidden="true" />,
+      color: "text-green-600 dark:text-green-400",
+    },
+    {
+      id: "artist",
+      label: t("settings.categories.artist"),
+      icon: <Palette className="w-4 h-4" aria-hidden="true" />,
+      color: "text-amber-600 dark:text-amber-400",
+    },
+    {
+      id: "general",
+      label: t("settings.categories.general"),
+      icon: <Layers className="w-4 h-4" aria-hidden="true" />,
+      color: "text-blue-600 dark:text-blue-400",
+    },
+    {
+      id: "meta",
+      label: t("settings.categories.meta"),
+      icon: <Cpu className="w-4 h-4" aria-hidden="true" />,
+      color: "text-slate-600 dark:text-slate-400",
+    },
+    {
+      id: "rating",
+      label: t("settings.categories.rating"),
+      icon: <Shield className="w-4 h-4" aria-hidden="true" />,
+      color: "text-rose-600 dark:text-rose-400",
+    },
+  ];
+
+  const sliderRow = (
+    label: React.ReactNode,
+    value: number,
+    display: string,
+    onInput: (v: number) => void,
+    min: number,
+    max: number,
+    step: number,
+  ) => (
+    <div className="flex w-full flex-col gap-1">
+      <div className="flex items-center justify-between text-sm">
+        {label}
+        <span className="font-mono text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+          {display}
+        </span>
+      </div>
+      <Range
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        disabled={disabled}
+        onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onInput(parseFloat(e.target.value))
+        }
+      />
+    </div>
+  );
+
+  return (
+    <div>
       {/* Output */}
-      <BlockTitle className="mt-6! mb-2!">
+      <BlockTitle className="mt-0! mb-2!">
         {t("settings.outputSettings")}
       </BlockTitle>
       <List strong inset className="my-0!">

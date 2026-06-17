@@ -84,12 +84,7 @@
         "animetimm": "AnimeTimm",
         "camie": "Camie"
       },
-      "models": {
-        "wd-swinv2-v3": "高速でバランスの取れた WD タガー。汎用的なデフォルトに最適。",
-        "wd-eva02-large-v3": "大型の WD EVA02 タガー。低速ですがより高精度。",
-        "animetimm-caformer-b36": "全体的に高い精度を持つモダンな CAFormer タガー。",
-        "camie-v2": "非常に幅広いタグをカバーするタガー。"
-      },
+      "models": {},
       "gatedHint": "サーバー側に Hugging Face トークンが必要です。",
       "warmupHint": "モデルはまだ読み込まれていません。最初のリクエストには時間がかかる場合があります。",
       "onlineHint": "バックエンドはオンラインです。",

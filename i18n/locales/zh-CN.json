@@ -84,12 +84,7 @@
         "animetimm": "AnimeTimm",
         "camie": "Camie"
       },
-      "models": {
-        "wd-swinv2-v3": "快速且均衡的 WD 标注器，适合作为通用默认选择。",
-        "wd-eva02-large-v3": "大型 WD EVA02 标注器，速度较慢但更准确。",
-        "animetimm-caformer-b36": "现代 CAFormer 标注器，整体准确率较高。",
-        "camie-v2": "标签覆盖范围非常广的标注器。"
-      },
+      "models": {},
       "gatedHint": "需要服务器端配置 Hugging Face 令牌。",
       "warmupHint": "模型尚未加载——首次请求可能需要更长时间。",
       "onlineHint": "后端在线。",

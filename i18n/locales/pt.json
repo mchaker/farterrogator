@@ -84,12 +84,7 @@
         "animetimm": "AnimeTimm",
         "camie": "Camie"
       },
-      "models": {
-        "wd-swinv2-v3": "Tagger WD rápido e equilibrado. Boa opção padrão de uso geral.",
-        "wd-eva02-large-v3": "Tagger WD EVA02 grande. Mais lento, porém mais preciso.",
-        "animetimm-caformer-b36": "Tagger CAFormer moderno com alta precisão geral.",
-        "camie-v2": "Tagger com cobertura de tags muito ampla."
-      },
+      "models": {},
       "gatedHint": "Requer um token do Hugging Face no servidor.",
       "warmupHint": "Modelo ainda não carregado — a primeira solicitação pode demorar mais.",
       "onlineHint": "Backend online.",

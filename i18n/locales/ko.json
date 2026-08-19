@@ -77,9 +77,9 @@
       "baseUrl": "API URL",
       "baseUrlHint": "API 엔드포인트 URL, 예: https://localtagger.gpu.garden 또는 http://localhost:8000",
       "families": {
-        "wd14": "WD 계열",
-        "animetimm": "AnimeTimm",
-        "camie": "Camie"
+        "wdtagger": "WD 계열",
+        "animetimm": "Animetimm dbv4",
+        "camie": "Camie v2"
       },
       "models": {},
       "gatedHint": "서버에 Hugging Face 토큰이 필요합니다.",

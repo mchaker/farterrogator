@@ -77,9 +77,9 @@
       "baseUrl": "URL API",
       "baseUrlHint": "URL endpoint API, es. https://localtagger.gpu.garden o http://localhost:8000",
       "families": {
-        "wd14": "Famiglia WD",
-        "animetimm": "AnimeTimm",
-        "camie": "Camie"
+        "wdtagger": "Famiglia WD",
+        "animetimm": "Animetimm dbv4",
+        "camie": "Camie v2"
       },
       "models": {},
       "gatedHint": "Richiede un token Hugging Face sul server.",

@@ -77,9 +77,9 @@
       "baseUrl": "API 地址",
       "baseUrlHint": "API 端点地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
       "families": {
-        "wd14": "WD 系列",
-        "animetimm": "AnimeTimm",
-        "camie": "Camie"
+        "wdtagger": "WD 系列",
+        "animetimm": "Animetimm dbv4",
+        "camie": "Camie v2"
       },
       "models": {},
       "gatedHint": "需要服务器端配置 Hugging Face 令牌。",

@@ -6,7 +6,7 @@ export interface TaggerModelInfo {
   id: string;
   label: string;
   description: string;
-  family: string;
+  group: string;
   recommended: boolean;
   gated: boolean;
   loaded: boolean;

@@ -77,9 +77,9 @@
       "baseUrl": "API URL",
       "baseUrlHint": "URL API-эндпоинта, напр. https://localtagger.gpu.garden или http://localhost:8000",
       "families": {
-        "wd14": "Семейство WD",
-        "animetimm": "AnimeTimm",
-        "camie": "Camie"
+        "wdtagger": "Семейство WD",
+        "animetimm": "Animetimm dbv4",
+        "camie": "Camie v2"
       },
       "models": {},
       "gatedHint": "Требуется токен Hugging Face на сервере.",

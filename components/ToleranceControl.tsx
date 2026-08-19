@@ -57,15 +57,15 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  // Group the server's model list by family, preserving server order
+  // Group the server's model list by group, preserving server order
   const modelGroups = useMemo(() => {
-    const byFamily = new Map<string, TaggerModelInfo[]>();
+    const byGroup = new Map<string, TaggerModelInfo[]>();
     (models ?? []).forEach((m) => {
-      const list = byFamily.get(m.family) ?? [];
+      const list = byGroup.get(m.group) ?? [];
       list.push(m);
-      byFamily.set(m.family, list);
+      byGroup.set(m.group, list);
     });
-    return [...byFamily.entries()];
+    return [...byGroup.entries()];
   }, [models]);
 
   const selectedModel = models?.find((m) => m.id === backendConfig.taggerModel);
@@ -105,14 +105,14 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           }
         >
           {models ? (
-            modelGroups.map(([family, familyModels]) => (
+            modelGroups.map(([group, groupModels]) => (
               <optgroup
-                key={family}
-                label={t(`settings.backend.families.${family}`, {
-                  defaultValue: family,
+                key={group}
+                label={t(`settings.backend.families.${group}`, {
+                  defaultValue: group,
                 })}
               >
-                {familyModels.map((m) => (
+                {groupModels.map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.recommended ? "★ " : ""}
                     {m.label} —{" "}

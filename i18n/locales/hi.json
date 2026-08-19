@@ -72,6 +72,8 @@
     "includeRanks": "टैग में स्कोर जोड़ें",
     "useEscape": "कोष्ठक एस्केप करें",
     "advancedThresholds": "उन्नत",
+    "resetValues": "मान रीसेट करें",
+    "ignoreModelThresholds": "अनुशंसित मॉडल थ्रेशोल्ड अनदेखा करें",
     "backend": {
       "model": "टैगर मॉडल",
       "baseUrl": "API URL",

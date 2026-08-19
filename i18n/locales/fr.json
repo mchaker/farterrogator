@@ -72,6 +72,8 @@
     "includeRanks": "Ajouter les scores aux tags",
     "useEscape": "Échapper les parenthèses",
     "advancedThresholds": "Avancé",
+    "resetValues": "Réinitialiser les valeurs",
+    "ignoreModelThresholds": "Ignorer les seuils recommandés du modèle",
     "backend": {
       "model": "Modèle de tagging",
       "baseUrl": "URL de l'API",

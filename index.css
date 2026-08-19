@@ -40,6 +40,16 @@ select optgroup {
   color: rgb(226, 226, 230) !important;
 }
 
+/* Slightly shrink the Konsta checkbox icon for inline settings use */
+.k-checkbox-sm > i {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.k-checkbox-sm > i svg {
+  width: 10px;
+  height: 10px;
+}
+
 :lang(hi) {
   font-family: "Kohinoor Devanagari", "Devanagari Sangam MN", "Nirmala UI", "Mangal", "Noto Sans Devanagari", sans-serif;
 }

@@ -72,6 +72,8 @@
     "includeRanks": "Aggiungi punteggi ai tag",
     "useEscape": "Esegui escape delle parentesi",
     "advancedThresholds": "Avanzato",
+    "resetValues": "Ripristina valori",
+    "ignoreModelThresholds": "Ignora soglie consigliate del modello",
     "backend": {
       "model": "Modello di tagging",
       "baseUrl": "URL API",

@@ -72,6 +72,8 @@
     "includeRanks": "Append Scores to Tags",
     "useEscape": "Escape Parentheses",
     "advancedThresholds": "Advanced",
+    "resetValues": "Reset values",
+    "ignoreModelThresholds": "Ignore recommended model thresholds",
     "backend": {
       "model": "Tagger Model",
       "baseUrl": "API URL",

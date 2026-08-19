@@ -72,6 +72,8 @@
     "includeRanks": "Añadir puntuaciones a las etiquetas",
     "useEscape": "Escapar paréntesis",
     "advancedThresholds": "Avanzado",
+    "resetValues": "Restablecer valores",
+    "ignoreModelThresholds": "Ignorar umbrales recomendados del modelo",
     "backend": {
       "model": "Modelo de etiquetado",
       "baseUrl": "URL de la API",

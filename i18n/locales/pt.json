@@ -72,6 +72,8 @@
     "includeRanks": "Anexar pontuações às tags",
     "useEscape": "Escapar parênteses",
     "advancedThresholds": "Avançado",
+    "resetValues": "Restaurar valores",
+    "ignoreModelThresholds": "Ignorar limiares recomendados do modelo",
     "backend": {
       "model": "Modelo de tagging",
       "baseUrl": "URL da API",

@@ -72,6 +72,8 @@
     "includeRanks": "在标签后附加分数",
     "useEscape": "转义括号",
     "advancedThresholds": "高级",
+    "resetValues": "重置数值",
+    "ignoreModelThresholds": "忽略推荐模型阈值",
     "backend": {
       "model": "标注模型",
       "baseUrl": "API 地址",

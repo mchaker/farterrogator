@@ -7,6 +7,7 @@ import {
   ListInput,
   Toggle,
   Range,
+  Checkbox,
 } from "konsta/react";
 import {
   Shuffle,
@@ -72,9 +73,10 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
 
   const handleModelChange = (id: string) => {
     onBackendChange({ ...backendConfig, taggerModel: id });
-    // Re-seed the thresholds from the newly selected model's defaults
+    // Re-seed the thresholds from the newly selected model's defaults,
+    // unless the user opted to keep their own threshold values.
     const info = models?.find((m) => m.id === id);
-    if (info) {
+    if (info && !settings.ignoreModelThresholds) {
       onSettingsChange({
         ...settings,
         thresholds: {
@@ -241,6 +243,35 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
         copyright: value,
         artist: value,
         meta: value,
+        rating: 0.8,
+      },
+    });
+  };
+
+  const resetOutputValues = () => {
+    onSettingsChange({
+      ...settings,
+      topK: 50,
+      maxTags: 0,
+      whitelist: "",
+      blacklist: "",
+      randomize: false,
+      removeUnderscores: false,
+      useEscape: true,
+      includeRanks: false,
+      scoreDescend: true,
+    });
+  };
+
+  const resetThresholds = () => {
+    onSettingsChange({
+      ...settings,
+      thresholds: {
+        general: 0.7,
+        character: 0.7,
+        copyright: 0.7,
+        artist: 0.7,
+        meta: 0.7,
         rating: 0.8,
       },
     });
@@ -479,6 +510,17 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           }
         />
       </List>
+      <div className="flex justify-end px-4 pt-1">
+        <button
+          type="button"
+          onClick={resetOutputValues}
+          disabled={disabled}
+          className="flex items-center gap-1 text-xs text-primary dark:text-md-dark-primary hover:underline disabled:opacity-30 disabled:no-underline disabled:cursor-default transition-opacity"
+        >
+          <RotateCcw className="w-3 h-3" aria-hidden="true" />
+          {t("settings.resetValues")}
+        </button>
+      </div>
 
       {/* Thresholds */}
       <BlockTitle className="mt-6! mb-2!">
@@ -539,6 +581,30 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           ))
         )}
       </List>
+      <div className="flex items-center justify-between px-4 pt-1">
+        <Checkbox
+          checked={settings.ignoreModelThresholds}
+          disabled={disabled}
+          onChange={() =>
+            onSettingsChange({
+              ...settings,
+              ignoreModelThresholds: !settings.ignoreModelThresholds,
+            })
+          }
+          className="k-checkbox-sm gap-1.5 items-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant"
+        >
+          {t("settings.ignoreModelThresholds")}
+        </Checkbox>
+        <button
+          type="button"
+          onClick={resetThresholds}
+          disabled={disabled}
+          className="flex items-center gap-1 text-xs text-primary dark:text-md-dark-primary hover:underline disabled:opacity-30 disabled:no-underline disabled:cursor-default transition-opacity"
+        >
+          <RotateCcw className="w-3 h-3" aria-hidden="true" />
+          {t("settings.resetValues")}
+        </button>
+      </div>
     </div>
   );
 };

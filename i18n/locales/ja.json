@@ -71,7 +71,9 @@
     "scoreDescend": "スコア順に並べ替え",
     "includeRanks": "タグにスコアを付加",
     "useEscape": "括弧をエスケープ",
-    "advancedThresholds": "詳細",
+    "advancedThresholds": "高度",
+    "resetValues": "値をリセット",
+    "ignoreModelThresholds": "推奨モデルしきい値を無視",
     "backend": {
       "model": "タガーモデル",
       "baseUrl": "API URL",

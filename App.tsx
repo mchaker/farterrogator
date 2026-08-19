@@ -82,6 +82,7 @@ const App: React.FC = () => {
         if (parsed.useEscape === undefined) parsed.useEscape = true;
         if (parsed.includeRanks === undefined) parsed.includeRanks = false;
         if (parsed.scoreDescend === undefined) parsed.scoreDescend = true;
+        if (parsed.ignoreModelThresholds === undefined) parsed.ignoreModelThresholds = false;
         return parsed;
       }
     } catch {
@@ -105,6 +106,7 @@ const App: React.FC = () => {
       useEscape: true,
       includeRanks: false,
       scoreDescend: true,
+      ignoreModelThresholds: false,
     };
   });
 

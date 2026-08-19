@@ -72,6 +72,8 @@
     "includeRanks": "Werte an Tags anhängen",
     "useEscape": "Klammern maskieren",
     "advancedThresholds": "Erweitert",
+    "resetValues": "Werte zurücksetzen",
+    "ignoreModelThresholds": "Empfohlene Modell-Schwellenwerte ignorieren",
     "backend": {
       "model": "Tagger-Modell",
       "baseUrl": "API-URL",

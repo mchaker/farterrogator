@@ -72,6 +72,8 @@
     "includeRanks": "Добавлять оценки к тегам",
     "useEscape": "Экранировать скобки",
     "advancedThresholds": "Расширенный",
+    "resetValues": "Сбросить значения",
+    "ignoreModelThresholds": "Игнорировать пороги модели по умолчанию",
     "backend": {
       "model": "Модель теггера",
       "baseUrl": "API URL",

@@ -54,7 +54,10 @@
     "copyArtist": "複製繪師名稱",
     "noPreview": "無預覽",
     "openOnDanbooru": "在 Danbooru 上開啟",
-    "openArtistOnDanbooru": "在 Danbooru 上開啟 {{artist}}"
+    "openArtistOnDanbooru": "在 Danbooru 上開啟 {{artist}}",
+    "useSafebooru": "使用 Safebooru",
+    "openOnSafebooru": "在 Safebooru 上開啟",
+    "openArtistOnSafebooru": "在 Safebooru 上開啟 {{artist}}"
   },
   "status": {
     "starting": "正在啟動...",

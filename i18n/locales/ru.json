@@ -54,7 +54,10 @@
     "copyArtist": "Скопировать имя художника",
     "noPreview": "Нет превью",
     "openOnDanbooru": "Открыть на Danbooru",
-    "openArtistOnDanbooru": "Открыть {{artist}} на Danbooru"
+    "openArtistOnDanbooru": "Открыть {{artist}} на Danbooru",
+    "useSafebooru": "Использовать Safebooru",
+    "openOnSafebooru": "Открыть на Safebooru",
+    "openArtistOnSafebooru": "Открыть {{artist}} на Safebooru"
   },
   "status": {
     "starting": "Запуск...",

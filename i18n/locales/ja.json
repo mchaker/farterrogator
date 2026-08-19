@@ -54,7 +54,10 @@
     "copyArtist": "絵師名をコピー",
     "noPreview": "プレビューなし",
     "openOnDanbooru": "Danbooruで開く",
-    "openArtistOnDanbooru": "{{artist}}をDanbooruで開く"
+    "openArtistOnDanbooru": "{{artist}}をDanbooruで開く",
+    "useSafebooru": "Safebooruを使用",
+    "openOnSafebooru": "Safebooruで開く",
+    "openArtistOnSafebooru": "{{artist}}をSafebooruで開く"
   },
   "status": {
     "starting": "開始中...",

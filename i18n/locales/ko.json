@@ -54,7 +54,10 @@
     "copyArtist": "작가 이름 복사",
     "noPreview": "미리보기 없음",
     "openOnDanbooru": "Danbooru에서 열기",
-    "openArtistOnDanbooru": "Danbooru에서 {{artist}} 열기"
+    "openArtistOnDanbooru": "Danbooru에서 {{artist}} 열기",
+    "useSafebooru": "Safebooru 사용",
+    "openOnSafebooru": "Safebooru에서 열기",
+    "openArtistOnSafebooru": "Safebooru에서 {{artist}} 열기"
   },
   "status": {
     "starting": "시작 중...",

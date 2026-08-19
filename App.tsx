@@ -58,6 +58,7 @@ const App: React.FC = () => {
     null,
   );
   const [isMatchingArtists, setIsMatchingArtists] = useState(false);
+  const [useSafebooru, setUseSafebooru] = useState(true);
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -431,6 +432,8 @@ const App: React.FC = () => {
                     selectedFile={selectedFiles[0]}
                     artistMatches={artistMatches}
                     isMatchingArtists={isMatchingArtists}
+                    useSafebooru={useSafebooru}
+                    onUseSafebooruChange={setUseSafebooru}
                   />
                 </div>
               )}

@@ -54,7 +54,10 @@
     "copyArtist": "Copia il nome dell'artista",
     "noPreview": "Nessuna anteprima",
     "openOnDanbooru": "Apri su Danbooru",
-    "openArtistOnDanbooru": "Apri {{artist}} su Danbooru"
+    "openArtistOnDanbooru": "Apri {{artist}} su Danbooru",
+    "useSafebooru": "Usa Safebooru",
+    "openOnSafebooru": "Apri su Safebooru",
+    "openArtistOnSafebooru": "Apri {{artist}} su Safebooru"
   },
   "status": {
     "starting": "Avvio...",

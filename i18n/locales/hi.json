@@ -54,7 +54,10 @@
     "copyArtist": "कलाकार का नाम कॉपी करें",
     "noPreview": "कोई पूर्वावलोकन नहीं",
     "openOnDanbooru": "Danbooru पर खोलें",
-    "openArtistOnDanbooru": "{{artist}} को Danbooru पर खोलें"
+    "openArtistOnDanbooru": "{{artist}} को Danbooru पर खोलें",
+    "useSafebooru": "Safebooru का उपयोग करें",
+    "openOnSafebooru": "Safebooru पर खोलें",
+    "openArtistOnSafebooru": "{{artist}} को Safebooru पर खोलें"
   },
   "status": {
     "starting": "शुरू हो रहा है...",

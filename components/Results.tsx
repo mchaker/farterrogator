@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
-import { Button, Progressbar, Preloader } from "konsta/react";
+import { Button, Progressbar, Preloader, Checkbox } from "konsta/react";
 import {
   Copy,
   Check,
@@ -35,6 +35,8 @@ interface ResultsProps {
   selectedFile: File | null;
   artistMatches?: ArtistMatch[] | null;
   isMatchingArtists?: boolean;
+  useSafebooru?: boolean;
+  onUseSafebooruChange?: (value: boolean) => void;
 }
 
 export const Results: React.FC<ResultsProps> = ({
@@ -45,6 +47,8 @@ export const Results: React.FC<ResultsProps> = ({
   selectedFile,
   artistMatches,
   isMatchingArtists,
+  useSafebooru = true,
+  onUseSafebooruChange,
 }) => {
   const { t } = useTranslation();
   const [copiedTags, setCopiedTags] = useState(false);
@@ -59,16 +63,26 @@ export const Results: React.FC<ResultsProps> = ({
   } | null>(null);
   const previewCache = useRef<Map<string, string | null>>(new Map());
   const previewHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const postCountCache = useRef<Map<string, Record<string, number>>>(new Map());
   const [artistPostCounts, setArtistPostCounts] = useState<
     Record<string, number>
   >({});
+  const booruHost = useSafebooru
+    ? "https://safebooru.donmai.us"
+    : "https://danbooru.donmai.us";
 
   useEffect(() => {
     if (!artistMatches || artistMatches.length === 0) return;
-    setArtistPostCounts({});
     const names = artistMatches.map((artist) => artist.name);
+    const cacheKey = `${booruHost}:${names.join(",")}`;
+    const cached = postCountCache.current.get(cacheKey);
+    if (cached) {
+      setArtistPostCounts(cached);
+      return;
+    }
+    setArtistPostCounts({});
     fetch(
-      `https://danbooru.donmai.us/tags.json?search[name_comma]=${encodeURIComponent(names.join(","))}&limit=${names.length}`,
+      `${booruHost}/tags.json?search[name_comma]=${encodeURIComponent(names.join(","))}&limit=${names.length}`,
     )
       .then((res) => res.json())
       .then((data: { name: string; post_count?: number }[]) => {
@@ -77,10 +91,11 @@ export const Results: React.FC<ResultsProps> = ({
         if (Array.isArray(data)) {
           data.forEach((tag) => (counts[tag.name] = tag.post_count ?? 0));
         }
+        postCountCache.current.set(cacheKey, counts);
         setArtistPostCounts(counts);
       })
       .catch(() => {});
-  }, [artistMatches]);
+  }, [artistMatches, booruHost]);
 
   const handleArtistEnter = async (
     artistName: string,
@@ -95,7 +110,8 @@ export const Results: React.FC<ResultsProps> = ({
     );
 
     // Serve repeat hovers from cache (both found URLs and confirmed misses)
-    const cached = previewCache.current.get(artistName);
+    const cacheKey = `${booruHost}:${artistName}`;
+    const cached = previewCache.current.get(cacheKey);
     if (cached !== undefined) {
       setArtistPreview({ name: artistName, url: cached, loading: false, x, y });
       return;
@@ -104,7 +120,7 @@ export const Results: React.FC<ResultsProps> = ({
     setArtistPreview({ name: artistName, url: null, loading: true, x, y });
     try {
       const res = await fetch(
-        `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(artistName + " -rating:e -rating:q")}&limit=1&random=true`,
+        `${booruHost}/posts.json?tags=${encodeURIComponent(artistName + " -rating:e -rating:q")}&limit=1&random=true`,
       );
       const data = await res.json();
       const url: string | null =
@@ -114,7 +130,7 @@ export const Results: React.FC<ResultsProps> = ({
             data[0].preview_file_url ??
             null)
           : null;
-      previewCache.current.set(artistName, url);
+      previewCache.current.set(cacheKey, url);
       setArtistPreview((prev) =>
         prev?.name === artistName ? { ...prev, url, loading: false } : prev,
       );
@@ -395,6 +411,15 @@ export const Results: React.FC<ResultsProps> = ({
             <span className="bg-md-light-surface-3 dark:bg-md-dark-surface-3 px-2 py-0.5 rounded-full text-2xs font-normal normal-case tracking-normal text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
               Kaloscope 2.0
             </span>
+            {onUseSafebooruChange && (
+              <Checkbox
+                checked={useSafebooru}
+                onChange={() => onUseSafebooruChange(!useSafebooru)}
+                className="k-checkbox-sm ml-auto flex items-center gap-1.5 text-xs normal-case tracking-normal text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant"
+              >
+                {t("results.useSafebooru")}
+              </Checkbox>
+            )}
           </h3>
 
           <div className="bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-3xl p-4 transition-colors duration-300">
@@ -445,14 +470,16 @@ export const Results: React.FC<ResultsProps> = ({
                         )}
                       </button>
                       <a
-                        href={`https://danbooru.donmai.us/artists/show_or_new?name=${encodeURIComponent(artist.name)}`}
+                        href={`${booruHost}/artists/show_or_new?name=${encodeURIComponent(artist.name)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 p-1.5 rounded-lg text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:text-primary dark:hover:text-md-dark-primary hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4 transition-colors"
-                        title={t("results.openOnDanbooru")}
-                        aria-label={t("results.openArtistOnDanbooru", {
-                          artist: formatTag(artist.name),
-                        })}
+                        title={useSafebooru ? t("results.openOnSafebooru") : t("results.openOnDanbooru")}
+                        aria-label={
+                          useSafebooru
+                            ? t("results.openArtistOnSafebooru", { artist: formatTag(artist.name) })
+                            : t("results.openArtistOnDanbooru", { artist: formatTag(artist.name) })
+                        }
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink

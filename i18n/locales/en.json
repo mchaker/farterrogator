@@ -68,12 +68,12 @@
     "topK": "Top K Tags",
     "randomize": "Randomize Order",
     "removeUnderscores": "Remove Underscores",
-    "scoreDescend": "Sort by Score",
     "includeRanks": "Append Scores to Tags",
     "useEscape": "Escape Parentheses",
     "advancedThresholds": "Advanced",
     "resetValues": "Reset values",
     "ignoreModelThresholds": "Ignore recommended model thresholds",
+    "batchOnly": "batch only",
     "backend": {
       "model": "Tagger Model",
       "baseUrl": "API URL",

@@ -68,12 +68,12 @@
     "topK": "前 K 個標籤",
     "randomize": "隨機排序",
     "removeUnderscores": "移除底線",
-    "scoreDescend": "依分數排序",
     "includeRanks": "在標籤後附加分數",
     "useEscape": "跳脫括號",
     "advancedThresholds": "進階",
     "resetValues": "重置數值",
     "ignoreModelThresholds": "忽略推薦模型閾值",
+    "batchOnly": "僅批次",
     "backend": {
       "model": "標註模型",
       "baseUrl": "API 地址",

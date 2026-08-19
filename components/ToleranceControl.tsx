@@ -27,7 +27,6 @@ import {
   WifiOff,
   Parentheses,
   Hash,
-  ArrowDownWideNarrow,
 } from "lucide-react";
 import {
   TaggingSettings,
@@ -217,12 +216,14 @@ interface ToleranceControlProps {
   settings: TaggingSettings;
   onSettingsChange: (settings: TaggingSettings) => void;
   disabled?: boolean;
+  isBatch?: boolean;
 }
 
 export const ToleranceControl: React.FC<ToleranceControlProps> = ({
   settings,
   onSettingsChange,
   disabled,
+  isBatch,
 }) => {
   const { t } = useTranslation();
   const [isAdvanced, setIsAdvanced] = useState(false);
@@ -256,10 +257,9 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
       whitelist: "",
       blacklist: "",
       randomize: false,
-      removeUnderscores: false,
+      removeUnderscores: true,
       useEscape: true,
       includeRanks: false,
-      scoreDescend: true,
     });
   };
 
@@ -443,50 +443,37 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
             />
           }
         />
-        <ListItem
-          label
-          title={t("settings.scoreDescend")}
-          media={
-            <ArrowDownWideNarrow
-              className={`w-5 h-5 ${settings.scoreDescend ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
-              aria-hidden="true"
-            />
-          }
-          after={
-            <Toggle
-              checked={settings.scoreDescend}
-              disabled={disabled}
-              onChange={() =>
-                onSettingsChange({
-                  ...settings,
-                  scoreDescend: !settings.scoreDescend,
-                })
-              }
-            />
-          }
-        />
-        <ListItem
-          label
-          title={t("settings.includeRanks")}
-          media={
-            <Hash
-              className={`w-5 h-5 ${settings.includeRanks ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
-              aria-hidden="true"
-            />
-          }
-          after={
-            <Toggle
-              checked={settings.includeRanks}
-              disabled={disabled}
-              onChange={() =>
-                onSettingsChange({
-                  ...settings,
-                  includeRanks: !settings.includeRanks,
-                })
-              }
-            />
-          }
-        />
+        {isBatch && (
+          <ListItem
+            label
+            title={
+              <span className="flex items-center gap-1.5">
+                {t("settings.includeRanks")}
+                <span className="text-2xs tracking-wide text-md-light-on-surface-variant/60 dark:text-md-dark-on-surface-variant/60">
+                  {t("settings.batchOnly")}
+                </span>
+              </span>
+            }
+            media={
+              <Hash
+                className={`w-5 h-5 ${settings.includeRanks ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
+                aria-hidden="true"
+              />
+            }
+            after={
+              <Toggle
+                checked={settings.includeRanks}
+                disabled={disabled}
+                onChange={() =>
+                  onSettingsChange({
+                    ...settings,
+                    includeRanks: !settings.includeRanks,
+                  })
+                }
+              />
+            }
+          />
+        )}
         <ListItem
           label
           title={t("settings.useEscape")}

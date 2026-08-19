@@ -171,12 +171,15 @@ export const Results: React.FC<ResultsProps> = ({
     return [...whitelistTags, ...tags];
   }, [result.tags, settings]);
 
-  const formatTag = (name: string) =>
-    settings.removeUnderscores ? name.replace(/_/g, " ") : name;
+  const formatTag = (name: string) => {
+    let out = settings.removeUnderscores ? name.replace(/_/g, " ") : name;
+    if (settings.useEscape) out = out.replace(/[()]/g, "\\$&");
+    return out;
+  };
 
   const tagString = useMemo(
     () => processedTags.map((t) => formatTag(t.name)).join(", "),
-    [processedTags, settings.removeUnderscores],
+    [processedTags, settings.removeUnderscores, settings.useEscape],
   );
 
   const handleCopyTags = () => {

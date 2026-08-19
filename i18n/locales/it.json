@@ -68,12 +68,12 @@
     "topK": "Top K tag",
     "randomize": "Ordine casuale",
     "removeUnderscores": "Rimuovi underscore",
-    "scoreDescend": "Ordina per punteggio",
     "includeRanks": "Aggiungi punteggi ai tag",
     "useEscape": "Esegui escape delle parentesi",
     "advancedThresholds": "Avanzato",
     "resetValues": "Ripristina valori",
     "ignoreModelThresholds": "Ignora soglie consigliate del modello",
+    "batchOnly": "solo batch",
     "backend": {
       "model": "Modello di tagging",
       "baseUrl": "URL API",

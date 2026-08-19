@@ -50,7 +50,6 @@ export interface TaggingSettings {
   // Passed straight through to the backend's /interrogate query params.
   useEscape: boolean; // escape () in tag names (default true)
   includeRanks: boolean; // append (tag:score) to tag_string (default false)
-  scoreDescend: boolean; // sort tags by score descending (default true)
   // Client-side only: when true, switching models does not overwrite thresholds.
   ignoreModelThresholds: boolean;
 }

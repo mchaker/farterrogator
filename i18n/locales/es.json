@@ -68,12 +68,12 @@
     "topK": "Top K etiquetas",
     "randomize": "Orden aleatorio",
     "removeUnderscores": "Quitar guiones bajos",
-    "scoreDescend": "Ordenar por puntuación",
     "includeRanks": "Añadir puntuaciones a las etiquetas",
     "useEscape": "Escapar paréntesis",
     "advancedThresholds": "Avanzado",
     "resetValues": "Restablecer valores",
     "ignoreModelThresholds": "Ignorar umbrales recomendados del modelo",
+    "batchOnly": "solo lote",
     "backend": {
       "model": "Modelo de etiquetado",
       "baseUrl": "URL de la API",

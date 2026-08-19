@@ -68,12 +68,12 @@
     "topK": "Top-K-Tags",
     "randomize": "Zufällige Reihenfolge",
     "removeUnderscores": "Unterstriche entfernen",
-    "scoreDescend": "Nach Bewertung sortieren",
     "includeRanks": "Werte an Tags anhängen",
     "useEscape": "Klammern maskieren",
     "advancedThresholds": "Erweitert",
     "resetValues": "Werte zurücksetzen",
     "ignoreModelThresholds": "Empfohlene Modell-Schwellenwerte ignorieren",
+    "batchOnly": "nur Batch",
     "backend": {
       "model": "Tagger-Modell",
       "baseUrl": "API-URL",

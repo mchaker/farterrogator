@@ -68,12 +68,12 @@
     "topK": "상위 K개 태그",
     "randomize": "순서 무작위화",
     "removeUnderscores": "밑줄 제거",
-    "scoreDescend": "점수순 정렬",
     "includeRanks": "태그에 점수 추가",
     "useEscape": "괄호 이스케이프",
     "advancedThresholds": "고급",
     "resetValues": "값 재설정",
     "ignoreModelThresholds": "권장 모델 임계값 무시",
+    "batchOnly": "배치 전용",
     "backend": {
       "model": "태거 모델",
       "baseUrl": "API URL",

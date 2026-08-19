@@ -81,7 +81,6 @@ const App: React.FC = () => {
         // Backfill tag-string params added after this config was last saved
         if (parsed.useEscape === undefined) parsed.useEscape = true;
         if (parsed.includeRanks === undefined) parsed.includeRanks = false;
-        if (parsed.scoreDescend === undefined) parsed.scoreDescend = true;
         if (parsed.ignoreModelThresholds === undefined) parsed.ignoreModelThresholds = false;
         return parsed;
       }
@@ -102,10 +101,9 @@ const App: React.FC = () => {
       whitelist: "",
       blacklist: "",
       randomize: false,
-      removeUnderscores: false,
+      removeUnderscores: true,
       useEscape: true,
       includeRanks: false,
-      scoreDescend: true,
       ignoreModelThresholds: false,
     };
   });
@@ -470,6 +468,7 @@ const App: React.FC = () => {
               settings={settings}
               onSettingsChange={setSettings}
               disabled={appState === AppState.ANALYZING}
+              isBatch={selectedFiles.length > 1}
             />
           </div>
         </main>

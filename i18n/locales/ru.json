@@ -68,12 +68,12 @@
     "topK": "Топ-K тегов",
     "randomize": "Случайный порядок",
     "removeUnderscores": "Убрать подчёркивания",
-    "scoreDescend": "Сортировать по оценке",
     "includeRanks": "Добавлять оценки к тегам",
     "useEscape": "Экранировать скобки",
     "advancedThresholds": "Расширенный",
     "resetValues": "Сбросить значения",
     "ignoreModelThresholds": "Игнорировать пороги модели по умолчанию",
+    "batchOnly": "только пакет",
     "backend": {
       "model": "Модель теггера",
       "baseUrl": "API URL",

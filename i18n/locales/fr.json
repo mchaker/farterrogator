@@ -68,12 +68,12 @@
     "topK": "Top K tags",
     "randomize": "Ordre aléatoire",
     "removeUnderscores": "Supprimer les underscores",
-    "scoreDescend": "Trier par score",
     "includeRanks": "Ajouter les scores aux tags",
     "useEscape": "Échapper les parenthèses",
     "advancedThresholds": "Avancé",
     "resetValues": "Réinitialiser les valeurs",
     "ignoreModelThresholds": "Ignorer les seuils recommandés du modèle",
+    "batchOnly": "lot uniquement",
     "backend": {
       "model": "Modèle de tagging",
       "baseUrl": "URL de l'API",

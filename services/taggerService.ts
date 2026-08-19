@@ -94,7 +94,14 @@ function parseTags(data: any): Tag[] {
 function appendOutputParams(params: URLSearchParams, settings: TaggingSettings): void {
   params.append('use_escape', String(settings.useEscape));
   params.append('include_ranks', String(settings.includeRanks));
-  params.append('score_descend', String(settings.scoreDescend));
+}
+
+// Format a tag name for display, mirroring Results.tsx's formatTag.
+function formatTagName(name: string, settings?: TaggingSettings): string {
+  let out = name;
+  if (settings?.removeUnderscores) out = out.replace(/_/g, ' ');
+  if (settings?.useEscape) out = out.replace(/[()]/g, '\\$&');
+  return out;
 }
 
 // Probes GET /health. A 2xx with {"status":"ok"} is `ok`; a 4xx means the server
@@ -230,7 +237,7 @@ export const fetchBatchTags = async (
       if (settings?.maxTags && settings.maxTags > 0) entries = entries.slice(0, settings.maxTags);
       const tags: Record<string, number> = {};
       entries.forEach(e => (tags[e.tag] = e.score));
-      result[filename] = { tags, tag_string: entries.map(e => e.tag).join(', ') };
+      result[filename] = { tags, tag_string: entries.map(e => formatTagName(e.tag, settings)).join(', ') };
     });
     return result;
   }
@@ -244,7 +251,7 @@ export const fetchBatchTags = async (
       const tags: Record<string, number> = {};
       entries.forEach(e => (tags[e.tag] = e.score));
       item.tags = tags;
-      item.tag_string = entries.map(e => e.tag).join(', ');
+      item.tag_string = entries.map(e => formatTagName(e.tag, settings)).join(', ');
     });
     return data;
   }

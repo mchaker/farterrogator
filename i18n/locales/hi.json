@@ -68,12 +68,12 @@
     "topK": "शीर्ष K टैग",
     "randomize": "क्रम यादृच्छिक करें",
     "removeUnderscores": "अंडरस्कोर हटाएँ",
-    "scoreDescend": "स्कोर के अनुसार क्रमबद्ध करें",
     "includeRanks": "टैग में स्कोर जोड़ें",
     "useEscape": "कोष्ठक एस्केप करें",
     "advancedThresholds": "उन्नत",
     "resetValues": "मान रीसेट करें",
     "ignoreModelThresholds": "अनुशंसित मॉडल थ्रेशोल्ड अनदेखा करें",
+    "batchOnly": "केवल बैच",
     "backend": {
       "model": "टैगर मॉडल",
       "baseUrl": "API URL",

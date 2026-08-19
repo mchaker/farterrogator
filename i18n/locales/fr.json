@@ -86,7 +86,8 @@
       "warmupHint": "Modèle pas encore chargé — la première requête peut prendre plus de temps.",
       "onlineHint": "Backend en ligne.",
       "offlineHint": "Backend injoignable. Vérifiez l'URL de l'API ou que le serveur est démarré.",
-      "resetToDefault": "Réinitialiser par défaut"
+      "resetToDefault": "Réinitialiser par défaut",
+      "useFallback": "Utiliser le repli"
     },
     "categories": {
       "general": "Général",

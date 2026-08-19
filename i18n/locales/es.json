@@ -86,7 +86,8 @@
       "warmupHint": "El modelo aún no está cargado: la primera solicitud puede tardar más.",
       "onlineHint": "Backend en línea.",
       "offlineHint": "Backend inaccesible. Comprueba la URL de la API o que el servidor esté en ejecución.",
-      "resetToDefault": "Restablecer predeterminado"
+      "resetToDefault": "Restablecer por defecto",
+      "useFallback": "Usar respaldo"
     },
     "categories": {
       "general": "General",

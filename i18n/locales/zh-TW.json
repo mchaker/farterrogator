@@ -86,7 +86,8 @@
       "warmupHint": "模型尚未載入——首次請求可能需要更長時間。",
       "onlineHint": "後端在線。",
       "offlineHint": "無法連線後端。請檢查 API URL 或伺服器是否正在執行。",
-      "resetToDefault": "重設為預設"
+      "resetToDefault": "重置為預設",
+      "useFallback": "使用備用"
     },
     "categories": {
       "general": "一般",

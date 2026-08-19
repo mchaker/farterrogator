@@ -86,7 +86,8 @@
       "warmupHint": "모델이 아직 로드되지 않았습니다. 첫 요청은 시간이 더 걸릴 수 있습니다.",
       "onlineHint": "백엔드 온라인.",
       "offlineHint": "백엔드에 연결할 수 없습니다. API URL을 확인하거나 서버가 실행 중인지 확인하세요.",
-      "resetToDefault": "기본값으로 초기화"
+      "resetToDefault": "기본값으로 재설정",
+      "useFallback": "폴백 사용"
     },
     "categories": {
       "general": "일반",

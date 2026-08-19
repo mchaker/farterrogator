@@ -144,18 +144,38 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           }
         />
       </List>
-      {health === "down" && (
-        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-rose-600 dark:text-rose-400">
-          <WifiOff className="w-3 h-3 shrink-0" aria-hidden="true" />
-          {t("settings.backend.offlineHint")}
-        </p>
-      )}
-      {health === "ok" && (
-        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-green-600 dark:text-green-400">
-          <Wifi className="w-3 h-3 shrink-0" aria-hidden="true" />
-          {t("settings.backend.onlineHint")}
-        </p>
-      )}
+      <div className="flex items-center justify-between px-4 pt-1.5">
+        {health === "down" ? (
+          <p className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400">
+            <WifiOff className="w-3 h-3 shrink-0" aria-hidden="true" />
+            {t("settings.backend.offlineHint")}
+          </p>
+        ) : health === "ok" ? (
+          <p className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
+            <Wifi className="w-3 h-3 shrink-0" aria-hidden="true" />
+            {t("settings.backend.onlineHint")}
+          </p>
+        ) : (
+          <span />
+        )}
+        <button
+          type="button"
+          onClick={() =>
+            onBackendChange({
+              ...backendConfig,
+              taggerBaseUrl: "https://mooshie-localtagger.hf.space",
+            })
+          }
+          disabled={
+            disabled ||
+            backendConfig.taggerBaseUrl === "https://mooshie-localtagger.hf.space"
+          }
+          className="flex items-center gap-1 text-xs text-primary dark:text-md-dark-primary hover:underline disabled:opacity-30 disabled:no-underline disabled:cursor-default transition-opacity"
+        >
+          <Globe className="w-3 h-3" aria-hidden="true" />
+          {t("settings.backend.useFallback")}
+        </button>
+      </div>
       {selectedModel?.gated && (
         <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
           <Lock className="w-3 h-3 shrink-0" aria-hidden="true" />

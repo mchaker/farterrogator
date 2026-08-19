@@ -86,7 +86,8 @@
       "warmupHint": "モデルはまだ読み込まれていません。最初のリクエストには時間がかかる場合があります。",
       "onlineHint": "バックエンドはオンラインです。",
       "offlineHint": "バックエンドに接続できません。API URL を確認するか、サーバーが起動しているか確認してください。",
-      "resetToDefault": "デフォルトにリセット"
+      "resetToDefault": "デフォルトに戻す",
+      "useFallback": "フォールバックを使用"
     },
     "categories": {
       "general": "一般",

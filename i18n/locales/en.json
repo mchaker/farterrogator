@@ -86,7 +86,8 @@
       "warmupHint": "Model not loaded yet — the first request may take longer.",
       "onlineHint": "Backend online.",
       "offlineHint": "Backend unreachable. Check the API URL or that the server is running.",
-      "resetToDefault": "Reset to default"
+      "resetToDefault": "Reset to default",
+      "useFallback": "Use fallback"
     },
     "categories": {
       "general": "General",

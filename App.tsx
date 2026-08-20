@@ -476,7 +476,7 @@ const App: React.FC = () => {
           </div>
         </main>
 
-        <footer className="px-3 pb-2.5 pt-1 flex flex-wrap items-center justify-between gap-3 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+        <footer className="px-3 sm:px-5 pb-3 pt-3 border-t border-md-light-surface-2/50 dark:border-md-dark-surface-2/50 flex flex-col items-center gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
           <a
             href="https://gpu.garden"
             target="_blank"
@@ -507,7 +507,7 @@ const App: React.FC = () => {
             </span>
           </a>
 
-          <p className="opacity-50 px-3 py-1 rounded-full bg-md-light-surface-2/70 dark:bg-md-dark-surface-2/70 backdrop-blur-md text-center shrink-0 order-3 sm:order-2 basis-full sm:basis-auto whitespace-normal break-words">
+          <p className="text-center opacity-70 leading-relaxed w-full sm:w-auto sm:flex-1 sm:min-w-0 sm:px-2 order-3 sm:order-2 break-words">
             {t("app.copyright", { year: copyrightYear })}
           </p>
 

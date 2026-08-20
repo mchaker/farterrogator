@@ -31,17 +31,8 @@ const currentYear = new Date().getFullYear();
 const copyrightYear = currentYear > 2025 ? `2025-${currentYear}` : "2025";
 
 const DEFAULT_BACKEND_CONFIG: BackendConfig = {
-  taggerModel: "wd-swinv2-v3",
+  taggerModel: "wd-eva02-canary-2026",
   taggerBaseUrl: "https://localtagger.gpu.garden",
-};
-
-// Pre-multi-model configs stored alias ids that routed to fixed endpoints;
-// map them onto the concrete model ids the backend now exposes.
-const LEGACY_MODEL_IDS: Record<string, string> = {
-  wd: "wd-eva02-large-v3",
-  pixai: "pixai-v0.9",
-  camie: "camie-v2",
-  taggerine: "animetimm-caformer-b36",
 };
 
 const App: React.FC = () => {
@@ -124,8 +115,6 @@ const App: React.FC = () => {
         const parsed = JSON.parse(saved);
         // Migrate old config shapes that had 'type' field
         if (parsed.taggerModel && parsed.taggerBaseUrl) {
-          parsed.taggerModel =
-            LEGACY_MODEL_IDS[parsed.taggerModel] ?? parsed.taggerModel;
           return parsed;
         }
       }

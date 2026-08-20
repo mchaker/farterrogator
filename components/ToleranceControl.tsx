@@ -124,30 +124,28 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           value={backendConfig.taggerModel}
           disabled={disabled}
           onClick={focusRowInput}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            handleModelChange(e.target.value)
-          }
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            handleModelChange(e.target.value);
+          }}
         >
           {models ? (
-            modelGroups.map(([group, groupModels]) => (
-              <optgroup
-                key={group}
-                label={t(`settings.backend.families.${group}`, {
-                  defaultValue: group,
-                })}
-              >
-                {groupModels.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.recommended ? "★ " : ""}
-                    {m.label} —{" "}
-                    {t(`settings.backend.models.${m.id}`, {
-                      defaultValue: m.description,
-                    })}
-                    {m.gated ? " 🔒" : ""}
-                  </option>
-                ))}
-              </optgroup>
-            ))
+            modelGroups.map(([group, groupModels]) => {
+              const groupLabel = t(`settings.backend.families.${group}`, {
+                defaultValue: group,
+              });
+              return (
+                <optgroup key={group} label={groupLabel}>
+                  {groupModels.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {`${m.recommended ? "★ " : ""}${m.label}${m.gated ? " 🔒" : ""} 〜 ${t(
+                        `settings.backend.models.${m.id}`,
+                        { defaultValue: m.description }
+                      )}`}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            })
           ) : (
             // Model list not loaded (yet); keep the saved selection usable
             <option value={backendConfig.taggerModel}>

@@ -73,7 +73,7 @@
     "removeUnderscores": "Убрать подчёркивания",
     "includeRanks": "Добавлять оценки к тегам",
     "useEscape": "Экранировать скобки",
-    "advancedThresholds": "Расширенный",
+    "advancedThresholds": "Расширенные",
     "resetValues": "Сбросить значения",
     "ignoreModelThresholds": "Игнорировать пороги модели по умолчанию",
     "batchOnly": "только пакет",
@@ -92,7 +92,7 @@
       "onlineHint": "Бэкенд в сети.",
       "offlineHint": "Бэкенд недоступен. Проверьте URL API или работает ли сервер.",
       "resetToDefault": "Сбросить по умолчанию",
-      "useFallback": "Использовать резерв"
+      "useFallback": "Резервный сервер"
     },
     "categories": {
       "general": "Общие",

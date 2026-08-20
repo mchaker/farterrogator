@@ -92,7 +92,7 @@
       "onlineHint": "Backend en ligne.",
       "offlineHint": "Backend injoignable. Vérifiez l'URL de l'API ou que le serveur est démarré.",
       "resetToDefault": "Réinitialiser par défaut",
-      "useFallback": "Utiliser le repli"
+      "useFallback": "Serveur de repli"
     },
     "categories": {
       "general": "Général",

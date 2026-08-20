@@ -47,7 +47,7 @@
     "downloadNai": "下载含嵌入标签的图像",
     "tagsCopied": "所有标签已复制到剪贴板!",
     "embedFailed": "创建 NAI Ready 图像失败。",
-    "score": "置信度",
+    "score": "分数",
     "batchResults": "批量结果",
     "artistSimilarity": "画师相似度",
     "matchingArtists": "正在匹配画师风格...",
@@ -92,7 +92,7 @@
       "onlineHint": "后端在线。",
       "offlineHint": "无法连接后端。请检查 API URL 或服务器是否在运行。",
       "resetToDefault": "重置为默认",
-      "useFallback": "使用备用"
+      "useFallback": "备用服务器"
     },
     "categories": {
       "general": "一般",
@@ -144,7 +144,7 @@
       "step4": "点击<strong>开始反推</strong>。",
       "step5": "复制标签，或下载 <strong>NAI Ready</strong> PNG。"
     },
-    "madeBy": "制作者"
+    "madeBy": "制作："
   },
   "theme": {
     "label": "主题选择",

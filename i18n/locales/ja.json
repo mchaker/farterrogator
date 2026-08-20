@@ -92,7 +92,7 @@
       "onlineHint": "バックエンドはオンラインです。",
       "offlineHint": "バックエンドに接続できません。API URL を確認するか、サーバーが起動しているか確認してください。",
       "resetToDefault": "デフォルトに戻す",
-      "useFallback": "フォールバックを使用"
+      "useFallback": "フォールバックサーバー"
     },
     "categories": {
       "general": "一般",
@@ -144,7 +144,7 @@
       "step4": "<strong>解析開始</strong>をクリックします。",
       "step5": "タグをコピーするか、<strong>NAI Ready</strong> PNG をダウンロードします。"
     },
-    "madeBy": "作者"
+    "madeBy": "制作"
   },
   "theme": {
     "label": "テーマの選択",

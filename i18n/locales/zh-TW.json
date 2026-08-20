@@ -47,7 +47,7 @@
     "downloadNai": "下載含嵌入標籤的圖像",
     "tagsCopied": "所有標籤已複製到剪貼簿!",
     "embedFailed": "建立 NAI Ready 圖像失敗。",
-    "score": "信賴度",
+    "score": "分數",
     "batchResults": "批次結果",
     "artistSimilarity": "繪師相似度",
     "matchingArtists": "正在比對繪師風格...",
@@ -92,7 +92,7 @@
       "onlineHint": "後端在線。",
       "offlineHint": "無法連線後端。請檢查 API URL 或伺服器是否正在執行。",
       "resetToDefault": "重置為預設",
-      "useFallback": "使用備用"
+      "useFallback": "備用伺服器"
     },
     "categories": {
       "general": "一般",
@@ -144,7 +144,7 @@
       "step4": "點擊<strong>開始反推</strong>。",
       "step5": "複製標籤，或下載 <strong>NAI Ready</strong> PNG。"
     },
-    "madeBy": "製作者"
+    "madeBy": "製作："
   },
   "theme": {
     "label": "主題選擇",

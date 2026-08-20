@@ -92,7 +92,7 @@
       "onlineHint": "백엔드 온라인.",
       "offlineHint": "백엔드에 연결할 수 없습니다. API URL을 확인하거나 서버가 실행 중인지 확인하세요.",
       "resetToDefault": "기본값으로 재설정",
-      "useFallback": "폴백 사용"
+      "useFallback": "폴백 서버"
     },
     "categories": {
       "general": "일반",

@@ -4,6 +4,18 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Farterrogator</title>
+        <script>
+            (function () {
+                try {
+                    var t = localStorage.getItem('theme') || 'auto';
+                    var dark =
+                        t === 'dark' ||
+                        (t === 'auto' &&
+                            window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    document.documentElement.classList.add(dark ? 'dark' : 'light');
+                } catch (e) {}
+            })();
+        </script>
         <meta
             name="description"
             content="Use the best new and proved Danbooru AI image taggers for free in less than 10 seconds."

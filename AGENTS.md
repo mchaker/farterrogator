@@ -40,6 +40,7 @@ Conventions to follow:
 - **Services are framework-free**: plain async functions, no hooks, no JSX. Components never call `fetch` directly.
 - **Persistence**: user settings are saved to `localStorage` (`taggingSettings`, `backendConfig`). When changing the shape of a persisted object, add a migration in the `useState` initializer like the existing `triggerPhrase → whitelist` migration in `App.tsx`.
 - **Styling**: stone palette (`stone-100`/`stone-800` etc.) with red accents; every color utility needs a `dark:` counterpart. Match the existing class patterns rather than inventing new ones.
+- **Theme initialization**: `hooks/useTheme.ts` toggles the `.light`/`.dark` class on `<html>`, but it runs inside `App.tsx` (which is wrapped by `<Suspense>` in `index.tsx`). A matching inline script in `index.html` `<head>` applies the theme class **before React mounts** so first paint and the `<Suspense>` fallback render in the correct theme (`dark:` variants are class-based via Konsta's `@custom-variant dark`). If you change the theme key name, storage key, or `auto` resolution logic in `useTheme`, update that script to match — they must stay in sync.
 - **Backend routing**: requests go through path prefixes (`/interrogate/gpu-garden`, `/kaloscope`, `/tag`, …). Adding a new backend route means updating **three places**: `vite.config.ts` `server.proxy`, the duplicated `preview.proxy` block, and a Cloudflare Pages function in `functions/`.
 
 ## i18n — required practice

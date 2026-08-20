@@ -12,7 +12,13 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <Suspense fallback={<div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen bg-stone-50 dark:bg-stone-900 transition-colors">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-stone-300 dark:border-stone-600 border-t-red-600 dark:border-t-red-400" />
+        </div>
+      }
+    >
       <App />
     </Suspense>
   </React.StrictMode>

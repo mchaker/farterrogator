@@ -36,6 +36,28 @@ import {
   BackendHealth,
 } from "../types";
 
+const focusRowInput = (e: React.MouseEvent<HTMLLIElement>) => {
+  const target = e.target;
+  if (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLSelectElement ||
+    target instanceof HTMLTextAreaElement
+  ) {
+    return;
+  }
+  const control = e.currentTarget.querySelector<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >("input, select, textarea");
+  if (!control || control.disabled) return;
+  control.focus();
+  if (control instanceof HTMLSelectElement && "showPicker" in control) {
+    try {
+      control.showPicker();
+    } catch {
+    }
+  }
+};
+
 interface ModelSettingsProps {
   settings: TaggingSettings;
   backendConfig: BackendConfig;
@@ -101,6 +123,7 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           media={<Server className="w-5 h-5" aria-hidden="true" />}
           value={backendConfig.taggerModel}
           disabled={disabled}
+          onClick={focusRowInput}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
             handleModelChange(e.target.value)
           }
@@ -139,6 +162,7 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           value={backendConfig.taggerBaseUrl}
           placeholder="https://localtagger.gpu.garden"
           disabled={disabled}
+          onClick={focusRowInput}
           inputClassName="font-mono text-xs"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onBackendChange({ ...backendConfig, taggerBaseUrl: e.target.value })
@@ -385,6 +409,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           value={settings.whitelist || ""}
           placeholder={t("settings.whitelistPlaceholder")}
           disabled={disabled}
+          onClick={focusRowInput}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onSettingsChange({ ...settings, whitelist: e.target.value })
           }
@@ -395,6 +420,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           value={settings.blacklist || ""}
           placeholder={t("settings.blacklistPlaceholder")}
           disabled={disabled}
+          onClick={focusRowInput}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onSettingsChange({ ...settings, blacklist: e.target.value })
           }

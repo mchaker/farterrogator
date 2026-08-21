@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Segmented, SegmentedButton } from 'konsta/react';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { Theme } from '../hooks/useTheme';
 
@@ -17,27 +18,32 @@ const OPTIONS: { value: Theme; icon: React.ReactNode; labelKey: string }[] = [
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, setTheme }) => {
   const { t } = useTranslation();
   return (
-    <div
-      className="flex items-center gap-0.5 p-1 rounded-full bg-md-light-surface-3 dark:bg-md-dark-surface-3"
+    <Segmented
+      strong
+      rounded
       role="group"
       aria-label={t('theme.label')}
+      className="gap-0.5 p-0.5"
+      colors={{
+        strongHighlightBgMaterial:
+          'bg-md-light-primary dark:bg-md-dark-primary',
+        strongHighlightBgIos:
+          'bg-md-light-primary dark:bg-md-dark-primary',
+      }}
     >
-      {OPTIONS.map(opt => (
-        <button
+      {OPTIONS.map((opt) => (
+        <SegmentedButton
           key={opt.value}
+          active={theme === opt.value}
+          className="h-9! w-9! px-0! rounded-full! [&.k-segmented-strong-button-active>*]:text-md-light-on-primary dark:[&.k-segmented-strong-button-active>*]:text-md-dark-on-primary"
           onClick={() => setTheme(opt.value)}
-          className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${
-            theme === opt.value
-              ? 'bg-md-light-primary-container dark:bg-md-dark-primary-container text-md-light-on-primary-container dark:text-md-dark-on-primary-container shadow-sm'
-              : 'text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:text-md-light-on-surface dark:hover:text-md-dark-on-surface'
-          }`}
           title={t(opt.labelKey)}
           aria-label={t(opt.labelKey)}
           aria-pressed={theme === opt.value}
         >
           {opt.icon}
-        </button>
+        </SegmentedButton>
       ))}
-    </div>
+    </Segmented>
   );
 };

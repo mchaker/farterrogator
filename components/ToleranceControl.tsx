@@ -602,7 +602,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
               ignoreModelThresholds: !settings.ignoreModelThresholds,
             })
           }
-          className="k-checkbox-sm gap-1.5 items-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant"
+          className="k-checkbox-sm gap-1.5 items-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:underline disabled:no-underline"
         >
           {t("settings.ignoreModelThresholds")}
         </Checkbox>

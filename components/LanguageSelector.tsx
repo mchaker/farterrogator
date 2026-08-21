@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "konsta/react";
+import { Button, List, ListItem } from "konsta/react";
 import { Languages, Check } from "lucide-react";
 
 export const LanguageSelector: React.FC = () => {
@@ -48,6 +48,49 @@ export const LanguageSelector: React.FC = () => {
     ? currentLang
     : currentLang.split("-")[0];
 
+  const dividerIndex = languages.findIndex((l) => l.code === "divider");
+  const pinned = languages.slice(0, dividerIndex);
+  const rest = languages.slice(dividerIndex + 1);
+
+  const renderLang = (lang: { code: string; label: string }) => {
+    const isActive = currentLang === lang.code;
+    return (
+      <ListItem
+        key={lang.code}
+        link
+        linkComponent="button"
+        linkProps={{
+          type: "button",
+          onClick: () => changeLanguage(lang.code),
+          role: "menuitem",
+          "aria-current": isActive ? "true" : undefined,
+        }}
+        chevron={false}
+        title={lang.label}
+        after={
+          isActive ? (
+            <Check className="w-4 h-4" aria-hidden="true" />
+          ) : undefined
+        }
+        contentClassName={`w-full ${
+          isActive
+            ? "bg-md-light-secondary-container dark:bg-md-dark-secondary-container"
+            : "hover:bg-black/5 dark:hover:bg-white/10"
+        }`}
+        colors={
+          isActive
+            ? {
+                primaryTextMaterial:
+                  "text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container",
+                secondaryTextMaterial:
+                  "text-md-light-on-secondary-container dark:text-md-dark-on-secondary-container",
+              }
+            : undefined
+        }
+      />
+    );
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       <Button
@@ -70,37 +113,25 @@ export const LanguageSelector: React.FC = () => {
 
       {isOpen && (
         <div
-          className="absolute right-0 top-full mt-2 w-36 bg-md-light-surface-2 dark:bg-md-dark-surface-2 rounded-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100"
+          className="absolute right-0 top-full mt-2 w-44 rounded-xl overflow-hidden z-50 shadow-lg shadow-black/10 dark:shadow-black/30 bg-md-light-surface-2 dark:bg-md-dark-surface-2 animate-in fade-in zoom-in-95 duration-100"
           role="menu"
           aria-orientation="vertical"
           aria-label={t("common.languageSelection")}
         >
-          {languages.map((lang) =>
-            lang.code === "divider" ? (
-              <div
-                key="divider"
-                className="h-px bg-stone-200 dark:bg-stone-700 my-1 mx-2"
-                role="separator"
-              />
-            ) : (
-              <button
-                key={lang.code}
-                onClick={() => changeLanguage(lang.code)}
-                className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors ${
-                  currentLang === lang.code
-                    ? "font-medium bg-md-light-primary/10 dark:bg-md-dark-primary/10 text-md-light-primary dark:text-md-dark-primary"
-                    : "text-stone-600 dark:text-stone-400 hover:bg-md-light-surface-4 dark:hover:bg-md-dark-surface-4"
-                }`}
-                role="menuitem"
-                aria-current={currentLang === lang.code ? "true" : undefined}
-              >
-                {lang.label}
-                {currentLang === lang.code && (
-                  <Check className="w-3.5 h-3.5" aria-hidden="true" />
+          <List className="my-0!" dividers={false}>
+            {pinned.map(renderLang)}
+            {rest.map((lang, i) => (
+              <React.Fragment key={lang.code}>
+                {i === 0 && (
+                  <li
+                    className="h-px bg-stone-200 dark:bg-stone-700 my-1"
+                    role="separator"
+                  />
                 )}
-              </button>
-            ),
-          )}
+                {renderLang(lang)}
+              </React.Fragment>
+            ))}
+          </List>
         </div>
       )}
     </div>

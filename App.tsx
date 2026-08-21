@@ -30,9 +30,13 @@ import { useTheme } from "./hooks/useTheme";
 const currentYear = new Date().getFullYear();
 const copyrightYear = currentYear > 2025 ? `2025-${currentYear}` : "2025";
 
+const MAIN_BACKEND_URL = "https://localtagger.gpu.garden";
+const FALLBACK_BACKEND_URL = "https://mooshie-localtagger.hf.space";
+
 const DEFAULT_BACKEND_CONFIG: BackendConfig = {
   taggerModel: "wd-eva02-canary-2026",
-  taggerBaseUrl: "https://localtagger.gpu.garden",
+  taggerBaseUrl: MAIN_BACKEND_URL,
+  autoFallback: true,
 };
 
 const App: React.FC = () => {
@@ -115,6 +119,10 @@ const App: React.FC = () => {
         const parsed = JSON.parse(saved);
         // Migrate old config shapes that had 'type' field
         if (parsed.taggerModel && parsed.taggerBaseUrl) {
+          if (parsed.autoFallback === undefined)
+            parsed.autoFallback =
+              parsed.taggerBaseUrl === MAIN_BACKEND_URL ||
+              parsed.taggerBaseUrl === FALLBACK_BACKEND_URL;
           return parsed;
         }
       }
@@ -169,6 +177,35 @@ const App: React.FC = () => {
       setBackendConfig((prev) => ({ ...prev, taggerModel: fallback.id }));
     }
   }, [models]);
+
+  useEffect(() => {
+    if (!backendConfig.autoFallback) return;
+    if (backendConfig.taggerBaseUrl !== FALLBACK_BACKEND_URL) return;
+    let cancelled = false;
+    checkHealth(MAIN_BACKEND_URL).then((mainHealth) => {
+      if (!cancelled && mainHealth !== "down") {
+        setBackendConfig((prev) => ({ ...prev, taggerBaseUrl: MAIN_BACKEND_URL }));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!backendConfig.autoFallback) return;
+    if (health !== "down") return;
+    if (backendConfig.taggerBaseUrl !== MAIN_BACKEND_URL) return;
+    let cancelled = false;
+    checkHealth(FALLBACK_BACKEND_URL).then((fallbackHealth) => {
+      if (!cancelled && fallbackHealth !== "down") {
+        setBackendConfig((prev) => ({ ...prev, taggerBaseUrl: FALLBACK_BACKEND_URL }));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [health, backendConfig.autoFallback, backendConfig.taggerBaseUrl]);
 
   const [error, setError] = useState<string | null>(null);
   const [lastTaggerModel, setLastTaggerModel] = useState<string>(

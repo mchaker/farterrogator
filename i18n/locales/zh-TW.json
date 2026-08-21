@@ -92,7 +92,8 @@
       "onlineHint": "後端在線。",
       "offlineHint": "無法連線後端。請檢查 API URL 或伺服器是否正在執行。",
       "resetToDefault": "重置為預設",
-      "useFallback": "備用伺服器"
+      "useFallback": "備用伺服器",
+      "autoFallback": "自動備用伺服器"
     },
     "categories": {
       "general": "一般",

@@ -92,7 +92,8 @@
       "onlineHint": "Backend online.",
       "offlineHint": "Backend unreachable. Check the API URL or that the server is running.",
       "resetToDefault": "Reset to default",
-      "useFallback": "Use fallback"
+      "useFallback": "Use fallback",
+      "autoFallback": "Automatic fallback"
     },
     "categories": {
       "general": "General",

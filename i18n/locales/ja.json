@@ -92,7 +92,8 @@
       "onlineHint": "バックエンドはオンラインです。",
       "offlineHint": "バックエンドに接続できません。API URL を確認するか、サーバーが起動しているか確認してください。",
       "resetToDefault": "デフォルトに戻す",
-      "useFallback": "フォールバックサーバー"
+      "useFallback": "フォールバックサーバー",
+      "autoFallback": "自動フォールバック"
     },
     "categories": {
       "general": "一般",

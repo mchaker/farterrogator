@@ -92,7 +92,8 @@
       "onlineHint": "Backend en línea.",
       "offlineHint": "Backend inaccesible. Comprueba la URL de la API o que el servidor esté en ejecución.",
       "resetToDefault": "Restablecer por defecto",
-      "useFallback": "Servidor de respaldo"
+      "useFallback": "Servidor de respaldo",
+      "autoFallback": "Servidor de respaldo automático"
     },
     "categories": {
       "general": "General",

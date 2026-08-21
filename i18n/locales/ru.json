@@ -92,7 +92,8 @@
       "onlineHint": "Бэкенд в сети.",
       "offlineHint": "Бэкенд недоступен. Проверьте URL API или работает ли сервер.",
       "resetToDefault": "Сбросить по умолчанию",
-      "useFallback": "Резервный сервер"
+      "useFallback": "Резервный сервер",
+      "autoFallback": "Автоматический резервный сервер"
     },
     "categories": {
       "general": "Общие",

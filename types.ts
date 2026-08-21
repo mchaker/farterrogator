@@ -37,6 +37,7 @@ export interface BatchResult {
 export interface BackendConfig {
   taggerModel: string; // model id from GET /models
   taggerBaseUrl: string;
+  autoFallback: boolean;
 }
 
 export interface TaggingSettings {

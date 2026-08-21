@@ -199,19 +199,20 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           {t("settings.backend.useFallback")}
         </button>
       </div>
-      {selectedModel?.gated && (
-        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-          <Lock className="w-3 h-3 shrink-0" aria-hidden="true" />
-          {t("settings.backend.gatedHint")}
-        </p>
-      )}
-      {selectedModel && !selectedModel.loaded && (
-        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-          <Hourglass className="w-3 h-3 shrink-0" aria-hidden="true" />
-          {t("settings.backend.warmupHint")}
-        </p>
-      )}
-      <div className="flex justify-end px-4 pt-1">
+      <div className="flex items-center justify-between px-4 pt-1">
+        <Checkbox
+          checked={backendConfig.autoFallback}
+          disabled={disabled}
+          onChange={() =>
+            onBackendChange({
+              ...backendConfig,
+              autoFallback: !backendConfig.autoFallback,
+            })
+          }
+          className="k-checkbox-sm gap-1.5 items-center text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant hover:underline disabled:no-underline"
+        >
+          {t("settings.backend.autoFallback")}
+        </Checkbox>
         <button
           type="button"
           onClick={() =>
@@ -230,6 +231,18 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
           {t("settings.backend.resetToDefault")}
         </button>
       </div>
+      {selectedModel?.gated && (
+        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+          <Lock className="w-3 h-3 shrink-0" aria-hidden="true" />
+          {t("settings.backend.gatedHint")}
+        </p>
+      )}
+      {selectedModel && !selectedModel.loaded && (
+        <p className="flex items-center gap-1.5 px-4 pt-1.5 text-xs text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
+          <Hourglass className="w-3 h-3 shrink-0" aria-hidden="true" />
+          {t("settings.backend.warmupHint")}
+        </p>
+      )}
     </div>
   );
 };

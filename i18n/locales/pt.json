@@ -92,7 +92,8 @@
       "onlineHint": "Backend online.",
       "offlineHint": "Backend inacessível. Verifique a URL da API ou se o servidor está em execução.",
       "resetToDefault": "Restaurar valores padrão",
-      "useFallback": "Servidor de reserva"
+      "useFallback": "Servidor de reserva",
+      "autoFallback": "Servidor de reserva automático"
     },
     "categories": {
       "general": "Geral",

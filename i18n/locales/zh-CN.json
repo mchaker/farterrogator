@@ -92,7 +92,8 @@
       "onlineHint": "后端在线。",
       "offlineHint": "无法连接后端。请检查 API URL 或服务器是否在运行。",
       "resetToDefault": "重置为默认",
-      "useFallback": "备用服务器"
+      "useFallback": "备用服务器",
+      "autoFallback": "自动备用服务器"
     },
     "categories": {
       "general": "一般",

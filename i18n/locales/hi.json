@@ -92,7 +92,8 @@
       "onlineHint": "बैकएंड ऑनलाइन है।",
       "offlineHint": "बैकएंड तक नहीं पहुँचा जा सका। API URL जाँचें या सुनिश्चित करें कि सर्वर चल रहा है।",
       "resetToDefault": "डिफ़ॉल्ट पर रीसेट करें",
-      "useFallback": "बैकअप सर्वर"
+      "useFallback": "बैकअप सर्वर",
+      "autoFallback": "स्वचालित बैकअप सर्वर"
     },
     "categories": {
       "general": "सामान्य",

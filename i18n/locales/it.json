@@ -92,7 +92,8 @@
       "onlineHint": "Backend online.",
       "offlineHint": "Backend non raggiungibile. Controlla l'URL dell'API o che il server sia in esecuzione.",
       "resetToDefault": "Ripristina valori predefiniti",
-      "useFallback": "Server di riserva"
+      "useFallback": "Server di riserva",
+      "autoFallback": "Server di riserva automatico"
     },
     "categories": {
       "general": "Generale",

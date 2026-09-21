@@ -36,7 +36,7 @@ import {
   BackendHealth,
 } from "../types";
 
-const focusRowInput = (e: React.MouseEvent<HTMLLIElement>) => {
+const focusRowInput = (e: React.MouseEvent<HTMLElement>) => {
   const target = e.target;
   if (
     target instanceof HTMLInputElement ||
@@ -102,6 +102,7 @@ export const ModelSettings: React.FC<ModelSettingsProps> = ({
         ...settings,
         thresholds: {
           ...settings.thresholds,
+          ...info.default_thresholds,
           general: info.default_threshold,
           character: info.default_character_threshold,
         },

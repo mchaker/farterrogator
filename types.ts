@@ -12,6 +12,7 @@ export interface TaggerModelInfo {
   loaded: boolean;
   default_threshold: number;
   default_character_threshold: number;
+  default_thresholds?: Partial<Record<TagCategory, number>>;
 }
 
 export interface Tag {

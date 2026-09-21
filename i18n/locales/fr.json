@@ -82,11 +82,15 @@
       "baseUrl": "URL de l'API",
       "baseUrlHint": "URL de l'endpoint API, ex. https://localtagger.gpu.garden ou http://localhost:8000",
       "families": {
+        "pixai": "PixAI",
         "wdtagger": "Famille WD",
         "animetimm": "Animetimm dbv4",
         "camie": "Camie v2"
       },
-      "models": {},
+      "models": {
+        "pixai-v1.0": "Modèle basé sur SAM3 avec 30 877 tags répartis en six catégories",
+        "pixai-v1.0-bf16": "Version de PixAI v1.0 en précision mixte BF16 avec une tête de classification FP32"
+      },
       "gatedHint": "Nécessite un jeton Hugging Face côté serveur.",
       "warmupHint": "Modèle pas encore chargé — la première requête peut prendre plus de temps.",
       "onlineHint": "Backend en ligne.",

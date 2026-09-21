@@ -40,11 +40,14 @@ function parseTags(data: any): Tag[] {
   const entry = Array.isArray(data) ? data[0] : data;
   const tagsData = entry?.tags;
 
-  // The response's `character` map is authoritative for character tags;
-  // anything else is categorized via the local tag database.
-  const characterNames = new Set(Object.keys(entry?.character ?? {}));
+  // Model-provided categories take precedence over the local database, which
+  // may not yet contain newer PixAI character, artist, copyright or meta tags.
+  const categories = new Map<string, TagCategory>();
+  for (const category of ['general', 'character', 'copyright', 'artist', 'meta', 'rating'] as const) {
+    Object.keys(entry?.[category] ?? {}).forEach(name => categories.set(name, category));
+  }
   const categorize = (name: string): TagCategory =>
-    characterNames.has(name) ? 'character' : getCategory(name);
+    categories.get(name) ?? getCategory(name);
 
   if (Array.isArray(tagsData)) {
     tagsData.forEach((item: any) => {
@@ -71,7 +74,7 @@ function parseTags(data: any): Tag[] {
 
   // The `rating` map is a separate content-rating breakdown (general/sensitive/
   // questionable/explicit). It's authoritative for the rating category and is
-  // an empty {} for models that don't produce ratings (e.g. pixai). The merged
+  // an empty {} for models that don't produce ratings (e.g. PixAI v0.9). The merged
   // `tags` field never contains these, so add them under the rating category.
   const ratingData = entry?.rating;
   if (ratingData && typeof ratingData === 'object') {
@@ -87,13 +90,15 @@ function parseTags(data: any): Tag[] {
   return tags.filter(tag => !(LOW_CONFIDENCE_SKIN_TAGS.has(tag.name) && tag.score < 0.85));
 }
 
-// Tag-string formatting params. These shape `tag_string` and the per-image .txt
-// files in a ZIP export; the single-image view rebuilds its own string so they
-// are mainly visible in batch/ZIP output. Sent explicitly so the UI toggles are
-// authoritative rather than relying on the backend defaults.
+// Output params, including category cutoffs for PixAI v1.0. Formatting affects
+// `tag_string` and ZIP exports; the single-image view rebuilds its own string.
+// Send these explicitly so the UI controls override backend defaults.
 function appendOutputParams(params: URLSearchParams, settings: TaggingSettings): void {
   params.append('use_escape', String(settings.useEscape));
   params.append('include_ranks', String(settings.includeRanks));
+  for (const category of ['copyright', 'artist', 'meta', 'rating'] as const) {
+    params.append(`${category}_threshold`, settings.thresholds[category].toString());
+  }
 }
 
 // Format a tag name for display, mirroring Results.tsx's formatTag.

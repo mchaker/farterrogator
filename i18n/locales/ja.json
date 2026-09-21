@@ -82,11 +82,15 @@
       "baseUrl": "API URL",
       "baseUrlHint": "APIエンドポイントURL。例: https://localtagger.gpu.garden または http://localhost:8000",
       "families": {
+        "pixai": "PixAI",
         "wdtagger": "WD ファミリー",
         "animetimm": "Animetimm dbv4",
         "camie": "Camie v2"
       },
-      "models": {},
+      "models": {
+        "pixai-v1.0": "SAM3ベースのタグ付けモデル。6カテゴリ、30,877タグに対応",
+        "pixai-v1.0-bf16": "分類ヘッドをFP32に維持したPixAI v1.0のBF16混合精度版"
+      },
       "gatedHint": "サーバー側に Hugging Face トークンが必要です。",
       "warmupHint": "モデルはまだ読み込まれていません。最初のリクエストには時間がかかる場合があります。",
       "onlineHint": "バックエンドはオンラインです。",

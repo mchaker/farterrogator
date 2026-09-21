@@ -82,11 +82,15 @@
       "baseUrl": "API URL",
       "baseUrlHint": "URL API-эндпоинта, напр. https://localtagger.gpu.garden или http://localhost:8000",
       "families": {
+        "pixai": "PixAI",
         "wdtagger": "Семейство WD",
         "animetimm": "Animetimm dbv4",
         "camie": "Camie v2"
       },
-      "models": {},
+      "models": {
+        "pixai-v1.0": "Модель на основе SAM3 с 30 877 тегами в шести категориях",
+        "pixai-v1.0-bf16": "Версия PixAI v1.0 со смешанной точностью BF16 и классификационной головой FP32"
+      },
       "gatedHint": "Требуется токен Hugging Face на сервере.",
       "warmupHint": "Модель ещё не загружена — первый запрос может занять больше времени.",
       "onlineHint": "Бэкенд в сети.",

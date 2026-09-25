@@ -82,14 +82,12 @@
       "baseUrl": "API-URL",
       "baseUrlHint": "API-Endpunkt-URL, z. B. https://localtagger.gpu.garden oder http://localhost:8000",
       "families": {
-        "pixai": "PixAI",
         "wdtagger": "WD-Familie",
         "animetimm": "Animetimm dbv4",
         "camie": "Camie v2"
       },
       "models": {
-        "pixai-v1.0": "SAM3-basiertes Tagging-Modell mit 30.877 Tags in sechs Kategorien",
-        "pixai-v1.0-bf16": "PixAI v1.0 mit gemischter BF16-Präzision und FP32-Klassifikationskopf"
+        "pixai-v1.0": "SAM3-basiertes Tagging-Modell mit 30.877 Tags in sechs Kategorien"
       },
       "gatedHint": "Erfordert ein Hugging-Face-Token auf dem Server.",
       "warmupHint": "Modell noch nicht geladen — die erste Anfrage kann länger dauern.",

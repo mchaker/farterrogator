@@ -82,14 +82,12 @@
       "baseUrl": "API URL",
       "baseUrlHint": "API एंडपॉइंट URL, जैसे https://localtagger.gpu.garden या http://localhost:8000",
       "families": {
-        "pixai": "PixAI",
         "wdtagger": "WD परिवार",
         "animetimm": "Animetimm dbv4",
         "camie": "Camie v2"
       },
       "models": {
-        "pixai-v1.0": "SAM3 पर आधारित टैगिंग मॉडल, छह श्रेणियों में 30,877 टैग के साथ",
-        "pixai-v1.0-bf16": "PixAI v1.0 का मिश्रित BF16 संस्करण, जिसमें वर्गीकरण हेड FP32 में है"
+        "pixai-v1.0": "SAM3 पर आधारित टैगिंग मॉडल, छह श्रेणियों में 30,877 टैग के साथ"
       },
       "gatedHint": "सर्वर पर Hugging Face टोकन आवश्यक है।",
       "warmupHint": "मॉडल अभी लोड नहीं हुआ है — पहली रिक्वेस्ट में अधिक समय लग सकता है।",

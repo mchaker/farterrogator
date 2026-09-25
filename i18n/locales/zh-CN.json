@@ -82,14 +82,12 @@
       "baseUrl": "API 地址",
       "baseUrlHint": "API 端点地址，例如 https://localtagger.gpu.garden 或 http://localhost:8000",
       "families": {
-        "pixai": "PixAI",
         "wdtagger": "WD 系列",
         "animetimm": "Animetimm dbv4",
         "camie": "Camie v2"
       },
       "models": {
-        "pixai-v1.0": "基于 SAM3 的标签模型，支持六类共 30,877 个标签",
-        "pixai-v1.0-bf16": "PixAI v1.0 的 BF16 混合精度版本，分类头保留 FP32 精度"
+        "pixai-v1.0": "基于 SAM3 的标签模型，支持六类共 30,877 个标签"
       },
       "gatedHint": "需要服务器端配置 Hugging Face 令牌。",
       "warmupHint": "模型尚未加载——首次请求可能需要更长时间。",

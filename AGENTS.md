@@ -74,7 +74,7 @@ header.*    upload.*    results.*    status.*    settings.*    errors.*    info.
 
 ### The cardinal rule: key parity across all 12 locales
 
-All locale files currently have **identical key sets** (108 keys each). Keep it that way:
+All locale files currently have **identical key sets** (116 keys each). Keep it that way:
 
 1. Adding a string → add the key to `en.json` **and all 11 other locale files** in the same change, with real translations (not English copies, not machine-garbled placeholders — write the best native translation you can).
 2. Removing/renaming a key → apply to all 12 files.

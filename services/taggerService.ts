@@ -35,15 +35,22 @@ export function parseTagList(value?: string): Set<string> {
 // These tags are noisy false positives below high confidence
 const LOW_CONFIDENCE_SKIN_TAGS = new Set(['blue_skin', 'colored_skin']);
 
-function parseTags(data: any): Tag[] {
+// Category maps the backend returns next to the merged `tags` map. General
+// tags have no map of their own; they are whatever `tags` holds beyond these.
+const RESPONSE_CATEGORIES = ['character', 'copyright', 'artist', 'meta', 'rating'] as const satisfies
+  readonly (TagCategory & keyof InterrogateResponseItem)[];
+
+function parseTags(data: InterrogateResponseItem[] | InterrogateResponseItem): Tag[] {
   const tags: Tag[] = [];
-  const entry = Array.isArray(data) ? data[0] : data;
-  const tagsData = entry?.tags;
+  const entry: InterrogateResponseItem | undefined = Array.isArray(data) ? data[0] : data;
+  // Typed per the contract, but older or third-party backends may send tags
+  // as an array of [name, score] pairs or {name, score} objects.
+  const tagsData: unknown = entry?.tags;
 
   // Model-provided categories take precedence over the local database, which
   // may not yet contain newer PixAI character, artist, copyright or meta tags.
   const categories = new Map<string, TagCategory>();
-  for (const category of ['general', 'character', 'copyright', 'artist', 'meta', 'rating'] as const) {
+  for (const category of RESPONSE_CATEGORIES) {
     Object.keys(entry?.[category] ?? {}).forEach(name => categories.set(name, category));
   }
   const categorize = (name: string): TagCategory =>

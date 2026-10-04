@@ -1,4 +1,4 @@
-import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, BackendHealth, I18nError } from "../types";
+import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, BackendHealth, I18nError, HealthResponse, ModelsResponse, InterrogateResponseItem } from "../types";
 import { getCategory, loadTagDatabase } from './tagService';
 
 // gpu.garden goes through the CORS proxy (Vite dev proxy / Cloudflare Pages
@@ -116,7 +116,7 @@ export const checkHealth = async (baseUrl: string): Promise<BackendHealth> => {
   try {
     const response = await fetch(resolveApiUrl(baseUrl, '/health'));
     if (response.ok) {
-      const data = await response.json().catch(() => null);
+      const data: Partial<HealthResponse> | null = await response.json().catch(() => null);
       return data?.status && data.status !== 'ok' ? 'down' : 'ok';
     }
     if (response.status >= 400 && response.status < 500) return 'unknown';
@@ -130,9 +130,9 @@ export const fetchAvailableModels = async (baseUrl: string): Promise<TaggerModel
   const response = await fetch(resolveApiUrl(baseUrl, '/models'));
   if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
 
-  const data = await response.json();
+  const data: Partial<ModelsResponse> = await response.json();
   if (!Array.isArray(data?.models)) return [];
-  return data.models.filter((m: any) => m && typeof m.id === 'string');
+  return data.models.filter((m) => m && typeof m.id === 'string');
 };
 
 export const fetchTags = async (
@@ -164,7 +164,7 @@ export const fetchTags = async (
   const response = await fetch(finalUrl, { method: 'POST', body: formData });
   if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
 
-  const data = await response.json();
+  const data: InterrogateResponseItem[] = await response.json();
   await tagDbPromise;
   const tags = parseTags(data).sort((a, b) => b.score - a.score);
 

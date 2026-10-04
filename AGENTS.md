@@ -10,7 +10,7 @@
 - **i18next + react-i18next + i18next-browser-languagedetector** for i18n (see below).
 - **pnpm** is the package manager. CI builds with `--frozen-lockfile`: any `package.json` change must be accompanied by a matching `pnpm-lock.yaml` update.
 
-There is no test runner or linter configured. Verify changes with `pnpm build` (type-checks via Vite) and `pnpm dev` (port 3000).
+There is no test runner or linter configured. Verify changes with `pnpm typecheck` (Vite strips types without checking them), `pnpm check-locales`, `pnpm build`, and `pnpm dev` (port 3000). CI (`.github/workflows/ci.yml`) runs the same checks on every PR.
 
 ## Repository structure
 
@@ -18,6 +18,8 @@ There is no test runner or linter configured. Verify changes with `pnpm build` (
 App.tsx                  Root component: all app state, interrogation flow, settings persistence
 index.tsx                Entry point; imports ./i18n/config and wraps <App /> in <Suspense>
 types.ts                 ALL shared types live here (Tag, TaggingSettings, BackendConfig, AppState, …)
+api/                     localtagger's API contract: openapi.json (copied from localtagger) and
+                           schema.generated.ts (generated from it; never edit by hand)
 components/              Presentational components, one per file, named exports (export const Foo: React.FC)
 hooks/                   Custom hooks (useTheme)
 services/                Pure logic / API clients, no React imports
@@ -37,6 +39,7 @@ Conventions to follow:
 
 - **State lives in `App.tsx`** and is passed down via props. Don't introduce a state library or context unless asked.
 - **Shared types go in `types.ts`**, not inline in components or services.
+- **Backend API types come from localtagger's contract.** `types.ts` derives `TaggerModelInfo`, `ArtistMatch` and the response types from `api/schema.generated.ts`; don't hand-write backend shapes. When localtagger's API changes, run `pnpm sync-api` (or `LOCALTAGGER_REF=v2.1.0 pnpm sync-api` for a release tag), fix any type errors, and commit both files in `api/`. A nightly CI run builds against localtagger `main` and goes red when a backend change would break this app.
 - **Services are framework-free**: plain async functions, no hooks, no JSX. Components never call `fetch` directly (the one exception is `components/Results.tsx`, which calls the Danbooru API directly for artist post counts and preview thumbnails — it is not a backend route).
 - **Persistence**: user settings are saved to `localStorage` (`taggingSettings`, `backendConfig`). When changing the shape of a persisted object, add a migration in the `useState` initializer like the existing `triggerPhrase → whitelist` migration in `App.tsx`.
 - **Styling**: stone palette (`stone-100`/`stone-800` etc.) with red accents; every color utility needs a `dark:` counterpart. Match the existing class patterns rather than inventing new ones. The `.k-checkbox-sm` class in `index.css` shrinks Konsta checkboxes for inline settings use — reuse it instead of restyling `konsta/react` `Checkbox` inline.

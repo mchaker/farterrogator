@@ -1,4 +1,4 @@
-import { ArtistMatch, I18nError } from '../types';
+import { ArtistMatch, I18nError, KaloscopeResponse } from '../types';
 import { resolveApiUrl } from './taggerService';
 
 const KALOSCOPE_PATH = '/kaloscope/infer';
@@ -16,10 +16,10 @@ export const fetchArtistMatches = async (
   const response = await fetch(`${endpoint}?top_k=${topK}`, { method: 'POST', body: formData });
   if (!response.ok) throw new I18nError('errors.kaloscopeError', { status: response.status, statusText: response.statusText });
 
-  const data = await response.json();
+  const data: Partial<KaloscopeResponse> = await response.json();
   if (!Array.isArray(data?.artists)) return [];
 
   return data.artists
-    .filter((a: any) => a && typeof a.name === 'string')
-    .map((a: any) => ({ name: a.name, score: Number(a.score) || 0 }));
+    .filter((a) => a && typeof a.name === 'string')
+    .map((a) => ({ name: a.name, score: Number(a.score) || 0 }));
 };

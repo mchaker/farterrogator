@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  # Nightly: check this app still compiles against localtagger's latest
+  # contract, so a backend change that would break the frontend shows up as a
+  # red run here before anyone deploys it.
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Use localtagger's latest contract
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: pnpm sync-api
+
+      - name: Generated API types match api/openapi.json
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: |
+          pnpm gen-api
+          git diff --exit-code -- api/schema.generated.ts || {
+            echo "::error::api/schema.generated.ts is stale. Run pnpm gen-api (or pnpm sync-api) and commit it."
+            exit 1
+          }
+
+      - run: pnpm typecheck
+      - run: pnpm check-locales
+      - run: pnpm build

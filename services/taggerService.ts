@@ -1,4 +1,4 @@
-import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, BackendHealth, I18nError } from "../types";
+import { Tag, BackendConfig, TagCategory, InterrogationResult, TaggingSettings, BatchResult, TaggerModelInfo, BackendHealth, I18nError, HealthResponse, ModelsResponse, InterrogateResponseItem } from "../types";
 import { getCategory, loadTagDatabase } from './tagService';
 
 // gpu.garden goes through the CORS proxy (Vite dev proxy / Cloudflare Pages
@@ -35,15 +35,22 @@ export function parseTagList(value?: string): Set<string> {
 // These tags are noisy false positives below high confidence
 const LOW_CONFIDENCE_SKIN_TAGS = new Set(['blue_skin', 'colored_skin']);
 
-function parseTags(data: any): Tag[] {
+// Category maps the backend returns next to the merged `tags` map. General
+// tags have no map of their own; they are whatever `tags` holds beyond these.
+const RESPONSE_CATEGORIES = ['character', 'copyright', 'artist', 'meta', 'rating'] as const satisfies
+  readonly (TagCategory & keyof InterrogateResponseItem)[];
+
+function parseTags(data: InterrogateResponseItem[] | InterrogateResponseItem): Tag[] {
   const tags: Tag[] = [];
-  const entry = Array.isArray(data) ? data[0] : data;
-  const tagsData = entry?.tags;
+  const entry: InterrogateResponseItem | undefined = Array.isArray(data) ? data[0] : data;
+  // Typed per the contract, but older or third-party backends may send tags
+  // as an array of [name, score] pairs or {name, score} objects.
+  const tagsData: unknown = entry?.tags;
 
   // Model-provided categories take precedence over the local database, which
   // may not yet contain newer PixAI character, artist, copyright or meta tags.
   const categories = new Map<string, TagCategory>();
-  for (const category of ['general', 'character', 'copyright', 'artist', 'meta', 'rating'] as const) {
+  for (const category of RESPONSE_CATEGORIES) {
     Object.keys(entry?.[category] ?? {}).forEach(name => categories.set(name, category));
   }
   const categorize = (name: string): TagCategory =>
@@ -116,7 +123,7 @@ export const checkHealth = async (baseUrl: string): Promise<BackendHealth> => {
   try {
     const response = await fetch(resolveApiUrl(baseUrl, '/health'));
     if (response.ok) {
-      const data = await response.json().catch(() => null);
+      const data: Partial<HealthResponse> | null = await response.json().catch(() => null);
       return data?.status && data.status !== 'ok' ? 'down' : 'ok';
     }
     if (response.status >= 400 && response.status < 500) return 'unknown';
@@ -130,9 +137,9 @@ export const fetchAvailableModels = async (baseUrl: string): Promise<TaggerModel
   const response = await fetch(resolveApiUrl(baseUrl, '/models'));
   if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
 
-  const data = await response.json();
+  const data: Partial<ModelsResponse> = await response.json();
   if (!Array.isArray(data?.models)) return [];
-  return data.models.filter((m: any) => m && typeof m.id === 'string');
+  return data.models.filter((m) => m && typeof m.id === 'string');
 };
 
 export const fetchTags = async (
@@ -164,7 +171,7 @@ export const fetchTags = async (
   const response = await fetch(finalUrl, { method: 'POST', body: formData });
   if (!response.ok) throw new I18nError('errors.taggerError', { status: response.status, statusText: response.statusText });
 
-  const data = await response.json();
+  const data: InterrogateResponseItem[] = await response.json();
   await tagDbPromise;
   const tags = parseTags(data).sort((a, b) => b.score - a.score);
 

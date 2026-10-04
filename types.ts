@@ -1,19 +1,22 @@
+import type { components } from './api/schema.generated';
+
 export type TagCategory = 'general' | 'character' | 'copyright' | 'artist' | 'meta' | 'rating';
+
+// Backend (localtagger) API types, generated from api/openapi.json, the
+// contract localtagger publishes. Update with `pnpm sync-api`; never edit the
+// generated file by hand.
+type ApiSchemas = components['schemas'];
+export type InterrogateResponseItem = ApiSchemas['InterrogateResult'];
+export type ModelsResponse = ApiSchemas['ModelsResponse'];
+export type HealthResponse = ApiSchemas['HealthResponse'];
+export type KaloscopeResponse = ApiSchemas['KaloscopeResponse'];
 
 // One entry of the backend's GET /models response. `id` is what goes into
 // ?model= and doubles as the i18n key; label/description are english fallbacks.
-export interface TaggerModelInfo {
-  id: string;
-  label: string;
-  description: string;
-  group: string;
-  recommended: boolean;
-  gated: boolean;
-  loaded: boolean;
-  default_threshold: number;
-  default_character_threshold: number;
+// default_thresholds stays optional: backends older than PixAI v1.0 omit it.
+export type TaggerModelInfo = Omit<ApiSchemas['ModelInfo'], 'default_thresholds'> & {
   default_thresholds?: Partial<Record<TagCategory, number>>;
-}
+};
 
 export interface Tag {
   name: string;
@@ -25,10 +28,7 @@ export interface InterrogationResult {
   tags: Tag[];
 }
 
-export interface ArtistMatch {
-  name: string;
-  score: number;
-}
+export type ArtistMatch = ApiSchemas['ArtistMatch'];
 
 export interface BatchResult {
   tags: Record<string, number>;

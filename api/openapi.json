@@ -1,0 +1,1172 @@
+{
+  "components": {
+    "schemas": {
+      "ArtistMatch": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "score"
+        ],
+        "title": "ArtistMatch",
+        "type": "object"
+      },
+      "Body_interrogate_post_interrogate__alias__post": {
+        "properties": {
+          "file": {
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "File",
+            "type": "array"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_interrogate_post_interrogate__alias__post",
+        "type": "object"
+      },
+      "Body_interrogate_post_interrogate_post": {
+        "properties": {
+          "file": {
+            "items": {
+              "contentMediaType": "application/octet-stream",
+              "type": "string"
+            },
+            "title": "File",
+            "type": "array"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_interrogate_post_interrogate_post",
+        "type": "object"
+      },
+      "Body_kaloscope_infer_kaloscope_infer_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_kaloscope_infer_kaloscope_infer_post",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "properties": {
+          "git_sha": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Git Sha"
+          },
+          "status": {
+            "default": "ok",
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "InterrogateResult": {
+        "properties": {
+          "artist": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Artist",
+            "type": "object"
+          },
+          "character": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Character",
+            "type": "object"
+          },
+          "copyright": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Copyright",
+            "type": "object"
+          },
+          "meta": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Meta",
+            "type": "object"
+          },
+          "model": {
+            "default": "",
+            "title": "Model",
+            "type": "string"
+          },
+          "rating": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Rating",
+            "type": "object"
+          },
+          "tag_string": {
+            "title": "Tag String",
+            "type": "string"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Tags",
+            "type": "object"
+          }
+        },
+        "required": [
+          "tags",
+          "tag_string"
+        ],
+        "title": "InterrogateResult",
+        "type": "object"
+      },
+      "KaloscopeResponse": {
+        "properties": {
+          "artists": {
+            "items": {
+              "$ref": "#/components/schemas/ArtistMatch"
+            },
+            "title": "Artists",
+            "type": "array"
+          },
+          "model": {
+            "default": "kaloscope-2.0",
+            "title": "Model",
+            "type": "string"
+          }
+        },
+        "required": [
+          "artists"
+        ],
+        "title": "KaloscopeResponse",
+        "type": "object"
+      },
+      "ModelInfo": {
+        "properties": {
+          "default_character_threshold": {
+            "title": "Default Character Threshold",
+            "type": "number"
+          },
+          "default_threshold": {
+            "title": "Default Threshold",
+            "type": "number"
+          },
+          "default_thresholds": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "default": {},
+            "title": "Default Thresholds",
+            "type": "object"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "family": {
+            "title": "Family",
+            "type": "string"
+          },
+          "gated": {
+            "title": "Gated",
+            "type": "boolean"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "loaded": {
+            "title": "Loaded",
+            "type": "boolean"
+          },
+          "recommended": {
+            "title": "Recommended",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "description",
+          "group",
+          "family",
+          "recommended",
+          "gated",
+          "loaded",
+          "default_threshold",
+          "default_character_threshold"
+        ],
+        "title": "ModelInfo",
+        "type": "object"
+      },
+      "ModelsResponse": {
+        "properties": {
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/ModelInfo"
+            },
+            "title": "Models",
+            "type": "array"
+          }
+        },
+        "required": [
+          "models"
+        ],
+        "title": "ModelsResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "LAN Image Interrogator",
+    "version": "2.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health Check"
+      }
+    },
+    "/interrogate": {
+      "get": {
+        "operationId": "interrogate_get_interrogate_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "url",
+            "required": true,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Url",
+              "type": "array"
+            }
+          },
+          {
+            "description": "Model id from /models",
+            "in": "query",
+            "name": "model",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Model id from /models",
+              "title": "Model"
+            }
+          },
+          {
+            "in": "query",
+            "name": "threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "character_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Character Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "copyright_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Copyright Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "artist_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Artist Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "meta_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Meta Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rating_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rating Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_spaces",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Use Spaces",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_escape",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Use Escape",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_ranks",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Ranks",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "score_descend",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Score Descend",
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Optional trigger word to prepend to tags",
+            "in": "query",
+            "name": "trigger_word",
+            "required": false,
+            "schema": {
+              "default": "",
+              "description": "Optional trigger word to prepend to tags",
+              "title": "Trigger Word",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Randomize tag order (useful for training)",
+            "in": "query",
+            "name": "random_order",
+            "required": false,
+            "schema": {
+              "default": false,
+              "description": "Randomize tag order (useful for training)",
+              "title": "Random Order",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/InterrogateResult"
+                  },
+                  "title": "Response Interrogate Get Interrogate Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Interrogate Get"
+      },
+      "post": {
+        "operationId": "interrogate_post_interrogate_post",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "alias",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Alias"
+            }
+          },
+          {
+            "description": "Model id from /models",
+            "in": "query",
+            "name": "model",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Model id from /models",
+              "title": "Model"
+            }
+          },
+          {
+            "in": "query",
+            "name": "threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "character_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Character Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "copyright_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Copyright Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "artist_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Artist Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "meta_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Meta Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rating_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rating Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_spaces",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Use Spaces",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_escape",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Use Escape",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_ranks",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Ranks",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "score_descend",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Score Descend",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "output_format",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "enum": [
+                "json",
+                "zip"
+              ],
+              "title": "Output Format",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Optional trigger word to prepend to tags",
+            "in": "query",
+            "name": "trigger_word",
+            "required": false,
+            "schema": {
+              "default": "",
+              "description": "Optional trigger word to prepend to tags",
+              "title": "Trigger Word",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Randomize tag order (useful for training)",
+            "in": "query",
+            "name": "random_order",
+            "required": false,
+            "schema": {
+              "default": false,
+              "description": "Randomize tag order (useful for training)",
+              "title": "Random Order",
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_interrogate_post_interrogate_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/InterrogateResult"
+                  },
+                  "title": "Response Interrogate Post Interrogate Post",
+                  "type": "array"
+                }
+              },
+              "application/zip": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Interrogate Post"
+      }
+    },
+    "/interrogate/{alias}": {
+      "post": {
+        "operationId": "interrogate_post_interrogate__alias__post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "alias",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Alias"
+            }
+          },
+          {
+            "description": "Model id from /models",
+            "in": "query",
+            "name": "model",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Model id from /models",
+              "title": "Model"
+            }
+          },
+          {
+            "in": "query",
+            "name": "threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "character_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Character Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "copyright_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Copyright Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "artist_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Artist Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "meta_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Meta Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rating_threshold",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rating Threshold"
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_spaces",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Use Spaces",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "use_escape",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Use Escape",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_ranks",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Ranks",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "score_descend",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Score Descend",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "output_format",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "enum": [
+                "json",
+                "zip"
+              ],
+              "title": "Output Format",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Optional trigger word to prepend to tags",
+            "in": "query",
+            "name": "trigger_word",
+            "required": false,
+            "schema": {
+              "default": "",
+              "description": "Optional trigger word to prepend to tags",
+              "title": "Trigger Word",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Randomize tag order (useful for training)",
+            "in": "query",
+            "name": "random_order",
+            "required": false,
+            "schema": {
+              "default": false,
+              "description": "Randomize tag order (useful for training)",
+              "title": "Random Order",
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_interrogate_post_interrogate__alias__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/InterrogateResult"
+                  },
+                  "title": "Response Interrogate Post Interrogate  Alias  Post",
+                  "type": "array"
+                }
+              },
+              "application/zip": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Interrogate Post"
+      }
+    },
+    "/kaloscope/infer": {
+      "post": {
+        "operationId": "kaloscope_infer_kaloscope_infer_post",
+        "parameters": [
+          {
+            "description": "Number of top artist matches to return",
+            "in": "query",
+            "name": "top_k",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "description": "Number of top artist matches to return",
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Top K",
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_kaloscope_infer_kaloscope_infer_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KaloscopeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Kaloscope Infer"
+      }
+    },
+    "/models": {
+      "get": {
+        "operationId": "list_models_models_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Models"
+      }
+    }
+  }
+}

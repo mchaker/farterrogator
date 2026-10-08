@@ -409,7 +409,7 @@ export const Results: React.FC<ResultsProps> = ({
             <Palette className="w-4 h-4" aria-hidden="true" />
             {t("results.artistSimilarity")}
             <span className="bg-md-light-surface-3 dark:bg-md-dark-surface-3 px-2 py-0.5 rounded-full text-2xs font-normal normal-case tracking-normal text-md-light-on-surface-variant dark:text-md-dark-on-surface-variant">
-              Kaloscope 2.0
+              Kaloscope 3.0
             </span>
             {onUseSafebooruChange && (
               <Checkbox

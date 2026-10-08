@@ -188,7 +188,7 @@ export interface components {
             artists: components["schemas"]["ArtistMatch"][];
             /**
              * Model
-             * @default kaloscope-2.0
+             * @default kaloscope-3.0-preview
              */
             model: string;
         };

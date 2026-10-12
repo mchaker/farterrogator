@@ -85,7 +85,8 @@
         "pixai": "PixAI",
         "wdtagger": "WD 계열",
         "animetimm": "Animetimm dbv4",
-        "camie": "Camie v2"
+        "camie": "Camie v2",
+        "oppaioracle": "OppaiOracle"
       },
       "models": {
         "pixai-v1.0": "6개 카테고리의 태그 30,877개를 지원하는 SAM3 기반 태깅 모델",

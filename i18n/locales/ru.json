@@ -85,7 +85,8 @@
         "pixai": "PixAI",
         "wdtagger": "Семейство WD",
         "animetimm": "Animetimm dbv4",
-        "camie": "Camie v2"
+        "camie": "Camie v2",
+        "oppaioracle": "OppaiOracle"
       },
       "models": {
         "pixai-v1.0": "Модель на основе SAM3 с 30 877 тегами в шести категориях",

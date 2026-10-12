@@ -85,7 +85,8 @@
         "pixai": "PixAI",
         "wdtagger": "WD Family",
         "animetimm": "Animetimm dbv4",
-        "camie": "Camie v2"
+        "camie": "Camie v2",
+        "oppaioracle": "OppaiOracle"
       },
       "models": {
         "pixai-v1.0": "SAM3-based tagger with 30,877 tags across six categories",

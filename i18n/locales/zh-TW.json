@@ -85,7 +85,8 @@
         "pixai": "PixAI",
         "wdtagger": "WD 系列",
         "animetimm": "Animetimm dbv4",
-        "camie": "Camie v2"
+        "camie": "Camie v2",
+        "oppaioracle": "OppaiOracle"
       },
       "models": {
         "pixai-v1.0": "基於 SAM3 的標籤模型，支援六類共 30,877 個標籤",

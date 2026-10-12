@@ -85,7 +85,8 @@
         "pixai": "PixAI",
         "wdtagger": "WD परिवार",
         "animetimm": "Animetimm dbv4",
-        "camie": "Camie v2"
+        "camie": "Camie v2",
+        "oppaioracle": "OppaiOracle"
       },
       "models": {
         "pixai-v1.0": "SAM3 पर आधारित टैगिंग मॉडल, छह श्रेणियों में 30,877 टैग के साथ",

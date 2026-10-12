@@ -85,7 +85,8 @@
         "pixai": "PixAI",
         "wdtagger": "WD ファミリー",
         "animetimm": "Animetimm dbv4",
-        "camie": "Camie v2"
+        "camie": "Camie v2",
+        "oppaioracle": "OppaiOracle"
       },
       "models": {
         "pixai-v1.0": "SAM3ベースのタグ付けモデル。6カテゴリ、30,877タグに対応",

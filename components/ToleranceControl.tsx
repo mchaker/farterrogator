@@ -27,6 +27,7 @@ import {
   WifiOff,
   Parentheses,
   Hash,
+  Space,
 } from "lucide-react";
 import {
   TaggingSettings,
@@ -294,6 +295,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
       blacklist: "",
       randomize: false,
       removeUnderscores: true,
+      booruFormat: false,
       useEscape: true,
       includeRanks: false,
     });
@@ -461,6 +463,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
         />
         <ListItem
           label
+          className={settings.booruFormat ? "opacity-40" : undefined}
           title={t("settings.removeUnderscores")}
           media={
             <Type
@@ -471,7 +474,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           after={
             <Toggle
               checked={settings.removeUnderscores}
-              disabled={disabled}
+              disabled={disabled || settings.booruFormat}
               onChange={() =>
                 onSettingsChange({
                   ...settings,
@@ -481,9 +484,39 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
             />
           }
         />
+        <ListItem
+          label
+          title={
+            <span className="flex flex-col">
+              {t("settings.booruFormat")}
+              <span className="text-2xs text-md-light-on-surface-variant/60 dark:text-md-dark-on-surface-variant/60">
+                {t("settings.booruFormatHint")}
+              </span>
+            </span>
+          }
+          media={
+            <Space
+              className={`w-5 h-5 ${settings.booruFormat ? "text-primary dark:text-md-dark-primary" : "opacity-50"}`}
+              aria-hidden="true"
+            />
+          }
+          after={
+            <Toggle
+              checked={settings.booruFormat}
+              disabled={disabled}
+              onChange={() =>
+                onSettingsChange({
+                  ...settings,
+                  booruFormat: !settings.booruFormat,
+                })
+              }
+            />
+          }
+        />
         {isBatch && (
           <ListItem
             label
+            className={settings.booruFormat ? "opacity-40" : undefined}
             title={
               <span className="flex items-center gap-1.5">
                 {t("settings.includeRanks")}
@@ -501,7 +534,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
             after={
               <Toggle
                 checked={settings.includeRanks}
-                disabled={disabled}
+                disabled={disabled || settings.booruFormat}
                 onChange={() =>
                   onSettingsChange({
                     ...settings,
@@ -514,6 +547,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
         )}
         <ListItem
           label
+          className={settings.booruFormat ? "opacity-40" : undefined}
           title={t("settings.useEscape")}
           media={
             <Parentheses
@@ -524,7 +558,7 @@ export const ToleranceControl: React.FC<ToleranceControlProps> = ({
           after={
             <Toggle
               checked={settings.useEscape}
-              disabled={disabled}
+              disabled={disabled || settings.booruFormat}
               onChange={() =>
                 onSettingsChange({
                   ...settings,

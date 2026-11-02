@@ -71,6 +71,8 @@
     "topK": "शीर्ष K टैग",
     "randomize": "क्रम यादृच्छिक करें",
     "removeUnderscores": "अंडरस्कोर हटाएँ",
+    "booruFormat": "बूरू फ़ॉर्मेट",
+    "booruFormatHint": "बूरू अपलोड के लिए टैग के बीच स्पेस, कॉमा नहीं",
     "includeRanks": "टैग में स्कोर जोड़ें",
     "useEscape": "कोष्ठक एस्केप करें",
     "advancedThresholds": "उन्नत",

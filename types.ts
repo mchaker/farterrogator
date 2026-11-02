@@ -49,6 +49,9 @@ export interface TaggingSettings {
   blacklist: string;
   randomize: boolean;
   removeUnderscores: boolean;
+  // Booru upload format: tags separated by single spaces, underscores kept, no
+  // escaping or rating tags. Overrides removeUnderscores/useEscape/includeRanks.
+  booruFormat: boolean;
   // Passed straight through to the backend's /interrogate query params.
   useEscape: boolean; // escape () in tag names (default true)
   includeRanks: boolean; // append (tag:score) to tag_string (default false)

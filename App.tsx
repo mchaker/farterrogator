@@ -77,6 +77,7 @@ const App: React.FC = () => {
         // Backfill tag-string params added after this config was last saved
         if (parsed.useEscape === undefined) parsed.useEscape = true;
         if (parsed.includeRanks === undefined) parsed.includeRanks = false;
+        if (parsed.booruFormat === undefined) parsed.booruFormat = false;
         if (parsed.ignoreModelThresholds === undefined) parsed.ignoreModelThresholds = false;
         return parsed;
       }
@@ -98,6 +99,7 @@ const App: React.FC = () => {
       blacklist: "",
       randomize: false,
       removeUnderscores: true,
+      booruFormat: false,
       useEscape: true,
       includeRanks: false,
       ignoreModelThresholds: false,

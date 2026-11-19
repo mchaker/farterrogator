@@ -71,6 +71,8 @@
     "topK": "上位Kタグ",
     "randomize": "順序をランダム化",
     "removeUnderscores": "アンダースコアを削除",
+    "booruFormat": "Booru形式",
+    "booruFormatHint": "Booruへのアップロード用に、タグをカンマなしのスペース区切りにします",
     "includeRanks": "タグにスコアを付加",
     "useEscape": "括弧をエスケープ",
     "advancedThresholds": "高度",

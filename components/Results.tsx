@@ -25,7 +25,12 @@ import {
   ArtistMatch,
 } from "../types";
 import { embedPngMetadata } from "../services/pngMetadata";
-import { normalizeTagName, parseTagList } from "../services/taggerService";
+import {
+  formatTagName,
+  formatTagString,
+  normalizeTagName,
+  parseTagList,
+} from "../services/taggerService";
 
 interface ResultsProps {
   result: InterrogationResult;
@@ -187,15 +192,19 @@ export const Results: React.FC<ResultsProps> = ({
     return [...whitelistTags, ...tags];
   }, [result.tags, settings]);
 
-  const formatTag = (name: string) => {
-    let out = settings.removeUnderscores ? name.replace(/_/g, " ") : name;
-    if (settings.useEscape) out = out.replace(/[()]/g, "\\$&");
-    return out;
-  };
+  const formatTag = (name: string) => formatTagName(name, settings);
 
+  // Boorus set the rating as its own field, so booru format leaves rating tags
+  // out of the string.
   const tagString = useMemo(
-    () => processedTags.map((t) => formatTag(t.name)).join(", "),
-    [processedTags, settings.removeUnderscores, settings.useEscape],
+    () =>
+      formatTagString(
+        processedTags
+          .filter((t) => !(settings.booruFormat && t.category === "rating"))
+          .map((t) => t.name),
+        settings,
+      ),
+    [processedTags, settings.removeUnderscores, settings.useEscape, settings.booruFormat],
   );
 
   const handleCopyTags = () => {

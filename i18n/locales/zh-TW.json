@@ -71,6 +71,8 @@
     "topK": "前 K 個標籤",
     "randomize": "隨機排序",
     "removeUnderscores": "移除底線",
+    "booruFormat": "Booru 格式",
+    "booruFormatHint": "標籤之間以空格分隔，不加逗號，用於上傳到 booru",
     "includeRanks": "在標籤後附加分數",
     "useEscape": "跳脫括號",
     "advancedThresholds": "進階",

@@ -71,6 +71,8 @@
     "topK": "前 K 个标签",
     "randomize": "随机排序",
     "removeUnderscores": "移除下划线",
+    "booruFormat": "Booru 格式",
+    "booruFormatHint": "标签之间用空格分隔，不加逗号，用于上传到 booru",
     "includeRanks": "在标签后附加分数",
     "useEscape": "转义括号",
     "advancedThresholds": "高级",

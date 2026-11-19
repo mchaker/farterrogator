@@ -71,6 +71,8 @@
     "topK": "Top K tag",
     "randomize": "Ordine casuale",
     "removeUnderscores": "Rimuovi underscore",
+    "booruFormat": "Formato booru",
+    "booruFormatHint": "Spazi tra i tag, senza virgole, per i caricamenti sui booru",
     "includeRanks": "Aggiungi punteggi ai tag",
     "useEscape": "Esegui escape delle parentesi",
     "advancedThresholds": "Avanzato",

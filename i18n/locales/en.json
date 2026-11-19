@@ -71,6 +71,8 @@
     "topK": "Top K Tags",
     "randomize": "Randomize Order",
     "removeUnderscores": "Remove Underscores",
+    "booruFormat": "Booru Format",
+    "booruFormatHint": "Spaces between tags, no commas, for booru uploads",
     "includeRanks": "Append Scores to Tags",
     "useEscape": "Escape Parentheses",
     "advancedThresholds": "Advanced",

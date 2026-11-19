@@ -71,6 +71,8 @@
     "topK": "Топ-K тегов",
     "randomize": "Случайный порядок",
     "removeUnderscores": "Убрать подчёркивания",
+    "booruFormat": "Формат booru",
+    "booruFormatHint": "Теги через пробел, без запятых, для загрузки на booru",
     "includeRanks": "Добавлять оценки к тегам",
     "useEscape": "Экранировать скобки",
     "advancedThresholds": "Расширенные",

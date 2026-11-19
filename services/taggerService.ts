@@ -101,19 +101,54 @@ function parseTags(data: InterrogateResponseItem[] | InterrogateResponseItem): T
 // `tag_string` and ZIP exports; the single-image view rebuilds its own string.
 // Send these explicitly so the UI controls override backend defaults.
 function appendOutputParams(params: URLSearchParams, settings: TaggingSettings): void {
-  params.append('use_escape', String(settings.useEscape));
-  params.append('include_ranks', String(settings.includeRanks));
+  // Booru format is rebuilt client-side from the plain comma list (see
+  // toBooruTagString), so ask for unescaped tags without scores.
+  params.append('use_escape', String(settings.useEscape && !settings.booruFormat));
+  params.append('include_ranks', String(settings.includeRanks && !settings.booruFormat));
   for (const category of ['copyright', 'artist', 'meta', 'rating'] as const) {
     params.append(`${category}_threshold`, settings.thresholds[category].toString());
   }
 }
 
-// Format a tag name for display, mirroring Results.tsx's formatTag.
-function formatTagName(name: string, settings?: TaggingSettings): string {
+// Format one tag name for the tag string. Booru format keeps the raw tag with
+// underscores (spaces become underscores, since a space separates tags there).
+export function formatTagName(name: string, settings?: TaggingSettings): string {
+  if (settings?.booruFormat) return name.trim().replace(/\s+/g, '_');
   let out = name;
   if (settings?.removeUnderscores) out = out.replace(/_/g, ' ');
   if (settings?.useEscape) out = out.replace(/[()]/g, '\\$&');
   return out;
+}
+
+// Join tag names into the copyable/exported tag string: comma separated, or
+// space separated for booru uploads.
+export function formatTagString(names: string[], settings?: TaggingSettings): string {
+  const formatted = names.map((name) => formatTagName(name, settings)).filter(Boolean);
+  return formatted.join(settings?.booruFormat ? ' ' : ', ');
+}
+
+// Turns a backend comma-separated tag string (requested with use_spaces=false
+// and use_escape=false, so tags read like "long hair, hatsune miku (cosplay)")
+// into booru format: "long_hair hatsune_miku_(cosplay)".
+export function toBooruTagString(tagString: string): string {
+  return tagString
+    .split(',')
+    .map((tag) => tag.trim().replace(/\s+/g, '_'))
+    .filter(Boolean)
+    .join(' ');
+}
+
+// Rewrites every .txt in a batch ZIP from the backend into booru format.
+async function booruFormatZip(blob: Blob): Promise<Blob> {
+  const { default: JSZip } = await import('jszip');
+  const zip = await JSZip.loadAsync(blob);
+  const textFiles = Object.values(zip.files).filter(
+    (f) => !f.dir && f.name.toLowerCase().endsWith('.txt'),
+  );
+  await Promise.all(
+    textFiles.map(async (f) => zip.file(f.name, toBooruTagString(await f.async('string')))),
+  );
+  return zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
 }
 
 // Probes GET /health. A 2xx with {"status":"ok"} is `ok`; a 4xx means the server
@@ -198,7 +233,7 @@ export const fetchBatchTags = async (
     // Whitelist tags are prepended server-side into the per-image .txt files
     if (settings.whitelist?.trim()) queryParams.append('trigger_word', settings.whitelist.trim());
     if (settings.randomize) queryParams.append('random_order', 'true');
-    if (settings.removeUnderscores) queryParams.append('use_spaces', 'true');
+    if (settings.removeUnderscores && !settings.booruFormat) queryParams.append('use_spaces', 'true');
     queryParams.append('threshold', settings.thresholds.general.toString());
     queryParams.append('character_threshold', settings.thresholds.character.toString());
     appendOutputParams(queryParams, settings);
@@ -213,7 +248,8 @@ export const fetchBatchTags = async (
 
   const contentType = response.headers.get('content-type') ?? '';
   if (contentType.includes('application/zip') || contentType.includes('application/octet-stream')) {
-    const blob = await response.blob();
+    let blob = await response.blob();
+    if (settings?.booruFormat) blob = await booruFormatZip(blob);
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -249,7 +285,7 @@ export const fetchBatchTags = async (
       if (settings?.maxTags && settings.maxTags > 0) entries = entries.slice(0, settings.maxTags);
       const tags: Record<string, number> = {};
       entries.forEach(e => (tags[e.tag] = e.score));
-      result[filename] = { tags, tag_string: entries.map(e => formatTagName(e.tag, settings)).join(', ') };
+      result[filename] = { tags, tag_string: formatTagString(entries.map(e => e.tag), settings) };
     });
     return result;
   }
@@ -263,7 +299,7 @@ export const fetchBatchTags = async (
       const tags: Record<string, number> = {};
       entries.forEach(e => (tags[e.tag] = e.score));
       item.tags = tags;
-      item.tag_string = entries.map(e => formatTagName(e.tag, settings)).join(', ');
+      item.tag_string = formatTagString(entries.map(e => e.tag), settings);
     });
     return data;
   }
